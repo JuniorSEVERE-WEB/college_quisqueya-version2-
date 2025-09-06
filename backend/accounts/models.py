@@ -5,6 +5,8 @@ from django.db import models
 
 
 class User(AbstractUser):
+    photo = models.ImageField(upload_to="profiles/", blank=True, null=True, verbose_name="Photo de profil")
+    email = models.EmailField(unique=True, blank=False, null=False, verbose_name="Adresse email")
     ROLE_CHOICES = [
         ('admin', 'Admin'),
         ('prof', 'Professeur'),

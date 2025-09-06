@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'membersite',
     'blog',
     'rest_framework',
+    'programs.apps.ProgramsConfig',
 ]
 
 MIDDLEWARE = [
