@@ -55,6 +55,20 @@ INSTALLED_APPS = [
     'programs.apps.ProgramsConfig',
 ]
 
+# settings.py
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+
+EMAIL_HOST_USER = "severejunior2017@gmail.com"
+EMAIL_HOST_PASSWORD = "dxku jdwv nxht vomq"
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -71,10 +85,11 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "backend" / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',

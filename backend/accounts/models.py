@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -18,7 +19,14 @@ class User(AbstractUser):
         ('membersite', 'Membre du site'),
     ]
 
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='student')
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default='membersite')
 
-    def __str__(self):
-        return f"{self.username} ({self.get_role_display()})"
+    def save(self, *args, **kwargs):
+        # Validation automatique pour membership
+        if self.role == "membersite":
+            self.is_active = True
+        else:
+            # Les autres attendent l'activation admin
+            if not self.pk:  # si c’est une nouvelle inscription
+                self.is_active = False
+        super().save(*args, **kwargs)

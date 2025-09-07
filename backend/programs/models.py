@@ -2,25 +2,27 @@
 from django.db import models
 from academics.models import AcademicYear
 
+
 class Program(models.Model):
+    KINDERGARTEN = "KINDERGARTEN"
+    PRIMAIRE = "PRIMAIRE"
+    SECONDAIRE = "SECONDAIRE"
+
     PROGRAM_CHOICES = [
-        ("kindergarten", "Kindergarten"),
-        ("primaire", "Primaire"),
-        ("secondaire", "Secondaire"),
+        (KINDERGARTEN, "Kindergarten"),
+        (PRIMAIRE, "Primaire"),
+        (SECONDAIRE, "Secondaire"),
     ]
 
-    name = models.CharField(max_length=20, choices=PROGRAM_CHOICES)
-    academic_year = models.ForeignKey(AcademicYear, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=50, choices=PROGRAM_CHOICES, unique=True)
 
     def __str__(self):
-        return f"{self.get_name_display()} ({self.academic_year.name})"
+        return self.get_name_display()
 
 
 class Classroom(models.Model):
     program = models.ForeignKey(Program, on_delete=models.CASCADE, related_name="classrooms")
-    name = models.CharField(max_length=50)  # ex: "1e A Kinder", "NS4"
-    created_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=100)
 
     def __str__(self):
-        return f"{self.name} - {self.program.get_name_display()}"
+        return f"{self.name} ({self.program.get_name_display()})"
