@@ -54,6 +54,7 @@ User = get_user_model()
 class UserRegisterForm(UserCreationForm):
     ROLE_CHOICES = (
         ('student', 'Étudiant'),
+        ('professor', 'Professeur'),
         ('membersite', 'Membre du site'),
     )
     role = forms.ChoiceField(choices=ROLE_CHOICES, label="Rôle")

@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Inscription</title>
 </head>
 <body>
@@ -10,10 +9,36 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ user_form.as_p }}
-        {% if user_form.cleaned_data.role == "student" or not user_form.is_bound %}
+        <div id="student-fields" style="display: none;">
             {{ student_form.as_p }}
-        {% endif %}
+        </div>
+        <div id="professor-fields" style="display: none;">
+            {{ professor_form.as_p }}
+        </div>
         <button type="submit">S'inscrire</button>
     </form>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const roleSelect = document.querySelector('select[name="role"]');
+        const studentFields = document.getElementById("student-fields");
+        const professorFields = document.getElementById("professor-fields");
+        function toggleRoleFields() {
+            if (roleSelect && roleSelect.value === "student") {
+                studentFields.style.display = "block";
+                professorFields.style.display = "none";
+            } else if (roleSelect && roleSelect.value === "professor") {
+                studentFields.style.display = "none";
+                professorFields.style.display = "block";
+            } else {
+                studentFields.style.display = "none";
+                professorFields.style.display = "none";
+            }
+        }
+        if (roleSelect) {
+            roleSelect.addEventListener("change", toggleRoleFields);
+            toggleRoleFields();
+        }
+    });
+    </script>
 </body>
 </html>
