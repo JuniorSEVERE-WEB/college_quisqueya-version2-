@@ -52,9 +52,15 @@ class StudentRegistrationForm(UserCreationForm):
 User = get_user_model()
 
 class UserRegisterForm(UserCreationForm):
+    ROLE_CHOICES = (
+        ('student', 'Étudiant'),
+        ('membersite', 'Membre du site'),
+    )
+    role = forms.ChoiceField(choices=ROLE_CHOICES, label="Rôle")
+
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ("username", "email", "role", "password1", "password2")
 
 class StudentForm(forms.ModelForm):
     class Meta:

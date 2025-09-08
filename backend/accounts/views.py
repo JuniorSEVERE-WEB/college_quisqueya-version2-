@@ -1,36 +1,36 @@
-# accounts/views.py
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from accounts.forms import StudentRegistrationForm
-from .forms import UserRegisterForm, StudentForm
+from accounts.forms import UserRegisterForm, StudentForm
 
-def student_register(request):
-    if request.method == "POST":
-        form = StudentRegistrationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            return redirect("registration_pending")
-    else:
-        form = StudentRegistrationForm()
-    return render(request, "accounts/student_register.html", {"form": form})
-
-
-def register_student(request):
+def register(request):
     if request.method == "POST":
         user_form = UserRegisterForm(request.POST)
         student_form = StudentForm(request.POST, request.FILES)
-        if user_form.is_valid() and student_form.is_valid():
+        if user_form.is_valid():
             user = user_form.save(commit=False)
-            user.is_active = False  # ⚠️ mettre en attente
+            if user.role == "student":
+                user.is_active = False
+            else:
+                user.is_active = True
             user.save()
-            student = student_form.save(commit=False)
-            student.user = user
-            student.save()
+            # Automatisme : copie first_name et last_name dans le profil Student
+            if user.role == "student" and student_form.is_valid():
+                student = student_form.save(commit=False)
+                student.user = user
+                student.first_name = user.first_name
+                student.last_name = user.last_name
+                student.save()
+            if user.role == "membersite":
+                # Si tu as un modèle Membersite, fais pareil ici
+                pass
+            if user.role == "membersite":
+                login(request, user)
+                return redirect("membersite_dashboard")
             return render(request, "accounts/registration_pending.html")
     else:
         user_form = UserRegisterForm()
         student_form = StudentForm()
-    return render(request, "accounts/student_register.html", {
+    return render(request, "accounts/register.html", {
         "user_form": user_form,
         "student_form": student_form,
     })

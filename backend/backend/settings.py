@@ -55,16 +55,21 @@ INSTALLED_APPS = [
     'programs.apps.ProgramsConfig',
 ]
 
-# settings.py
+import environ
+
+env = environ.Env()
+environ.Env.read_env()
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-
-EMAIL_HOST_USER = "severejunior2017@gmail.com"
-EMAIL_HOST_PASSWORD = "dxku jdwv nxht vomq"
+# Utilise les variables d'environnement si elles existent, sinon utilise les valeurs par défaut
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="severejunior2017@gmail.com")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="dxku jdwv nxht vomq")
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
 
 
@@ -85,7 +90,7 @@ ROOT_URLCONF = 'backend.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "backend" / "templates"],
+        'DIRS': [BASE_DIR / "accounts" / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
