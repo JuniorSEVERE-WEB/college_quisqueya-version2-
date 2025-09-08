@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from professors.models import Professor
+from employees.models import Employee
 
 User = get_user_model()
 
@@ -44,6 +45,26 @@ professor_profile.classrooms.set([])  # à adapter si tu veux lier des classes
 
 print(f"Profil Professor créé → user={professor_profile.user.username}, subjects={professor_profile.subjects}")
 
+print("\n==== Test inscription Employee ====")
+User.objects.filter(username="test_employee").delete()
+e = User.objects.create_user(
+    username="test_employee",
+    email="test_employee@test.ht",
+    password="12345",
+    role="employee"
+)
+print(f"Employee créé → is_active={e.is_active}")  # doit être False
+
+# Création du profil Employee lié à l'utilisateur
+employee_profile = Employee.objects.create(
+    user=e,
+    academic_year_id=1,  # à adapter selon l'ID existant
+    position="Secrétaire",
+    hire_date="2025-09-08",
+    department="Administration"
+)
+print(f"Profil Employee créé → user={employee_profile.user.username}, position={employee_profile.position}")
+
 print("\n==== Test activation manuelle ====")
 u.is_active = True
 u.save()
@@ -52,3 +73,7 @@ print(f"Student activé par admin → is_active={u.is_active} (email envoyé si 
 p.is_active = True
 p.save()
 print(f"Professor activé par admin → is_active={p.is_active} (email envoyé si EMAIL_BACKEND=console)")
+
+e.is_active = True
+e.save()
+print(f"Employee activé par admin → is_active={e.is_active} (email envoyé si EMAIL_BACKEND=console)")

@@ -15,6 +15,9 @@
         <div id="professor-fields" style="display: none;">
             {{ professor_form.as_p }}
         </div>
+        <div id="employee-fields" style="display: none;">
+            {{ employee_form.as_p }}
+        </div>
         <button type="submit">S'inscrire</button>
     </form>
     <script>
@@ -22,16 +25,24 @@
         const roleSelect = document.querySelector('select[name="role"]');
         const studentFields = document.getElementById("student-fields");
         const professorFields = document.getElementById("professor-fields");
+        const employeeFields = document.getElementById("employee-fields");
         function toggleRoleFields() {
             if (roleSelect && roleSelect.value === "student") {
                 studentFields.style.display = "block";
                 professorFields.style.display = "none";
+                employeeFields.style.display = "none";
             } else if (roleSelect && roleSelect.value === "professor") {
                 studentFields.style.display = "none";
                 professorFields.style.display = "block";
+                employeeFields.style.display = "none";
+            } else if (roleSelect && roleSelect.value === "employee") {
+                studentFields.style.display = "none";
+                professorFields.style.display = "none";
+                employeeFields.style.display = "block";
             } else {
                 studentFields.style.display = "none";
                 professorFields.style.display = "none";
+                employeeFields.style.display = "none";
             }
         }
         if (roleSelect) {
