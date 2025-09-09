@@ -18,6 +18,9 @@
         <div id="employee-fields" style="display: none;">
             {{ employee_form.as_p }}
         </div>
+        <div id="alumni-fields" style="display: none;">
+            {{ alumni_form.as_p }}
+        </div>
         <button type="submit">S'inscrire</button>
     </form>
     <script>
@@ -26,23 +29,33 @@
         const studentFields = document.getElementById("student-fields");
         const professorFields = document.getElementById("professor-fields");
         const employeeFields = document.getElementById("employee-fields");
+        const alumniFields = document.getElementById("alumni-fields");
         function toggleRoleFields() {
             if (roleSelect && roleSelect.value === "student") {
                 studentFields.style.display = "block";
                 professorFields.style.display = "none";
                 employeeFields.style.display = "none";
+                alumniFields.style.display = "none";
             } else if (roleSelect && roleSelect.value === "professor") {
                 studentFields.style.display = "none";
                 professorFields.style.display = "block";
                 employeeFields.style.display = "none";
+                alumniFields.style.display = "none";
             } else if (roleSelect && roleSelect.value === "employee") {
                 studentFields.style.display = "none";
                 professorFields.style.display = "none";
                 employeeFields.style.display = "block";
+                alumniFields.style.display = "none";
+            } else if (roleSelect && roleSelect.value === "alumni") {
+                studentFields.style.display = "none";
+                professorFields.style.display = "none";
+                employeeFields.style.display = "none";
+                alumniFields.style.display = "block";
             } else {
                 studentFields.style.display = "none";
                 professorFields.style.display = "none";
                 employeeFields.style.display = "none";
+                alumniFields.style.display = "none";
             }
         }
         if (roleSelect) {
@@ -50,6 +63,3 @@
             toggleRoleFields();
         }
     });
-    </script>
-</body>
-</html>
