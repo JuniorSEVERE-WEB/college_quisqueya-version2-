@@ -10,6 +10,12 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+import os
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "ta_cle_secrete")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "ta_cle_publishable")
+
+
 from pathlib import Path
 AUTH_USER_MODEL = "accounts.User"
 

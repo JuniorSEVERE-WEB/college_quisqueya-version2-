@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/", include("employees.urls")),
     path("api/", include("programs.urls")),
     path("blog/", include("blog.urls")),
+    path('payments/', include(('payments.urls', 'payments'), namespace='payments')),
     
 
 
