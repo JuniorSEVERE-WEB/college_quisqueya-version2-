@@ -1,0 +1,7 @@
+<!-- filepath: c:\Users\sever\Documents\college_quisqueya\backend\blog\templates\blog\add_article.html -->
+<h2>Add Article</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Publish</button>
+</form>

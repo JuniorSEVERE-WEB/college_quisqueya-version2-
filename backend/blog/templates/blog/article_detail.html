@@ -1,0 +1,140 @@
+{% load custom_filters %}
+
+<h2>{{ article.title }}</h2>
+<img src="{{ article.image.url }}" alt="Image" style="max-width:300px;">
+<p>{{ article.description }}</p>
+<p>Published: {{ article.date_published }}</p>
+<p>By: {{ article.author }}</p>
+<p>Visibility: {{ article.get_visibility_display }}</p>
+
+<!-- Affichage des tags -->
+{% if article.tags.all %}
+    <p>
+        <strong>Tags:</strong>
+        {% for tag in article.tags.all %}
+            <a href="{% url 'blog_articles_by_tag' tag.id %}" 
+               style="background:#eee; padding:3px 6px; margin:2px; border-radius:4px; text-decoration:none; color:black;">
+                {{ tag.name }}
+            </a>
+        {% empty %}
+            <span>Aucun tag</span>
+        {% endfor %}
+    </p>
+{% endif %}
+
+<!-- Likes/dislikes article -->
+<p>
+    👍 {{ article.likes_count }}
+    <a href="{% url 'blog_article_reaction' article.pk 'like' %}">Like</a>
+    |
+    👎 {{ article.dislikes_count }}
+    <a href="{% url 'blog_article_reaction' article.pk 'dislike' %}">Dislike</a>
+</p>
+
+{% if article.is_published %}
+    <span style="color:green;">Published</span>
+{% else %}
+    <span style="color:red;">Not published</span>
+{% endif %}
+
+<h3>Comments</h3>
+{% for comment in comments %}
+    <div style="margin-bottom: 1em; border-bottom:1px solid #eee;">
+        <strong>{{ comment.user.username }}</strong> ({{ comment.date_posted }}):<br>
+        {{ comment.text }}
+
+        <!-- Likes/dislikes commentaire -->
+        <p>
+            👍 {{ comment.likes_count }}
+            <a href="{% url 'blog_comment_reaction' comment.pk 'like' %}">Like</a>
+            |
+            👎 {{ comment.dislikes_count }}
+            <a href="{% url 'blog_comment_reaction' comment.pk 'dislike' %}">Dislike</a>
+        </p>
+
+        {% if comment.user == request.user or request.user.is_staff %}
+            <form method="post" action="{% url 'blog_delete_comment' comment.pk %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('Delete this comment?');">Delete</button>
+            </form>
+        {% endif %}
+
+        <form method="post" action="{% url 'blog_add_comment' article.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="parent" value="{{ comment.pk }}">
+            <textarea name="text" placeholder="Reply..."></textarea>
+            <button type="submit">Reply</button>
+        </form>
+
+        <!-- Replies paginées -->
+        {% with replies=replies_paginated|get_item:comment.pk %}
+            {% for reply in replies %}
+                <div style="margin-left: 2em;">
+                    <strong>{{ reply.user.username }}</strong> ({{ reply.date_posted }}):<br>
+                    {{ reply.text }}
+                    <!-- Likes/dislikes reply -->
+                    <p>
+                        👍 {{ reply.likes_count }}
+                        <a href="{% url 'blog_comment_reaction' reply.pk 'like' %}">Like</a>
+                        |
+                        👎 {{ reply.dislikes_count }}
+                        <a href="{% url 'blog_comment_reaction' reply.pk 'dislike' %}">Dislike</a>
+                    </p>
+                    {% if reply.user == request.user or request.user.is_staff %}
+                        <form method="post" action="{% url 'blog_delete_comment' reply.pk %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" onclick="return confirm('Delete this reply?');">Delete</button>
+                        </form>
+                    {% endif %}
+                </div>
+            {% endfor %}
+
+            <!-- Pagination des replies -->
+            <div style="margin-left: 2em; margin-top:10px;">
+                {% if replies.has_previous %}
+                    <a href="?reply_page_{{ comment.pk }}={{ replies.previous_page_number }}">‹ Précédentes</a>
+                {% endif %}
+
+                Page {{ replies.number }} sur {{ replies.paginator.num_pages }}
+
+                {% if replies.has_next %}
+                    <a href="?reply_page_{{ comment.pk }}={{ replies.next_page_number }}">Suivantes ›</a>
+                {% endif %}
+            </div>
+        {% endwith %}
+    </div>
+{% endfor %}
+
+<!-- Pagination des commentaires -->
+<div style="margin-top:20px;">
+    <span>
+        Page {{ comments.number }} sur {{ comments.paginator.num_pages }}
+    </span>
+
+    <div>
+        {% if comments.has_previous %}
+            <a href="?page=1">« Première</a>
+            <a href="?page={{ comments.previous_page_number }}">‹ Précédente</a>
+        {% endif %}
+
+        {% for num in comments.paginator.page_range %}
+            {% if comments.number == num %}
+                <strong>{{ num }}</strong>
+            {% elif num > comments.number|add:"-3" and num < comments.number|add:"3" %}
+                <a href="?page={{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if comments.has_next %}
+            <a href="?page={{ comments.next_page_number }}">Suivante ›</a>
+            <a href="?page={{ comments.paginator.num_pages }}">Dernière »</a>
+        {% endif %}
+    </div>
+</div>
+
+<h3>Add a comment</h3>
+<form method="post" action="{% url 'blog_add_comment' article.pk %}">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Comment</button>
+</form>
