@@ -8,3 +8,13 @@ router.register(r"professors", ProfessorViewSet, basename="professor")
 urlpatterns = [
     path("", include(router.urls)),
 ]
+
+
+"""
+u = User.objects.get(username="iii")   # remplace par ton username
+u.role = "professeur"
+u.save()
+print("role mis à jour:", u.username, u.role)
+
+
+"""

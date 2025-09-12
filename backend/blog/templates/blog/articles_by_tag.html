@@ -1,0 +1,14 @@
+<h2>Articles avec le tag : {{ tag.name }}</h2>
+
+{% if articles %}
+    <ul>
+        {% for article in articles %}
+            <li>
+                <a href="{% url 'blog_article_detail' article.pk %}">{{ article.title }}</a>
+                (publié le {{ article.date_published }})
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Aucun article trouvé avec ce tag.</p>
+{% endif %}
