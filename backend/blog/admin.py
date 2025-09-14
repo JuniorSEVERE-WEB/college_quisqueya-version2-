@@ -17,11 +17,11 @@ class ArticleAdmin(admin.ModelAdmin):
     filter_horizontal = ("tags",) 
 
     def likes_count(self, obj):
-        return obj.reactions.filter(type="like").count()
+        return obj.reactions.filter(reaction_type="like").count()
     likes_count.short_description = "👍 Likes"
 
     def dislikes_count(self, obj):
-        return obj.reactions.filter(type="dislike").count()
+        return obj.reactions.filter(reaction_type="dislike").count()
     dislikes_count.short_description = "👎 Dislikes"
 
 
@@ -39,9 +39,9 @@ class CommentAdmin(admin.ModelAdmin):
     delete_selected.short_description = "Supprimer les commentaires sélectionnés"
 
     def likes_count(self, obj):
-        return obj.reactions.filter(type="like").count()
+        return obj.reactions.filter(reaction_type="like").count()
     likes_count.short_description = "👍 Likes"
 
     def dislikes_count(self, obj):
-        return obj.reactions.filter(type="dislike").count()
+        return obj.reactions.filter(reaction_type="dislike").count()
     dislikes_count.short_description = "👎 Dislikes"

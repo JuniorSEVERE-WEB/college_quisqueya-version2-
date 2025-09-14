@@ -25,8 +25,5 @@ urlpatterns = [
     path("api/", include("programs.urls")),
     path("blog/", include("blog.urls")),
     path('payments/', include(('payments.urls', 'payments'), namespace='payments')),
-    
-
-
-
+    path("messages/", include(("communication.urls", "communication"), namespace="communication")),
 ]

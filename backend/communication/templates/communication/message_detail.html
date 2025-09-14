@@ -1,0 +1,5 @@
+<h2>{{ message.subject }}</h2>
+<p><b>De:</b> {{ message.sender }}</p>
+<p><b>À:</b> {% for r in message.recipients.all %} {{ r.username }} {% if not forloop.last %}, {% endif %}{% endfor %}</p>
+<p>{{ message.body }}</p>
+<p><i>Envoyé le {{ message.created_at }}</i></p>

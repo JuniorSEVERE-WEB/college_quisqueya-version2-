@@ -1,0 +1,12 @@
+<h2>📤 Messages envoyés</h2>
+<ul>
+  {% for msg in messages %}
+    <li>
+      <a href="{% url 'communication:detail' msg.pk %}">
+        <b>{{ msg.subject }}</b> (à {{ msg.recipients.count }} destinataire(s)) - {{ msg.created_at }}
+      </a>
+    </li>
+  {% empty %}
+    <p>Aucun message envoyé.</p>
+  {% endfor %}
+</ul>
