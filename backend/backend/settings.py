@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'programs.apps.ProgramsConfig',
     "channels",
+    'smart_selects',
 ]
 ASGI_APPLICATION = "backend.asgi.application"
 CHANNEL_LAYERS = {

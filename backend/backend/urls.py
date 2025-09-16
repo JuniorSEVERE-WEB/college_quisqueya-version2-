@@ -27,4 +27,6 @@ urlpatterns = [
     path('payments/', include(('payments.urls', 'payments'), namespace='payments')),
     path("messages/", include(("communication.urls", "communication"), namespace="communication")),
     path('api/academics/', include('academics.urls')),
+    path('chaining/', include('smart_selects.urls')),
+    path('reports/', include('reports.urls')),
 ]

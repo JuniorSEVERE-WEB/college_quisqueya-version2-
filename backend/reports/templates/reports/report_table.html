@@ -1,0 +1,72 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bulletin de {{ classroom.name }}</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .hachure {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h2>Bulletin de {{ classroom.name }} - {{ report_session }}</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th class="hachure">Élèves</th>
+                {% for subject in subjects %}
+                    <th>{{ subject.name }}</th>
+                {% endfor %}
+                <th>Moyenne</th>
+            </tr>
+            <tr>
+                <th class="hachure">Coefficient</th>
+                {% for subject in subjects %}
+                    <th>{{ coefficients|get_item:subject.id }}</th>
+                {% endfor %}
+                <th>100</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in table %}
+                <tr>
+                    <td>{{ row.student.first_name }} {{ row.student.last_name }}</td>
+                    {% for subject in subjects %}
+                        <td>
+                            {% if row.scores|get_item:subject.id %}
+                                {{ row.scores|get_item:subject.id }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td>{{ row.average }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <th class="hachure">Moyenne</th>
+                {% for subject in subjects %}
+                    <td>{{ subject_averages|get_item:subject.id }}</td>
+                {% endfor %}
+                <td>{{ class_avg }}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

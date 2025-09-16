@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from smart_selects.db_fields import ChainedForeignKey
 
 
 # ---------- ReportSession ----------
@@ -72,24 +73,44 @@ class SubjectCoefficient(models.Model):
 
     def __str__(self):
         return f"{self.subject.name} — {self.classroom.name} ({self.academic_year}) = {self.coefficient}"
+from smart_selects.db_fields import ChainedForeignKey
 
-
-# ---------- Grade ----------
 class Grade(models.Model):
-    """
-    Une note (cellule du tableau) : relie un student, une subject et une ReportSession (donc implicitement année/trimestre/étape).
-    On garantit qu'il n'y a qu'une note par (report_session, student, subject).
-    """
-    report_session = models.ForeignKey(ReportSession, on_delete=models.CASCADE, related_name='grades')
-    student = models.ForeignKey('students.Student', on_delete=models.CASCADE, related_name='grades')
-    subject = models.ForeignKey('programs.Subject', on_delete=models.CASCADE, related_name='grades')
-    note = models.DecimalField(max_digits=5, decimal_places=2)  # précision : 2 chiffres après la virgule
-
-    created_at = models.DateTimeField(auto_now=True)
-
-    class Meta:
-        unique_together = ('report_session', 'student', 'subject')
-        ordering = ['student__last_name', 'student__first_name']
-
-    def __str__(self):
-        return f"{self.student} • {self.subject.name} : {self.note}"
+    program = models.ForeignKey('programs.Program', on_delete=models.CASCADE)
+    classroom = ChainedForeignKey(
+        'programs.Classroom',
+        chained_field="program",
+        chained_model_field="program",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.CASCADE
+    )
+    student = ChainedForeignKey(
+        'students.Student',
+        chained_field="classroom",
+        chained_model_field="classroom",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.CASCADE
+    )
+    subject = ChainedForeignKey(
+        'programs.Subject',
+        chained_field="classroom",
+        chained_model_field="classroom",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.CASCADE
+    )
+    report_session = ChainedForeignKey(
+        'reports.ReportSession',
+        chained_field="classroom",
+        chained_model_field="classroom",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        on_delete=models.CASCADE
+    )
+    note = models.FloatField()
