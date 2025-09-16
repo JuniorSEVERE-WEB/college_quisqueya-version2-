@@ -26,3 +26,15 @@ class Classroom(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.program.get_name_display()})"
+    
+
+# programs/models.py
+class Subject(models.Model):
+    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE, related_name="subjects")
+    name = models.CharField(max_length=100)
+
+    class Meta:
+        unique_together = ("classroom", "name")  # éviter doublons
+
+    def __str__(self):
+        return f"{self.name} - {self.classroom.name}"
