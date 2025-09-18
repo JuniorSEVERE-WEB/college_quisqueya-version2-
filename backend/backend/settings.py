@@ -62,6 +62,8 @@ INSTALLED_APPS = [
     "channels",
     'smart_selects',
 ]
+logo_path = os.path.join("static", "images", "logo.png")
+
 ASGI_APPLICATION = "backend.asgi.application"
 CHANNEL_LAYERS = {
     "default": {

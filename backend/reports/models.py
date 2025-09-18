@@ -1,6 +1,9 @@
 from django.db import models
 from django.conf import settings
 from smart_selects.db_fields import ChainedForeignKey
+from programs.models import Classroom, Subject, Program
+from academics.models import AcademicYear
+from students.models import Student
 
 
 # ---------- ReportSession ----------
@@ -26,7 +29,7 @@ class ReportSession(models.Model):
     classroom = models.ForeignKey('programs.Classroom', on_delete=models.CASCADE, related_name='report_sessions')
     academic_year = models.ForeignKey('academics.AcademicYear', on_delete=models.CASCADE, related_name='report_sessions')
     trimester = models.CharField(max_length=2, choices=TRIMESTER_CHOICES)
-    step = models.CharField(max_length=2, choices=STEP_CHOICES)  # unique=True retiré
+    step = models.CharField(max_length=2, choices=STEP_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -35,6 +38,7 @@ class ReportSession(models.Model):
         on_delete=models.SET_NULL,
         limit_choices_to={'is_staff': True}
     )
+    is_active = models.BooleanField(default=False)  # ✅ nouvelle colonne pour session active
 
     class Meta:
         unique_together = ('classroom', 'academic_year', 'trimester', 'step')
@@ -45,15 +49,15 @@ class ReportSession(models.Model):
         return f"{self.classroom.name} • {self.academic_year} • {self.get_trimester_display()} • {self.get_step_display()} • {title}"
 
     def save(self, *args, **kwargs):
-        # Si created_by n'est pas défini, on le met automatiquement (si possible)
-        if not self.created_by and hasattr(self, '_current_user'):
-            self.created_by = self._current_user
+        # Forcer un seul actif à la fois
+        if self.is_active:
+            ReportSession.objects.filter(is_active=True).exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
-    def save_model(self, request, obj, form, change):
-        if not obj.created_by:
-            obj.created_by = request.user
-        super().save_model(request, obj, form, change)    
+    @staticmethod
+    def get_active_session():
+        """Retourne la session active actuelle, ou None"""
+        return ReportSession.objects.filter(is_active=True).first()  
 
 
 # ---------- SubjectCoefficient ----------

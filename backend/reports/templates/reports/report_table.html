@@ -1,71 +1,77 @@
-{% load custom_filters %}
+{% load report_filters %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Bulletin de {{ classroom.name }}</title>
+    <title>Tableau des bulletins</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
         table {
             border-collapse: collapse;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
         }
+
         th, td {
             border: 1px solid #000;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #4CAF50;
+            color: white;
         }
-        .hachure {
-            background-color: #ddd;
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .student-col {
+            font-weight: bold;
+            text-align: left;
         }
     </style>
 </head>
 <body>
-    <h2>Bulletin de {{ classroom.name }} - {{ report_session }}</h2>
+    <h2>Tableau des bulletins</h2>
 
     <table>
         <thead>
             <tr>
-                <th class="hachure">Élèves</th>
-                {% for subject in subjects %}
-                    <th>{{ subject.name }}</th>
-                {% endfor %}
-                <th>Moyenne</th>
-            </tr>
-            <tr>
-                <th class="hachure">Coefficient</th>
-                {% for subject in subjects %}
-                    <th>{{ coefficients|get_item:subject.id }}</th>
-                {% endfor %}
-                <th>100</th>
+                <th>Élève</th>
+                <th>Matière</th>
+                <th>Note</th>
+                <th>Commentaire</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in table %}
+            {% for grade in grades %}
                 <tr>
-                    <td>{{ row.student.first_name }} {{ row.student.last_name }}</td>
-                    {% for subject in subjects %}
-                        <td>
-                            {% if row.scores|get_item:subject.id %}
-                                {{ row.scores|get_item:subject.id }}
-                            {% else %}
-                                -
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                    <td>{{ row.average }}</td>
+                    <td class="student-col">{{ grade.student.first_name }} {{ grade.student.last_name }}</td>
+                    <td>{{ grade.subject.name }}</td>
+                    <td>{{ grade.score }}</td>
+                    <td>{{ grade.comment }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">Aucun bulletin disponible.</td>
                 </tr>
             {% endfor %}
-            <tr>
-                <th class="hachure">Moyenne</th>
-                {% for subject in subjects %}
-                    <td>{{ subject_averages|get_item:subject.id }}</td>
-                {% endfor %}
-                <td>{{ class_avg }}</td>
-            </tr>
         </tbody>
     </table>
 </body>
