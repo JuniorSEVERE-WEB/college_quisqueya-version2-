@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 
+
+
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "ta_cle_secrete")
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "ta_cle_publishable")
 
@@ -62,7 +64,7 @@ INSTALLED_APPS = [
     "channels",
     'smart_selects',
 ]
-logo_path = os.path.join("static", "images", "logo.png")
+
 
 ASGI_APPLICATION = "backend.asgi.application"
 CHANNEL_LAYERS = {
@@ -87,7 +89,7 @@ import environ
 env = environ.Env()
 environ.Env.read_env()
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
@@ -180,6 +182,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

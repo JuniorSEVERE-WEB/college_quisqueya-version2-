@@ -61,7 +61,7 @@ def student_report_pdf(request, student_id):
         total_notes += g.note
         total_coeff += coeff
 
-    average = round(total_notes / total_coeff, 2) if total_coeff else 0
+    average = round((total_notes / total_coeff) * 100, 2) if total_coeff else 0
 
     if average >= 90:
         mention = "Excellent"
