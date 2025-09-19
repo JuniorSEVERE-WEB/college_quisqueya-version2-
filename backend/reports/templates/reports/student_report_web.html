@@ -68,6 +68,11 @@
       justify-content: space-between;
       font-size: 13px;
     }
+    .moyenne-row {
+      background-color: #004080;
+      color: #fff;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
@@ -82,8 +87,12 @@
 
   <h2>Bulletin de Notes</h2>
 
-  <p><strong>Élève :</strong> {{ student.first_name }} {{ student.last_name }}<br>
-     <strong>Classe :</strong> {{ classroom }}</p>
+  <p>
+    <strong>Élève :</strong> {{ student.first_name }} {{ student.last_name }}<br>
+    <strong>Classe :</strong> {{ classroom }}<br>
+    <strong>Date de livraison du carnet :</strong> {{ delivery_date|date:"d/m/Y" }}<br>
+   
+  </p>
 
   <table>
     <thead>
@@ -101,10 +110,14 @@
         <td>{{ item.note }}</td>
       </tr>
       {% endfor %}
+      <tr class="moyenne-row">
+        <td>Moyenne</td>
+        <td>{{ total_coeff }}</td>
+        <td>{{ average }}/100</td>
+      </tr>
     </tbody>
   </table>
 
-  <p><strong>Moyenne générale :</strong> {{ average }}/100</p>
   <p><span class="badge" style="background-color: {{ badge_color }};">{{ mention }}</span></p>
 
   <div class="signature">
@@ -119,7 +132,7 @@
   </div>
 
   <div class="footer">
-    <p><em>Établi le : {{ now|date:"d/m/Y" }}</em></p>
+    <p><em>Remis le : {{ delivery_date|date:"d/m/Y" }}</em></p>
     <p><em>{{ school_name }} - Tous droits réservés</em></p>
   </div>
 
