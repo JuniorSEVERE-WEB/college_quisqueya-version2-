@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.views.i18n import set_language
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,5 +29,7 @@ urlpatterns = [
     path("messages/", include(("communication.urls", "communication"), namespace="communication")),
     path('api/academics/', include('academics.urls')),
     path('chaining/', include('smart_selects.urls')),
+    path("i18n/set-language/", set_language, name="set_language"),
+    path("core/", include("core.urls")),
     path('reports/', include('reports.urls')),
 ]

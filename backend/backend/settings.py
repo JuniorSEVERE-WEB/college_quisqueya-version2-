@@ -102,17 +102,20 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # ajouté
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "core.middleware.AcademicYearMiddleware",
+    'core.middleware.CurrentUserMiddleware',
+    'core.middleware.ActiveAcademicYearMiddleware',  # remplace AcademicYearMiddleware
+    
 ]
+
 
 ROOT_URLCONF = 'backend.urls'
 
@@ -199,3 +202,20 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.SessionAuthentication",  # pour login via l’interface DRF
     ],
 }
+
+
+# Paramètre utilisé par le middleware core pour l’année académique
+# Adapte si ton modèle est dans 'academics'
+CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
+
+# Smart selects (optionnel)
+SMART_SELECTS_JQUERY = True
+
+LANGUAGE_CODE = "fr"
+LANGUAGES = [
+    ("fr", "Français"),
+    ("en", "English"),
+]
+LOCALE_PATHS = [
+    BASE_DIR / "locale",
+]
