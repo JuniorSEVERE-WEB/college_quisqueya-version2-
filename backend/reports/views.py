@@ -1,6 +1,6 @@
-from django.shortcuts import get_object_or_404
+from django.db import models
+from django.shortcuts import get_object_or_404, render
 from django.http import HttpResponse
-from django.shortcuts import render
 from students.models import Student
 from reports.models import Grade, SubjectCoefficient
 from reportlab.lib.pagesizes import A4
@@ -11,6 +11,12 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from students.models import Student
+from professors.models import Professor
+from payments.models import Donation, EnrollmentFee
 
 def report_table(request):
     grades = Grade.objects.all()
@@ -96,8 +102,70 @@ def student_report_pdf(request, student_id):
         "trimester": trimester,
     })
 
-    pdf_file = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf()
+    pdf_file = HTML(string=html_string).write_pdf()
+    response = HttpResponse(pdf_file, content_type="application/pdf")
+    response["Content-Disposition"] = f"attachment; filename=student_{student.id}_report.pdf"
+    return response
 
-    response = HttpResponse(pdf_file, content_type='application/pdf')
-    response['Content-Disposition'] = f'filename=Bulletin_{student.first_name}_{student.last_name}.pdf'
+class DashboardStatsAPIView(APIView):
+    def get(self, request):
+        students_by_year = (
+            Student.objects.values("academic_year")
+            .annotate(count=models.Count("id"))
+            .order_by("academic_year")
+        )
+        donations_count = Donation.objects.count()
+        enrollment_count = EnrollmentFee.objects.count()
+        payments_count = donations_count + enrollment_count
+        active_profs_count = Professor.objects.filter(user__is_active=True).count()
+
+        return Response({
+            "students_by_year": list(students_by_year),
+            "payments_count": payments_count,
+            "donations_count": donations_count,
+            "enrollment_count": enrollment_count,
+            "active_profs_count": active_profs_count,
+        })
+
+def dashboard_view(request):
+    students_by_year = (
+        Student.objects.values("academic_year")
+        .annotate(count=models.Count("id"))
+        .order_by("academic_year")
+    )
+    donations_count = Donation.objects.count()
+    enrollment_count = EnrollmentFee.objects.count()
+    payments_count = donations_count + enrollment_count
+    active_profs_count = Professor.objects.filter(user__is_active=True).count()
+
+    return render(request, "reports/dashboard.html", {
+        "students_by_year": students_by_year,
+        "payments_count": payments_count,
+        "donations_count": donations_count,
+        "enrollment_count": enrollment_count,
+        "active_profs_count": active_profs_count,
+    })
+
+def dashboard_pdf_view(request):
+    students_by_year = (
+        Student.objects.values("academic_year")
+        .annotate(count=models.Count("id"))
+        .order_by("academic_year")
+    )
+    donations_count = Donation.objects.count()
+    enrollment_count = EnrollmentFee.objects.count()
+    payments_count = donations_count + enrollment_count
+    active_profs_count = Professor.objects.filter(user__is_active=True).count()
+
+    html_string = render_to_string("reports/dashboard_pdf.html", {
+        "students_by_year": students_by_year,
+        "payments_count": payments_count,
+        "donations_count": donations_count,
+        "enrollment_count": enrollment_count,
+        "active_profs_count": active_profs_count,
+    })
+
+    pdf_file = HTML(string=html_string).write_pdf()
+    response = HttpResponse(pdf_file, content_type="application/pdf")
+    response["Content-Disposition"] = "attachment; filename=dashboard_stats.pdf"
     return response

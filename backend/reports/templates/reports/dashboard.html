@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard - Statistiques</title>
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <h1>Tableau de bord - Statistiques</h1>
+
+    <a href="{% url 'dashboard_pdf' %}" class="btn">Exporter en PDF</a>
+
+    <div class="stats">
+        <div>
+            <h2>Nombre d'étudiants inscrits par année</h2>
+            <canvas id="studentsChart"></canvas>
+        </div>
+        <div>
+            <h2>Nombre de dons / paiements</h2>
+            <p id="paymentsCount"></p>
+        </div>
+        <div>
+            <h2>Nombre de profs actifs</h2>
+            <p id="activeProfsCount"></p>
+        </div>
+    </div>
+
+    <script>
+        // Exemple d'intégration avec fetch (à adapter avec React plus tard)
+        fetch('/reports/api/dashboard-stats/')
+            .then(response => response.json())
+            .then(data => {
+                // Affichage des paiements et profs actifs
+                document.getElementById('paymentsCount').textContent = data.payments_count;
+                document.getElementById('activeProfsCount').textContent = data.active_profs_count;
+
+                // Préparation des données pour Chart.js
+                const years = data.students_by_year.map(item => item.academic_year);
+                const counts = data.students_by_year.map(item => item.count);
+
+                new Chart(document.getElementById('studentsChart'), {
+                    type: 'bar',
+                    data: {
+                        labels: years,
+                        datasets: [{
+                            label: "Étudiants inscrits",
+                            data: counts,
+                            backgroundColor: "#2196F3"
+                        }]
+                    }
+                });
+            });
+    </script>
+</body>
+</html>

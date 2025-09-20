@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard PDF - Statistiques</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        h1 { color: #2196F3; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .section { margin-bottom: 30px; }
+    </style>
+</head>
+<body>
+    <h1>Tableau de bord - Statistiques</h1>
+
+    <div class="section">
+        <h2>Nombre d'étudiants inscrits par année</h2>
+        <table>
+            <tr>
+                <th>Année scolaire</th>
+                <th>Nombre d'étudiants</th>
+            </tr>
+            {% for item in students_by_year %}
+            <tr>
+                <td>{{ item.academic_year }}</td>
+                <td>{{ item.count }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <div class="section">
+        <h2>Nombre de dons / paiements</h2>
+        <p><strong>Total paiements :</strong> {{ payments_count }}</p>
+        <p><strong>Dons :</strong> {{ donations_count }}</p>
+        <p><strong>Frais d'inscription :</strong> {{ enrollment_count }}</p>
+    </div>
+
+    <div class="section">
+        <h2>Nombre de profs actifs</h2>
+        <p><strong>Profs actifs :</strong> {{ active_profs_count }}</p>
+    </div>
+</body>
+</html>
