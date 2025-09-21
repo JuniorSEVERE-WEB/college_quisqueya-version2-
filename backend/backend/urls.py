@@ -40,4 +40,7 @@ urlpatterns = [
     path("api/payments/", include("payments.api_urls")), # pour l’API REST
         # Blog en API REST
     path("api/blog/", include("blog.api_urls")),
+    path("api/reports/", include("reports.api_urls")),
+    path("api/alumni/", include("alumni.api_urls")),
+     path("api/communication/", include("communication.api_urls")),
 ]
