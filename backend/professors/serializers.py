@@ -14,5 +14,5 @@ class ProfessorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Professor
-        fields = ["id", "user", "academic_year", "department", "hire_date", "created_at"]
+        fields = "__all__"
         read_only_fields = ["created_at"]

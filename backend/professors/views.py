@@ -8,6 +8,7 @@ from django.contrib.auth import login
 from .forms import ProfessorRegisterForm, ProfessorProfileForm
 
 class ProfessorViewSet(viewsets.ModelViewSet):
+    queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [permissions.IsAuthenticated]
 

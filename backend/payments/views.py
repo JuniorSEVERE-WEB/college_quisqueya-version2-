@@ -97,3 +97,20 @@ def create_checkout_session(request):
         return redirect(checkout_session.url)
     except Exception as e:
         return JsonResponse({'error': str(e)})
+    
+
+# ...existing code...
+from rest_framework import viewsets, permissions
+from .models import Donation, EnrollmentFee
+from .serializers import DonationSerializer, EnrollmentFeeSerializer
+
+class DonationViewSet(viewsets.ModelViewSet):
+    queryset = Donation.objects.all()
+    serializer_class = DonationSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+class EnrollmentFeeViewSet(viewsets.ModelViewSet):
+    queryset = EnrollmentFee.objects.all()
+    serializer_class = EnrollmentFeeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+# ...existing code...

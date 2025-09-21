@@ -1,13 +1,17 @@
 from django.shortcuts import render
 
 # Create your views here.
-from rest_framework import viewsets
-from .models import Program, Classroom
-from .serializers import ProgramSerializer, ClassroomSerializer
+from rest_framework import viewsets, permissions
+
+from .models import Program, Classroom, Subject
+from .serializers import ProgramSerializer, ClassroomSerializer, SubjectSerializer
+
 
 class ProgramViewSet(viewsets.ModelViewSet):
     queryset = Program.objects.all()
     serializer_class = ProgramSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
 
 class ClassroomViewSet(viewsets.ReadOnlyModelViewSet):
     """
@@ -23,3 +27,8 @@ class ClassroomViewSet(viewsets.ReadOnlyModelViewSet):
             qs = qs.filter(program_id=program)
         return qs
 
+
+class SubjectViewSet(viewsets.ModelViewSet):
+    queryset = Subject.objects.all()
+    serializer_class = SubjectSerializer
+    permission_classes = [permissions.IsAuthenticated]
