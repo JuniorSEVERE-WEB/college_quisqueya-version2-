@@ -1,0 +1,240 @@
+.mobile-only {
+    display: none;
+}
+
+.menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.3);
+    z-index: 100;
+}
+
+.header 
+{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+    height: 70px;
+    font-weight: bold;
+    border-bottom: 1px solid rgb(224, 223, 223);
+}
+.left-section 
+{
+    display: flex;
+    align-items: center;
+}
+.left-section a
+{
+    text-decoration: none;
+}
+
+.left-section a ul 
+{
+    display: flex ;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+.left-section a ul li 
+{
+    list-style: none;
+    display: flex;
+    align-items: center;
+    /* ... */
+}
+.left-section a ul li span 
+{
+    font-weight: bold;
+    text-decoration: none;
+     color: rgb(57, 113, 188);
+}
+.left-section a ul li img 
+{
+    width: 60px;
+    height: 60px;
+    margin-right: 6px;
+}
+
+
+/*-----------------------------MIDDLE-SECTION-----------------------------*/
+.middle-section 
+{
+    display: flex;
+    align-items: center;
+}
+.menu-header-row
+{
+    display: none;
+}
+.middle-section ul 
+{
+    display: flex;
+    align-items: center;
+    gap:40px
+}
+.middle-section ul li 
+{
+    list-style: none;
+    cursor:pointer;
+}
+.middle-section ul li a 
+{
+    text-decoration: none;
+    color: rgb(57, 113, 188);
+}
+.middle-section ul li a:hover
+{
+    color: #5A91D6;
+}
+.middle-section ul li a:active 
+{
+    text-decoration: underline;
+}
+
+/*---------------------------RIGHT-SECTION---------------------------*/
+.right-section 
+{
+    display: flex;
+    align-items: center;
+}
+.right-section ul 
+{
+    display: flex;
+    align-items: center;
+}
+.right-section ul button
+{
+    background-color: rgb(57, 113, 188);
+    padding: 6px 12px;
+    border: 1px solid rgb(57, 113, 188);
+    border-radius: 20px;
+}
+.right-section ul button:hover
+{
+    background-color: white;
+    color: rgb(57, 113, 188);
+}
+.right-section ul button a
+{
+    text-decoration: none;
+    color: white;
+    font-weight: bold;
+
+}
+.right-section ul button a:hover 
+{
+    color: rgb(57, 113, 188);
+}
+.right-section .menu-icon 
+{
+    display: none;
+}
+/*--------------------------------MOBILE DESIGN--------------------------------*/
+@media(max-width: 1124px)
+{
+    .header 
+    {
+        justify-content: space-between;
+        padding: 0 25px;
+    }
+
+
+    /*------------------------------------- MIDDLE-SECTION-----------------------------------*/
+    .middle-section
+    {
+        display:  none;
+    }
+    .middle-section.show-menu 
+    {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 60vw;
+        height: 100vh;
+        background-color: white;
+        border: 1px solid rgb(240, 236, 236);
+        display: flex !important;
+        flex-direction: column;
+        z-index: 101;
+    }
+    .middle-section.show-menu .menu-header-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 75px;
+    padding-left: 10px;
+    padding-right: 10px;
+    position: relative;
+    box-sizing: border-box;
+    gap: 200px;
+    }
+    .middle-section.show-menu .menu-header-row .menu-logo img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+     .middle-section.show-menu ul {
+        padding-top: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+    .middle-section.show-menu ul li {
+        margin-bottom: 10px;
+        width:100%;
+        float: left;
+
+    }
+    
+
+   
+        
+        
+
+
+
+  /*-------------------------------------right-section------------------------*/
+
+
+    .right-section ul button 
+    {
+        display: none;
+    }
+
+    .mobile-only {
+    display: inline-block !important;
+    width: auto;
+    margin: 20px 0 0 0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #1659a5;
+    background-color: #1659a5;
+    color: #ffffff;
+    font-weight: bold;
+    text-align: center;
+        transition: background 0.2s, color 0.2s;
+    }
+    .mobile-only:hover {
+        background-color: #ffffff;
+        color: #1659a5;
+    }
+    .mobile-only a 
+    {
+        text-decoration: none;
+        color: #ffffff;
+    }
+    .mobile-only a:hover 
+    {
+        color: #1659a5;
+    }
+    .right-section .menu-icon 
+    {
+        display: block;
+        cursor: pointer;
+        font-size: 25px;
+        color: rgb(57, 113, 188);
+    }
+}

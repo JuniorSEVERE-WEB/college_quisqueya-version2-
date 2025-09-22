@@ -1,0 +1,83 @@
+html, body 
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.carroussel-images-text
+{
+    width: 50vw;
+}
+.carroussel
+{
+    width: 100%;
+    height: 60vh;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+.carroussel-img 
+{
+    width: 100%;
+    height: 60vh;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.carroussel-img::before
+{
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.45);
+    z-index: 1;
+    
+}
+.carroussel-text 
+{
+    position: relative;
+    z-index: 2;
+    color: white;
+    font-size: 2rem;
+    text-align: center;
+    text-shadow: 0 2px 8px #000;
+    padding: 0 20px;
+}
+.carroussel-btn 
+{
+    position: absolute;
+    top:50%;
+    transform: translateY(-50%);
+    z-index:3;
+    background-color: rgba(0, 0, 0, 0.4);
+    color: #fff;
+    border: none;
+    font-size: 2.2rem;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    
+}
+.carroussel-btn:hover 
+{
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.carroussel-btn.prev 
+{
+    left:18px;
+}
+.carroussel-btn.next 
+{
+    right: 18px;
+}

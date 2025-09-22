@@ -1,0 +1,110 @@
+.foot-page 
+{
+    display: flex;
+    flex-direction: row;
+    background-color: rgb(57,113,188);
+    color: white;
+    font-family: Montserrat;
+    justify-content: center;
+    gap: 80px;
+    padding: 40px 20px;
+}
+
+/* Animations pour les éléments du footer */
+.foot-page .part1,
+.foot-page .part2,
+.foot-page .part3 {
+    transform: scale(1);
+    opacity: 1;
+    transition: all 0.8s ease;
+}
+
+.foot-page.animate .part1 {
+    transform: scale(1);
+    opacity: 1;
+    transition-delay: 0.2s;
+}
+
+.foot-page.animate .part2 {
+    transform: scale(1);
+    opacity: 1;
+    transition-delay: 0.6s;
+}
+
+.foot-page.animate .part3 {
+    transform: scale(1);
+    opacity: 1;
+    transition-delay: 1s;
+}
+
+.part2 ul li a
+{
+    text-decoration: none;
+    color: white;
+    
+}
+.part2 ul li 
+{
+    list-style: none;
+    margin-top: 15px;
+}
+
+
+
+.copyright-inscrire
+{
+     background-color: rgb(57,113,188);
+    color: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-family: 800;
+    transform: scale(1);
+    opacity: 1;
+    transition: all 0.8s ease;
+    padding: 20px 0;
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.copyright-inscrire.animate {
+    transform: scale(1);
+    opacity: 1;
+    transition-delay: 1.4s;
+}
+
+.copyright-inscrire div ul 
+{
+    display: flex;
+    gap: 80px;
+    list-style: none;
+}
+.copyright-inscrire div ul li a 
+{
+    list-style: none;
+    text-decoration: none;
+    color: white;
+}
+@media (max-width: 767px) {
+
+    .foot-page
+    {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap:30px;
+    }
+    .foot-page .part1 .centre,
+    .foot-page .part2 .centre,
+    .foot-page .part3 .centre,
+    .part2 h2,
+    .part3 p
+    {
+        text-align: center;
+    } 
+    .copyright-inscrire
+    {
+        flex-direction: column-reverse;
+    }
+}
