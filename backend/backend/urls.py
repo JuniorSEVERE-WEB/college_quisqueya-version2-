@@ -18,6 +18,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -42,5 +45,13 @@ urlpatterns = [
     path("api/blog/", include("blog.api_urls")),
     path("api/reports/", include("reports.api_urls")),
     path("api/alumni/", include("alumni.api_urls")),
-     path("api/communication/", include("communication.api_urls")),
+    path("api/communication/", include("communication.api_urls")),
+    path("api/employees/", include("employees.urls")),
+
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

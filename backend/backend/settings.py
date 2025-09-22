@@ -50,6 +50,9 @@ INSTALLED_APPS = [
     'accounts',
     'academics',
     'core',
+    "corsheaders",
+    "drf_spectacular",
+    "django_filters",
     'students',
     'alumni',
     'employees',
@@ -103,17 +106,25 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # <-- remplace "corsheaders"
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.locale.LocaleMiddleware',  # ajouté
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'core.middleware.CurrentUserMiddleware',
-    'core.middleware.ActiveAcademicYearMiddleware',  # remplace AcademicYearMiddleware
-    
+    'core.middleware.ActiveAcademicYearMiddleware',
+    # supprime "drf_spectacular" ici (ce n’est pas un middleware)
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 
@@ -196,13 +207,23 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+# ...existing code...
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",  # pour login via l’interface DRF
-        "rest_framework_simplejwt.authentication.JWTAuthentication",  # ajouté
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 20,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.OrderingFilter",
+        "rest_framework.filters.SearchFilter",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+# ...existing code...
 
 
 # Paramètre utilisé par le middleware core pour l’année académique
@@ -220,3 +241,6 @@ LANGUAGES = [
 LOCALE_PATHS = [
     BASE_DIR / "locale",
 ]
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
