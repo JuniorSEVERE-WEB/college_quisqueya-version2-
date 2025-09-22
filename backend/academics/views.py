@@ -18,11 +18,19 @@ class AcademicYearViewSet(viewsets.ModelViewSet):
     serializer_class = AcademicYearSerializer
     permission_classes = [permissions.IsAdminUser]
 
+    # Filtres/Recherche/Tri
+    filterset_fields = ["is_active", "id"]
+    ordering_fields = ["id"]
+
 
 class TrimesterViewSet(viewsets.ModelViewSet):
     queryset = Trimester.objects.all()
     serializer_class = TrimesterSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    # Filtres/Recherche/Tri
+    filterset_fields = ["academic_year", "id"]
+    ordering_fields = ["id"]
 
 
 class StepViewSet(viewsets.ModelViewSet):
@@ -30,11 +38,20 @@ class StepViewSet(viewsets.ModelViewSet):
     serializer_class = StepSerializer
     permission_classes = [permissions.IsAdminUser]
 
+    # Filtres/Recherche/Tri
+    filterset_fields = ["trimester", "is_active", "id"]
+    ordering_fields = ["id"]
+
 
 class ClassroomViewSet(viewsets.ModelViewSet):
     queryset = Classroom.objects.all()
     serializer_class = ClassroomSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    # Filtres/Recherche/Tri
+    filterset_fields = ["academic_year", "id"]
+    search_fields = ["name"]
+    ordering_fields = ["id", "name"]
 
 
 class SubjectViewSet(viewsets.ModelViewSet):
@@ -42,17 +59,30 @@ class SubjectViewSet(viewsets.ModelViewSet):
     serializer_class = SubjectSerializer
     permission_classes = [permissions.IsAdminUser]
 
+    filterset_fields = ["classroom", "id"]
+    search_fields = ["name"]
+    ordering_fields = ["id", "name"]
+
 
 class ProfessorViewSet(viewsets.ModelViewSet):
     queryset = Professor.objects.all()
     serializer_class = ProfessorSerializer
     permission_classes = [permissions.IsAdminUser]
 
+    # Filtres/Recherche/Tri
+    filterset_fields = ["academic_year", "user", "id"]
+    search_fields = ["user__username", "user__first_name", "user__last_name", "user__email"]
+    ordering_fields = ["id", "user__username"]
+
 
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAdminUser]
+
+    filterset_fields = ["academic_year", "user", "id"]
+    search_fields = ["user__username", "user__first_name", "user__last_name", "user__email"]
+    ordering_fields = ["id", "user__username"]
 
     @action(detail=True, methods=["get"], url_path="moyennes")
     def get_moyennes(self, request, pk=None):
@@ -75,6 +105,10 @@ class NoteViewSet(viewsets.ModelViewSet):
     serializer_class = NoteSerializer
     permission_classes = [IsProfessorOrAdmin]
 
+    filterset_fields = ["student", "subject", "step"]
+    search_fields = ["student__user__username", "subject__name"]
+    ordering_fields = ["value", "id"]
+
     def _check_step_active(self, serializer):
         step = serializer.validated_data.get("step")
         if not step.is_active:
@@ -92,6 +126,10 @@ class ResourceViewSet(viewsets.ModelViewSet):
     queryset = Resource.objects.all()
     serializer_class = ResourceSerializer
     permission_classes = [IsProfessorOrAdmin]
+
+    filterset_fields = ["step", "subject", "id"]
+    search_fields = ["title"]
+    ordering_fields = ["id"]
 
     def _check_step_active(self, serializer):
         step = serializer.validated_data.get("step")
@@ -111,6 +149,10 @@ class AssignmentViewSet(viewsets.ModelViewSet):
     serializer_class = AssignmentSerializer
     permission_classes = [IsProfessorOrAdmin]
 
+    filterset_fields = ["step", "subject", "id"]
+    search_fields = ["title", "instructions"]
+    ordering_fields = ["id"]
+
     def _check_step_active(self, serializer):
         step = serializer.validated_data.get("step")
         if not step.is_active:
@@ -128,6 +170,10 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     queryset = Submission.objects.all()
     serializer_class = SubmissionSerializer
     permission_classes = [IsStudentOrAdmin]
+
+    # Filtres/Recherche/Tri
+    filterset_fields = ["assignment", "student", "id"]
+    ordering_fields = ["id"]
 
     def _check_step_active(self, serializer):
         step = serializer.validated_data.get("assignment").step

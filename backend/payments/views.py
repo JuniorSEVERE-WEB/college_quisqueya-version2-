@@ -109,8 +109,21 @@ class DonationViewSet(viewsets.ModelViewSet):
     serializer_class = DonationSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # Filtres/Recherche/Tri
+    filterset_fields = ["donor", "amount", "id"]
+    search_fields = ["donor__username", "donor__email"]
+    ordering_fields = ["id", "amount"]
+
 class EnrollmentFeeViewSet(viewsets.ModelViewSet):
     queryset = EnrollmentFee.objects.all()
     serializer_class = EnrollmentFeeSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    # Filtres/Recherche/Tri
+    filterset_fields = ["student", "amount", "id"]
+    search_fields = ["student__username", "student__email"]
+    ordering_fields = ["id", "amount"]
+
+
 # ...existing code...
+   

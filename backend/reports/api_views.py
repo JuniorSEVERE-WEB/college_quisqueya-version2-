@@ -9,15 +9,20 @@ from .serializers import (
     GradeSerializer,
 )
 
+
 class ReportSessionViewSet(viewsets.ModelViewSet):
     queryset = ReportSession.objects.select_related("classroom", "academic_year", "created_by").all()
     serializer_class = ReportSessionSerializer
     permission_classes = [permissions.IsAuthenticated]
     ordering = ["-created_at"]
 
+    # Ajout DRF filters
+    filterset_fields = ["classroom", "academic_year", "is_active", "trimester", "step"]
+    ordering_fields = ["created_at", "id"]
+
     def get_queryset(self):
         qs = super().get_queryset()
-        # Filtres: ?classroom=<id>&academic_year=<id>&active=true
+        # Filtres manuels
         classroom_id = self.request.query_params.get("classroom")
         ay_id = self.request.query_params.get("academic_year")
         active = self.request.query_params.get("active")
@@ -35,20 +40,24 @@ class ReportSessionViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["post"])
     def activate(self, request, pk=None):
         session = self.get_object()
-        # Un seul actif à la fois (logique déjà dans save, mais on le force ici aussi)
         ReportSession.objects.filter(is_active=True).exclude(pk=session.pk).update(is_active=False)
         session.is_active = True
         session.save()
         return Response({"status": "activated"}, status=status.HTTP_200_OK)
+
 
 class SubjectCoefficientViewSet(viewsets.ModelViewSet):
     queryset = SubjectCoefficient.objects.select_related("classroom", "subject", "academic_year").all()
     serializer_class = SubjectCoefficientSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    # Ajout DRF filters
+    filterset_fields = ["classroom", "subject", "academic_year"]
+    ordering_fields = ["coefficient", "id"]
+
     def get_queryset(self):
         qs = super().get_queryset()
-        # Filtres: ?classroom=<id>&subject=<id>&academic_year=<id>
+        # Filtres manuels
         classroom_id = self.request.query_params.get("classroom")
         subject_id = self.request.query_params.get("subject")
         ay_id = self.request.query_params.get("academic_year")
@@ -60,6 +69,7 @@ class SubjectCoefficientViewSet(viewsets.ModelViewSet):
             qs = qs.filter(academic_year_id=ay_id)
         return qs
 
+
 class GradeViewSet(viewsets.ModelViewSet):
     queryset = Grade.objects.select_related(
         "program", "classroom", "student", "subject", "report_session"
@@ -68,9 +78,13 @@ class GradeViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     ordering = ["student_id", "subject_id"]
 
+    # Ajout DRF filters
+    filterset_fields = ["student", "classroom", "subject", "program", "report_session"]
+    ordering_fields = ["student", "subject", "note", "id"]
+
     def get_queryset(self):
         qs = super().get_queryset()
-        # Filtres: ?student=<id>&classroom=<id>&subject=<id>&program=<id>&report_session=<id>&academic_year=<id>
+        # Filtres manuels
         student_id = self.request.query_params.get("student")
         classroom_id = self.request.query_params.get("classroom")
         subject_id = self.request.query_params.get("subject")
@@ -88,7 +102,6 @@ class GradeViewSet(viewsets.ModelViewSet):
             qs = qs.filter(program_id=program_id)
         if session_id:
             qs = qs.filter(report_session_id=session_id)
-        # academic_year via session ou student.classroom si présent
         if ay_id:
             qs = qs.filter(report_session__academic_year_id=ay_id)
         return qs

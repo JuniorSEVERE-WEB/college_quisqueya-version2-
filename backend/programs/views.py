@@ -12,6 +12,10 @@ class ProgramViewSet(viewsets.ModelViewSet):
     serializer_class = ProgramSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+    filterset_fields = ["academic_year", "user", "id"]
+    search_fields = ["user__username", "user__first_name", "user__last_name", "user__email"]
+    ordering_fields = ["id", "user__username"]
+
 
 class ClassroomViewSet(viewsets.ReadOnlyModelViewSet):
     """

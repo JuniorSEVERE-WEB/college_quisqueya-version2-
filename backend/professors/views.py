@@ -12,6 +12,13 @@ class ProfessorViewSet(viewsets.ModelViewSet):
     serializer_class = ProfessorSerializer
     permission_classes = [permissions.IsAuthenticated]
 
+     # Filtres/Recherche/Tri
+    filterset_fields = ["academic_year", "user", "id"]
+    search_fields = ["user__username", "user__first_name", "user__last_name", "user__email"]
+    ordering_fields = ["id", "user__username"]
+
+    
+
     def get_queryset(self):
         active = AcademicYear.objects.filter(is_active=True).first()
         if active:

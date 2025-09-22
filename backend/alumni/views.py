@@ -10,6 +10,11 @@ class AlumniViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
+
+    filterset_fields = ["role", "year_left", "user"]
+    search_fields = ["promo_name", "user__email"]
+    ordering_fields = ["date_created", "id"]
+
     def get_queryset(self):
         qs = super().get_queryset()
         # Filtres: ?role=student&year_left=2024&user=<id>&q=<search>
