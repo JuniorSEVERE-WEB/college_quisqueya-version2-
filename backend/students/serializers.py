@@ -15,11 +15,8 @@ class StudentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Student
-        fields = [
-            "id", "user", "academic_year", "classroom", "classroom_label", "matricule", "date_of_birth", "created_at",
-            "birth_certificate", "last_school_report"
-        ]
-        read_only_fields = ["created_at"]
+        fields = "__all__"
+        
 
     def validate_birth_certificate(self, file):
         if file:

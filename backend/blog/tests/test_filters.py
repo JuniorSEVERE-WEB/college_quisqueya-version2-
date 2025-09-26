@@ -1,5 +1,5 @@
 from django.test import SimpleTestCase
-from blog.templatetags.custom_filters import get_item
+from backend.blog.templatetags.blog_filters import get_item
 
 class TestCustomFilters(SimpleTestCase):
     def test_get_item_returns_value(self):

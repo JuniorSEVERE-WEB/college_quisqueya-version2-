@@ -1,0 +1,12 @@
+<h2>📥 Inbox</h2>
+<ul>
+  {% for msg in messages %}
+    <li>
+      <a href="{% url 'communication:detail' msg.pk %}">
+        <b>{{ msg.subject }}</b> (de {{ msg.sender }}) - {{ msg.created_at }}
+      </a>
+    </li>
+  {% empty %}
+    <p>Aucun message.</p>
+  {% endfor %}
+</ul>

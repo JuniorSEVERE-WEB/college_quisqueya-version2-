@@ -36,8 +36,7 @@ SECRET_KEY = 'django-insecure-@r(yc)5)bctlih7-o-d)#)nwhqb$^os57hkx__*3yt%@$1@#$9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
 
 # Application definition
 
@@ -48,12 +47,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Apps projet
     'accounts',
     'academics',
     'core',
-    "corsheaders",
-    "drf_spectacular",
-    "django_filters",
     'students',
     'alumni',
     'employees',
@@ -63,9 +61,14 @@ INSTALLED_APPS = [
     'payments',
     'membersite',
     'blog',
+    'programs.apps.ProgramsConfig',  # <-- garder UNE SEULE entrée pour programs
+
+    # Libs
     'rest_framework',
-    'programs.apps.ProgramsConfig',
-    "channels",
+    'corsheaders',        # <-- présent ici une seule fois
+    'drf_spectacular',
+    'django_filters',
+    'channels',
     'smart_selects',
 ]
 
@@ -73,8 +76,9 @@ INSTALLED_APPS = [
 ASGI_APPLICATION = "backend.asgi.application"
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    },
 }
 
 CHANNEL_LAYERS = {
@@ -120,6 +124,15 @@ MIDDLEWARE = [
     'core.middleware.ActiveAcademicYearMiddleware',
     # supprime "drf_spectacular" ici (ce n’est pas un middleware)
 ]
+
+
+# ...existing code...
+MIDDLEWARE = ["corsheaders.middleware.CorsMiddleware"] + MIDDLEWARE
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # Vite
+    "http://localhost:3000",  # React dev server
+]
+# ...existing code...
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

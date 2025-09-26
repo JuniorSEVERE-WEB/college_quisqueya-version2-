@@ -1,8 +1,5 @@
-from django.shortcuts import render
-
-# Create your views here.
+# programs/views.py
 from rest_framework import viewsets, permissions
-
 from .models import Program, Classroom, Subject
 from .serializers import ProgramSerializer, ClassroomSerializer, SubjectSerializer
 
@@ -12,16 +9,8 @@ class ProgramViewSet(viewsets.ModelViewSet):
     serializer_class = ProgramSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    filterset_fields = ["academic_year", "user", "id"]
-    search_fields = ["user__username", "user__first_name", "user__last_name", "user__email"]
-    ordering_fields = ["id", "user__username"]
-
 
 class ClassroomViewSet(viewsets.ReadOnlyModelViewSet):
-    """
-    On permet de filtrer par paramètre ?program=<id>
-    Exemple: /api/classrooms/?program=5
-    """
     serializer_class = ClassroomSerializer
 
     def get_queryset(self):
