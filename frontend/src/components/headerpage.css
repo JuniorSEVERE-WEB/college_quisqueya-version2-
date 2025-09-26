@@ -50,7 +50,7 @@
 {
     font-weight: bold;
     text-decoration: none;
-     color: rgb(57, 113, 188);
+     color: rgb(1,1,32);
 }
 .left-section a ul li img 
 {
@@ -84,11 +84,11 @@
 .middle-section ul li a 
 {
     text-decoration: none;
-    color: rgb(57, 113, 188);
+    color: rgb(1,1,32);
 }
 .middle-section ul li a:hover
 {
-    color: #5A91D6;
+    color: rgb(30, 30, 172);
 }
 .middle-section ul li a:active 
 {
@@ -108,15 +108,15 @@
 }
 .right-section ul button
 {
-    background-color: rgb(57, 113, 188);
+    background-color: rgb(1,1,32);
     padding: 6px 12px;
-    border: 1px solid rgb(57, 113, 188);
+    border: 1px solid rgb(1,1,32);
     border-radius: 20px;
 }
 .right-section ul button:hover
 {
     background-color: white;
-    color: rgb(57, 113, 188);
+    color: rgb(1,1,32);
 }
 .right-section ul button a
 {
@@ -127,7 +127,7 @@
 }
 .right-section ul button a:hover 
 {
-    color: rgb(57, 113, 188);
+    color: rgb(1,1,32);
 }
 .right-section .menu-icon 
 {
@@ -204,14 +204,27 @@
         display: none;
     }
 
+    
+.right-section ul button.logout {
+    background-color: #b00020;
+    border: 1px solid #b00020;
+    color: #fff;
+}
+.right-section ul button.logout:hover {
+    background-color: #ffffff;
+    color: #b00020;
+    border-color: #b00020;
+}
+
+
     .mobile-only {
     display: inline-block !important;
     width: auto;
     margin: 20px 0 0 0;
     padding: 6px 12px;
     border-radius: 20px;
-    border: 1px solid #1659a5;
-    background-color: #1659a5;
+    border: 1px solid rgb(1,1,32);
+    background-color: rgb(1,1,32);
     color: #ffffff;
     font-weight: bold;
     text-align: center;
@@ -219,7 +232,7 @@
     }
     .mobile-only:hover {
         background-color: #ffffff;
-        color: #1659a5;
+        color: rgb(1,1,32);
     }
     .mobile-only a 
     {
@@ -228,13 +241,13 @@
     }
     .mobile-only a:hover 
     {
-        color: #1659a5;
+        color: rgb(1,1,32);
     }
     .right-section .menu-icon 
     {
         display: block;
         cursor: pointer;
         font-size: 25px;
-        color: rgb(57, 113, 188);
+        color: rgb(1,1,32);
     }
 }

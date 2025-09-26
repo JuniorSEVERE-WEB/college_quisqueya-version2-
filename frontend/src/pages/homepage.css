@@ -1,17 +1,13 @@
-html, body 
-{
+html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
-.carroussel-images-text
-{
-    width: 50vw;
-}
-.carroussel
-{
+
+/* === Carrousel === */
+.carroussel {
     width: 100%;
-    height: 60vh;
+    height: 50vh; /* mobile */
     min-height: 220px;
     display: flex;
     align-items: center;
@@ -20,30 +16,52 @@ html, body
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    
 }
-.carroussel-img 
-{
+.carroussel-img {
     width: 100%;
-    height: 60vh;
+    height: 50vh; /* mobile */
     background-size: cover;
-    background-position: center;
+    background-position: center 15%; /* mobile: focus un peu haut */
+    background-repeat: no-repeat;
     position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
 }
-.carroussel-img::before
-{
+/* Ajuste le cadrage sur grands écrans pour éviter de couper le haut du sujet */
+/* Mobile (déjà bien) */
+
+
+/* Tablette et plus */
+@media (min-width: 768px) {
+  .carroussel,
+  .carroussel-img {
+    height: 65vh;
+  }
+  .carroussel-img {
+    background-position: center 50%; /* compromis : tête + bas */
+  }
+}
+
+/* Très grands écrans */
+@media (min-width: 1200px) {
+  .carroussel,
+  .carroussel-img {
+    height: 75vh;
+  }
+  .carroussel-img {
+    background-position: center 10%; /* pas trop bas sinon tête coupée */
+  }
+}
+
+.carroussel-img::before {
     content: "";
     position: absolute;
     inset: 0;
     background-color: rgba(0, 0, 0, 0.45);
     z-index: 1;
-    
 }
-.carroussel-text 
-{
+.carroussel-text {
     position: relative;
     z-index: 2;
     color: white;
@@ -52,8 +70,7 @@ html, body
     text-shadow: 0 2px 8px #000;
     padding: 0 20px;
 }
-.carroussel-btn 
-{
+.carroussel-btn {
     position: absolute;
     top:50%;
     transform: translateY(-50%);
@@ -66,18 +83,191 @@ html, body
     width: 44px;
     height: 44px;
     cursor: pointer;
-    
 }
-.carroussel-btn:hover 
-{
+.carroussel-btn:hover {
     background-color: rgba(0, 0, 0, 0.7);
 }
+.carroussel-btn.prev { left:18px; }
+.carroussel-btn.next { right: 18px; }
 
-.carroussel-btn.prev 
-{
-    left:18px;
+/* === Section Bienvenue === */
+.bienvenue-section {
+  background: #ffffff;
+  padding: 32px 20px;
+  text-align: center;
 }
-.carroussel-btn.next 
-{
-    right: 18px;
+.bienvenue-card {
+  border: 1px solid rgb(1, 1, 32);              /* bordure visible (doré) */
+  border-radius: 16px;
+  background: #ffffff;
+  padding: 24px 20px;
+  max-width: 980px;
+  margin: 0 auto;                          /* centré */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.06); /* esthétique douce */
+  position: relative;
+}
+.bienvenue-title {
+  color: #001f3f;
+  font-size: clamp(0.9rem, 4vw, 2.2rem); /* réduit sur mobile, max 2.2rem */
+  margin: 0 0 14px;
+  line-height: 1.2;
+  letter-spacing: 0.3px;
+  position: relative;
+  white-space: nowrap;
+}
+.bienvenue-title::after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, rgb(1, 1, 32), rgb(112, 112, 197));
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+.bienvenue-text {
+  color: #2b2b2b;
+  font-size: 1.06rem;
+  line-height: 1.85;
+  max-width: 820px;
+  margin: 0 auto;
+  text-align: left;            /* plus lisible */
+  text-wrap: pretty;           /* meilleur retour à la ligne si supporté */
+}
+.bienvenue-text::first-letter {
+  float: left;
+  font-size: 2.2rem;
+  line-height: 1;
+  padding-right: 6px;
+  padding-top: 2px;
+  color: #001f3f;              /* drop cap discret */
+  font-weight: 700;
+}
+
+@media (min-width: 768px) {
+  .bienvenue-card { padding: 28px 28px; }
+  .bienvenue-title { font-size: 2.4rem; 
+    white-space: normal; }
+  .bienvenue-text { font-size: 1.12rem; }
+}
+
+/* === Section Nos Valeurs / Missions === */
+.valeurs-section {
+  background: #f8f9fa;
+  padding: 80px 20px;
+  text-align: center;
+}
+.valeurs-title {
+  font-size: 2rem;
+  margin-bottom: 40px;
+  color: #001f3f;
+}
+.valeurs-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+.valeur-card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 30px 20px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+.valeur-card:hover {
+  transform: translateY(-5px);
+}
+.valeur-icon {
+  font-size: 2.5rem;
+  color: #daa520; /* or doré */
+  margin-bottom: 15px;
+}
+.valeur-card h3 {
+  color: #001f3f;
+  margin-bottom: 15px;
+}
+.valeur-card p {
+  color: #555555;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+
+
+/* === Section Actualités === */
+.articles-home h2 {
+  text-align: center;
+  margin: 0 auto 40px;
+}
+
+/* Par défaut: on affiche le carrousel, on cache la grille */
+
+
+/* Cartes d’articles (grille desktop) */
+.article-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+.article-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+}
+.article-card-img {
+  aspect-ratio: 16 / 9;
+  background-size: cover;
+  background-position: center 30%;
+}
+.article-card-body {
+  padding: 12px 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.article-meta {
+  font-size: 13px;
+  color: #566;
+  opacity: .9;
+}
+.article-title {
+  font-size: clamp(1rem, 1.4vw, 1.1rem);
+  margin: 0;
+  color: #0f2742;
+}
+.article-desc {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #2b2b2b;
+}
+.article-actions {
+  margin-top: 6px;
+}
+.btn-read {
+  display: inline-block;
+  padding: 8px 14px;
+  background: #daa520;
+  color: #102a43;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  text-align: center;
+}
+.btn-read:hover {
+  background: #c3991c;
+}
+
+/* À partir de 992px: on masque le carrousel et on montre une grille 4 colonnes */
+@media (min-width: 992px) {
+  .news-slide { display: none !important; }
+  .articles-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-top: 8px;
+  }
 }

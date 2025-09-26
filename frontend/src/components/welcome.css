@@ -1,0 +1,19 @@
+.welcome-section {
+  background: #ffffff;
+  padding: 80px 20px;
+  text-align: center;
+}
+
+.welcome-title {
+  color: #001f3f; /* bleu nuit */
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.welcome-text {
+  color: #333333; /* gris foncé */
+  font-size: 1.1rem;
+  line-height: 1.6;
+  max-width: 800px;
+  margin: 0 auto;
+}

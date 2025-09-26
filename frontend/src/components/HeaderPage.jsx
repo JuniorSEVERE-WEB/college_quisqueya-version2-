@@ -1,21 +1,35 @@
 import './headerpage.css'
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+
 export function HeaderPage()
 {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem('access_token'));
+
     const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
     const handleLinkClick = () => setIsMenuOpen(false);
 
+    useEffect(() => {
+        const update = () => setIsLoggedIn(!!localStorage.getItem('access_token'));
+        update();
+        window.addEventListener('storage', update);
+        window.addEventListener('authChanged', update);
+        return () => {
+            window.removeEventListener('storage', update);
+            window.removeEventListener('authChanged', update);
+        };
+    }, []);
+
     const navigate = useNavigate();
-    // Vérifie si l'utilisateur est connecté
-    const isLoggedIn = !!localStorage.getItem('access_token');
 
     const handleLogoutClick = (e) => {
         e.preventDefault();
         localStorage.removeItem('access_token');
         localStorage.removeItem('refresh_token');
+        localStorage.removeItem('user');
         setIsMenuOpen(false);
+        window.dispatchEvent(new Event('authChanged'));
         navigate('/');
     };
 
@@ -24,15 +38,15 @@ export function HeaderPage()
            {isMenuOpen && <div className="menu-overlay" onClick={handleMenuClick}></div>}
           <div className="header">
             <div className="left-section">
-                <a href="#">
+                <Link to="/" onClick={handleLinkClick}>
                     <ul>
                         <li><img src="/logo-19-aout.png" alt="Logo" /></li>
-                        <li><span>CCM</span></li>
+                        <li><span>CQL</span></li>
                     </ul>
-                </a>
+                </Link>
             </div>
+
             <div className={`middle-section${isMenuOpen ? " show-menu" : ""}`}>
-                {/* menu-header-row supprimé : logo et close-menu */}
                 <div className="menu-header-row">
                     <div className="menu-logo">
                         <img src="/logo-19-aout.png" alt="Logo" />
@@ -40,20 +54,30 @@ export function HeaderPage()
                     <button className="close-menu" onClick={handleMenuClick} style={{display: isMenuOpen ? 'block' : 'none'}}>✕</button>
                 </div>
                 <ul>
-                    <li><a href="/" onClick={handleLinkClick}>Accueil</a></li>
-                    <li><a href="/about-us" onClick={handleLinkClick}>A propos</a></li>
-                    <li><a href="/news" onClick={handleLinkClick}>Actualité</a></li>
-                    
-                        {!isLoggedIn && <li><a href="/login" onClick={handleLinkClick}>Connexion</a></li>}
-                        {!isLoggedIn && <li><a href="/register" onClick={handleLinkClick}>Vie scolaire</a></li>}
-                        
-                
+                    <li><Link to="/" onClick={handleLinkClick}>Accueil</Link></li>
+                    <li><Link to="/about-us" onClick={handleLinkClick}>A propos</Link></li>
+                    <li><Link to="/news" onClick={handleLinkClick}>Actualité</Link></li>
+                    {!isLoggedIn && <li><Link to="/login" onClick={handleLinkClick}>Connexion</Link></li>}
+                    {!isLoggedIn && <li><Link to="/register" onClick={handleLinkClick}>Vie scolaire</Link></li>}
+                    {isLoggedIn && <li><a href="#" onClick={handleLogoutClick}>Déconnexion</a></li>}
                 </ul>
-                <button className="deconnexion mobile-only"><a href="/contact" onClick={handleLinkClick}>Contact</a></button>
+
+                <button className="deconnexion mobile-only">
+                    <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
+                </button>
+                {isLoggedIn && (
+                    <button className="mobile-only" onClick={handleLogoutClick}>Déconnexion</button>
+                )}
             </div>
+
             <div className="right-section">
                 <ul>
-                    <button><a href="/contact">Contact</a></button>
+                    {!isLoggedIn && (
+                        <button><Link to="/contact">Contact</Link></button>
+                    )}
+                    {isLoggedIn && (
+                        <button className="logout" onClick={handleLogoutClick}>Déconnexion</button>
+                    )}
                     <li className="menu-icon" onClick={handleMenuClick}>
                          {isMenuOpen? '✕' : '☰'}
                     </li>
