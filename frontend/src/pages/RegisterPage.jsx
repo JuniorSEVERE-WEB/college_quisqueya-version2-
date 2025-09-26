@@ -1,3 +1,4 @@
+// frontend/src/pages/RegisterPage.jsx
 import { useEffect, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
@@ -8,7 +9,9 @@ export default function RegisterPage() {
   const [classes, setClasses] = useState([]);
   const [programs, setPrograms] = useState([]);
   const [subjects, setSubjects] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loadingClasses, setLoadingClasses] = useState(false);
+  const [loadingPrograms, setLoadingPrograms] = useState(false);
+  const [loadingSubjects, setLoadingSubjects] = useState(false);
   const [msg, setMsg] = useState("");
   const [err, setErr] = useState("");
 
@@ -18,32 +21,48 @@ export default function RegisterPage() {
     setErr("");
   }, [role]);
 
-  // Charger classes/programs/subjects selon rôle
+  // Charger classes si étudiant
   useEffect(() => {
     if (role === "student") {
-      setLoading(true);
+      setLoadingClasses(true);
+      setClasses([]);
       API.get("classrooms/public/")
-        .then(res => setClasses(Array.isArray(res.data) ? res.data : (res.data?.results || [])))
+        .then(res =>
+          setClasses(Array.isArray(res.data) ? res.data : (res.data?.results || []))
+        )
         .catch(() => setErr("Impossible de charger les classes."))
-        .finally(() => setLoading(false));
-    } else if (role === "professor") {
-      setLoading(true);
-      Promise.all([
-        API.get("programs/public/"),
-        API.get("subjects/public/")
-      ])
-        .then(([progRes, subjRes]) => {
-          setPrograms(Array.isArray(progRes.data) ? progRes.data : (progRes.data?.results || []));
-          setSubjects(Array.isArray(subjRes.data) ? subjRes.data : (subjRes.data?.results || []));
-        })
-        .catch(() => setErr("Impossible de charger les programmes ou matières."))
-        .finally(() => setLoading(false));
+        .finally(() => setLoadingClasses(false));
+    }
+  }, [role]);
+
+  // Charger programmes & matières si professeur
+  useEffect(() => {
+    if (role === "professor") {
+      setLoadingPrograms(true);
+      setLoadingSubjects(true);
+      setPrograms([]);
+      setSubjects([]);
+
+      API.get("programs/public/")
+        .then(res =>
+          setPrograms(Array.isArray(res.data) ? res.data : (res.data?.results || []))
+        )
+        .catch(() => setErr("Impossible de charger les programmes."))
+        .finally(() => setLoadingPrograms(false));
+
+      API.get("subjects/public/")
+        .then(res =>
+          setSubjects(Array.isArray(res.data) ? res.data : (res.data?.results || []))
+        )
+        .catch(() => setErr("Impossible de charger les matières."))
+        .finally(() => setLoadingSubjects(false));
     }
   }, [role]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMsg(""); setErr("");
+    setMsg("");
+    setErr("");
     const form = new FormData(e.currentTarget);
 
     try {
@@ -57,28 +76,37 @@ export default function RegisterPage() {
         setMsg("Compte créé. Vous pouvez vous connecter.");
       } else if (role === "student") {
         const fd = new FormData();
-        ["username","email","password1","password2","first_name","last_name",
-         "date_of_birth","parent_phone","student_phone","parent_email","classroom"]
-          .forEach(k => { if (form.get(k)) fd.append(k, form.get(k)); });
+        [
+          "username","email","password1","password2",
+          "first_name","last_name","date_of_birth",
+          "parent_phone","student_phone","parent_email","classroom"
+        ].forEach(k => { if (form.get(k)) fd.append(k, form.get(k)); });
         if (form.get("birth_certificate")) fd.append("birth_certificate", form.get("birth_certificate"));
         if (form.get("last_school_report")) fd.append("last_school_report", form.get("last_school_report"));
-        await API.post("students/register/", fd, { headers: { "Content-Type": "multipart/form-data" }});
+
+        await API.post("students/register/", fd, { headers: { "Content-Type": "multipart/form-data" } });
         setMsg("Demande envoyée. En attente de validation de l’administration.");
       } else if (role === "professor") {
         const fd = new FormData();
-        ["username","email","password1","password2","first_name","last_name",
-         "department","hire_date","program"].forEach(k => { if (form.get(k)) fd.append(k, form.get(k)); });
+        [
+          "username","email","password1","password2",
+          "first_name","last_name","department","hire_date","program"
+        ].forEach(k => { if (form.get(k)) fd.append(k, form.get(k)); });
         for (let s of form.getAll("subjects")) {
           fd.append("subjects", s);
         }
+
         await API.post("professors/register/", fd);
         setMsg("Demande envoyée. En attente de validation de l’administration.");
       } else if (role === "alumni") {
         const fd = new FormData();
-        ["username","email","password1","password2","year_left","promo_name","years_interval"]
-          .forEach(k => { if (form.get(k)) fd.append(k, form.get(k)); });
+        [
+          "username","email","password1","password2",
+          "first_name","last_name","year_left","promo_name","years_interval"
+        ].forEach(k => { if (form.get(k)) fd.append(k, form.get(k)); });
         if (form.get("proof_document")) fd.append("proof_document", form.get("proof_document"));
-        await API.post("alumni/register/", fd, { headers: { "Content-Type": "multipart/form-data" }});
+
+        await API.post("alumni/register/", fd, { headers: { "Content-Type": "multipart/form-data" } });
         setMsg("Demande envoyée. En attente de validation de l’administration.");
       }
 
@@ -111,18 +139,20 @@ export default function RegisterPage() {
               <button type="button" onClick={() => setRole("")} style={{ marginLeft: "auto" }}>Changer</button>
             </div>
 
+            {/* Champs communs */}
             <input name="username" placeholder="Nom d'utilisateur" required />
             <input name="email" type="email" placeholder="Email" required />
             <input name="password1" type="password" placeholder="Mot de passe" required />
             <input name="password2" type="password" placeholder="Confirmer le mot de passe" required />
 
+            {/* Étudiant */}
             {role === "student" && (
               <>
                 <div style={{ display: "grid", gap: 8, gridTemplateColumns: "1fr 1fr" }}>
                   <input name="first_name" placeholder="Prénom" required />
                   <input name="last_name" placeholder="Nom" required />
                 </div>
-                <input name="date_of_birth" type="date" required />
+                <input name="date_of_birth" type="date" placeholder="Date de naissance" required />
                 <input name="parent_phone" placeholder="Téléphone parent" required />
                 <input name="student_phone" placeholder="Téléphone étudiant" />
                 <input name="parent_email" type="email" placeholder="Email parent" />
@@ -130,8 +160,8 @@ export default function RegisterPage() {
                 <label>Classe</label>
                 <select name="classroom" required defaultValue="">
                   <option value="" disabled>— Choisir une classe —</option>
-                  {loading && <option disabled>Chargement…</option>}
-                  {!loading && classes.map(c => (
+                  {loadingClasses && <option disabled>Chargement…</option>}
+                  {!loadingClasses && classes.map(c => (
                     <option key={c.id} value={c.id}>{c.name}</option>
                   ))}
                 </select>
@@ -141,6 +171,7 @@ export default function RegisterPage() {
               </>
             )}
 
+            {/* Professeur */}
             {role === "professor" && (
               <>
                 <div style={{ display: "grid", gap: 8, gridTemplateColumns: "1fr 1fr" }}>
@@ -148,30 +179,35 @@ export default function RegisterPage() {
                   <input name="last_name" placeholder="Nom" required />
                 </div>
                 <input name="department" placeholder="Département" required />
-                <input name="hire_date" type="date" required />
+                <input name="hire_date" type="date" placeholder="Date d’embauche" required />
 
                 <label>Programme</label>
                 <select name="program" required defaultValue="">
                   <option value="" disabled>— Choisir un programme —</option>
-                  {loading && <option disabled>Chargement…</option>}
-                  {!loading && programs.map(p => (
+                  {loadingPrograms && <option disabled>Chargement…</option>}
+                  {!loadingPrograms && programs.map(p => (
                     <option key={p.id} value={p.id}>{p.name}</option>
                   ))}
                 </select>
 
                 <label>Matières</label>
                 <select name="subjects" multiple required>
-                  {loading && <option disabled>Chargement…</option>}
-                  {!loading && subjects.map(s => (
+                  {loadingSubjects && <option disabled>Chargement…</option>}
+                  {!loadingSubjects && subjects.map(s => (
                     <option key={s.id} value={s.id}>{s.name}</option>
                   ))}
                 </select>
               </>
             )}
 
+            {/* Alumni */}
             {role === "alumni" && (
               <>
-                <input name="year_left" type="number" placeholder="Année de sortie" required />
+                <div style={{ display: "grid", gap: 8, gridTemplateColumns: "1fr 1fr" }}>
+                  <input name="first_name" placeholder="Prénom" required />
+                  <input name="last_name" placeholder="Nom" required />
+                </div>
+                <input name="year_left" type="number" min="1950" max="2100" placeholder="Année de sortie" required />
                 <input name="promo_name" placeholder="Nom de la promo" required />
                 <input name="years_interval" placeholder="Intervalle d’années (ex: 2018-2025)" required />
                 <label>Justificatif (PDF) <input name="proof_document" type="file" accept="application/pdf" /></label>
