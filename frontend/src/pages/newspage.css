@@ -76,7 +76,7 @@
 .btn-read {
   display: inline-block;
   padding: 8px 14px;
-  background: #daa520;
+  background: rgb(1, 1, 32);
   color: #102a43;
   border-radius: 8px;
   font-weight: 600;

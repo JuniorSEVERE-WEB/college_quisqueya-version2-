@@ -79,3 +79,42 @@ button:hover {
     font-size: 1.5rem;
   }
 }
+
+.form-section {
+  display: grid;
+  gap: 10px; /* espace entre chaque input */
+}
+
+.form-input,
+.form-select {
+  padding: 10px;
+  border: 1px solid rgb(1, 1, 32);
+  border-radius: 6px;
+  font-size: 1rem;
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 6px; /* 👈 petit espace supplémentaire */
+}
+
+.form-input:focus,
+.form-select:focus {
+  outline: none;
+  border-color: rgb(30, 30, 172);
+  box-shadow: 0 0 6px rgba(30, 30, 172, 0.4);
+}
+
+.form-button {
+  background-color: rgb(1, 1, 32);
+  color: white;
+  padding: 10px 16px;
+  border: 1px solid rgb(1, 1, 32);
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-button:hover {
+  background-color: white;
+  color: rgb(1, 1, 32);
+}

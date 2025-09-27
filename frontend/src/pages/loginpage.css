@@ -38,7 +38,7 @@
 /* Bouton */
 .login-page button {
   padding: 12px;
-  background-color: #2563eb;
+  background-color: rgb(1, 1, 32);
   color: white;
   border: none;
   border-radius: 6px;
@@ -48,7 +48,7 @@
 }
 
 .login-page button:hover {
-  background-color: #1e40af;
+  background-color: white;
 }
 
 /* Message d’erreur */
