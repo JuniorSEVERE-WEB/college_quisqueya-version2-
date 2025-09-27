@@ -9,7 +9,7 @@ import './App.css'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
-import ContactPage from './pages/ContactPage'
+import {ContactPage} from './pages/ContactPage'
 import { HomePage } from './pages/HomePage'
 import QuiSommesNousPage from './pages/QuiSommesNousPage'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';

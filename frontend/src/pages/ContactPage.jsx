@@ -1,60 +1,90 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import API from "../api"; // ton instance Axios
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
-export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
+import "./contact.css";
+
+export function ContactPage() {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [status, setStatus] = useState("");
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setSent(true);
-    // Ici tu pourrais envoyer les données à un backend plus tard
+    try {
+      await API.post("/contact-messages/", form);
+      setStatus("✅ Message envoyé avec succès !");
+      setForm({ name: "", email: "", subject: "", message: "" });
+    } catch (error) {
+      console.error(error);
+      setStatus("❌ Erreur lors de l’envoi du message.");
+    }
   };
-
-  if (sent) {
-    return (
-      <div style={{ color: "green" }}>
-        Merci pour votre message ! Nous vous répondrons bientôt.
-      </div>
-    );
-  }
 
   return (
     <>
-    <HeaderPage />
-      <div className="contact-page">
-        <h2>Contact</h2>
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            placeholder="Votre nom"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Votre email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-          <textarea
-            name="message"
-            placeholder="Votre message"
-            value={form.message}
-            onChange={handleChange}
-            required
-          />
+      <HeaderPage />
+
+      <div className="contact-container">
+        <h1>Contactez-nous</h1>
+        {status && <p className="status-message">{status}</p>}
+
+        <form onSubmit={handleSubmit} className="contact-form">
+          <label>
+            Nom :
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Email :
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Sujet :
+            <input
+              type="text"
+              name="subject"
+              value={form.subject}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
+          <label>
+            Message :
+            <textarea
+              name="message"
+              value={form.message}
+              onChange={handleChange}
+              required
+            />
+          </label>
+
           <button type="submit">Envoyer</button>
         </form>
       </div>
+
       <FooterPage />
     </>
   );

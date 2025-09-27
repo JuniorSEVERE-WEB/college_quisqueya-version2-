@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
 import API from "../api";
+import "./registerpage.css"; // 👈 style des cartes
 
 export default function RegisterPage() {
   const [role, setRole] = useState("");
@@ -121,14 +122,26 @@ export default function RegisterPage() {
     <>
       <HeaderPage />
       <div style={{ maxWidth: 900, margin: "24px auto", padding: "0 16px" }}>
-        <h2 style={{ textAlign: "center", marginBottom: 16 }}>S'inscrire</h2>
+        <h2 style={{ textAlign: "center", marginBottom: 16 }}>S'inscrire comme :</h2>
 
         {!role && (
-          <div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
-            <button onClick={() => setRole("membersite")}>Membre du site</button>
-            <button onClick={() => setRole("student")}>Étudiant</button>
-            <button onClick={() => setRole("professor")}>Professeur</button>
-            <button onClick={() => setRole("alumni")}>Alumni</button>
+          <div className="role-selection">
+            <div className="role-card" onClick={() => setRole("membersite")}>
+              <div className="icon">🌐</div>
+              Abonné(e) 
+            </div>
+            <div className="role-card" onClick={() => setRole("student")}>
+              <div className="icon">🎓</div>
+              Étudiant(e)
+            </div>
+            <div className="role-card" onClick={() => setRole("professor")}>
+              <div className="icon">📘</div>
+              Professeur(e)
+            </div>
+            <div className="role-card" onClick={() => setRole("alumni")}>
+              <div className="icon">🏅</div>
+              Anciens/Anciennes
+            </div>
           </div>
         )}
 

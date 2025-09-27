@@ -1,0 +1,81 @@
+/* ===================== */
+/*  Boutons standards    */
+/* ===================== */
+button {
+  background: rgb(1, 1, 32);
+  color: white;
+  border: 1.2px solid rgb(1, 1, 32);
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+button:hover {
+  background: white;
+  color: rgb(1, 1, 32);
+  border: 1.2px solid rgb(1, 1, 32);
+}
+
+/* ===================== */
+/*  Grille des rôles     */
+/* ===================== */
+.role-selection {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 20px;
+  height: 50vh; /* occupe 50% de la hauteur de l’écran */
+  padding: 10px;
+}
+
+/* Chaque carte de rôle */
+.role-card {
+  background: white;
+  color: rgb(1, 1, 32);
+  border: 0.8px solid rgb(1, 1, 32);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.role-card .icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+/* Hover sur cartes */
+.role-card:hover {
+  color: rgb(30, 30, 172);
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 6px 18px rgba(30,30,172,0.25);
+}
+
+/* ===================== */
+/*  Responsivité mobile  */
+/* ===================== */
+@media (max-width: 768px) {
+  .role-selection {
+    grid-template-columns: 1fr 1fr; /* 2 colonnes sur mobile */
+    height: auto;
+    min-height: 50vh;
+  }
+
+  .role-card {
+    font-size: 1rem;
+    padding: 16px;
+  }
+
+  .role-card .icon {
+    font-size: 1.5rem;
+  }
+}

@@ -3,6 +3,7 @@ import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
 import API from "../api";
 import { useNavigate, Link } from "react-router-dom";
+import "./loginpage.css";
 
 export default function LoginPage({ onLogin }) {
   const [username, setUsername] = useState("");
