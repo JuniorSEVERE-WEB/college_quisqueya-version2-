@@ -1,6 +1,7 @@
 from rest_framework import serializers
-from .models import Message
+from .models import Message, ContactMessage
 from accounts.models import User  # ou get_user_model()
+
 
 class MessageSerializer(serializers.ModelSerializer):
     sender_username = serializers.CharField(source="sender.username", read_only=True)
@@ -16,10 +17,23 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = [
             "id",
-            "sender", "sender_username",
-            "recipients", "recipients_usernames",
-            "subject", "body",
+            "sender",
+            "sender_username",
+            "recipients",
+            "recipients_usernames",
+            "subject",
+            "body",
             "created_at",
-            "read_by", "read_by_usernames",
+            "read_by",
+            "read_by_usernames",
         ]
         read_only_fields = ["sender", "created_at", "read_by"]
+
+
+class ContactMessageSerializer(serializers.ModelSerializer):
+    """Sérialiseur pour les messages du formulaire de contact"""
+
+    class Meta:
+        model = ContactMessage
+        fields = "__all__"
+        read_only_fields = ["created_at", "is_read"]

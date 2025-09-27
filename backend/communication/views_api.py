@@ -1,8 +1,9 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Message
-from .serializers import MessageSerializer
+from .models import Message, ContactMessage
+from .serializers import MessageSerializer, ContactMessageSerializer
+
 
 class MessageViewSet(viewsets.ModelViewSet):
     serializer_class = MessageSerializer
@@ -27,3 +28,22 @@ class MessageViewSet(viewsets.ModelViewSet):
         if request.user in msg.recipients.all() and request.user not in msg.read_by.all():
             msg.read_by.add(request.user)
         return Response({"status": "marked as read"})
+
+
+class ContactMessageViewSet(viewsets.ModelViewSet):
+    """
+    ViewSet pour créer des messages de contact.
+
+    Par défaut, toute personne (authenticated ou anonyme) peut créer un message.
+    Seuls les utilisateurs staff ou superusers peuvent lister et consulter les messages.
+    """
+
+    queryset = ContactMessage.objects.all().order_by("-created_at")
+    serializer_class = ContactMessageSerializer
+
+    def get_permissions(self):
+        if self.action in ["list", "retrieve", "update", "partial_update", "destroy"]:
+            # Restreindre la consultation des messages de contact aux admins
+            return [permissions.IsAdminUser()]
+        # Toute personne peut créer un message de contact (POST)
+        return [permissions.AllowAny()]

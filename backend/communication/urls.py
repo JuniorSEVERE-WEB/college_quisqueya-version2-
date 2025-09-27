@@ -8,7 +8,5 @@ urlpatterns = [
     path("sent/", views.sent_messages, name="sent"),
     path("compose/", views.compose_message, name="compose"),
     path("<int:pk>/", views.message_detail, name="detail"),
-    path("unread-count/", views.unread_count, name="unread_count"),  
-
-
+    path("unread-count/", views.unread_count, name="unread_count"),
 ]

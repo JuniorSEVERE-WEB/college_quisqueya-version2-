@@ -18,6 +18,7 @@ urlpatterns = [
     path("api/classrooms/", include("programs.api_urls")),   # classes publiques
     path("api/subjects/", include("programs.api_urls")),     # matières publiques
     path("api/", include("programs.api_urls")),
+    path("api/", include("communication.api_urls")),
 
     path("api/professors/", include("professors.api_urls")), # inscription publique professeurs
     path("api/students/", include("students.urls")),         # inscription publique étudiants
@@ -33,7 +34,9 @@ urlpatterns = [
     path("api/reports/", include("reports.api_urls")),
     path("api/alumni/", include("alumni.api_urls")),
     path("api/communication/", include("communication.api_urls")),
-    path("api/auth/", include("accounts.api_urls")),
+
+    # ---- Auth & comptes ----
+    path("api/auth/", include("accounts.api_urls")),   # ✅ inclut register/abonne, token, me...
 
     # ---- Apps non-API ----
     path("blog/", include("blog.urls")),

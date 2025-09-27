@@ -4,6 +4,7 @@ from accounts.forms import UserRegisterForm, StudentForm
 from professors.forms import ProfessorProfileForm
 from employees.forms import EmployeeForm
 
+
 def register(request):
     if request.method == "POST":
         user_form = UserRegisterForm(request.POST, request.FILES)
@@ -16,7 +17,7 @@ def register(request):
             user = user_form.save(commit=False)
 
             # Politique d’activation
-            if user.role in ("student", "professor", "employee"):
+            if user.role in ("student", "prof", "employee"):
                 user.is_active = False
             else:
                 user.is_active = True
@@ -39,7 +40,7 @@ def register(request):
                 student.last_name = getattr(user, "last_name", student.last_name)
                 student.save()
 
-            if user.role == "professor" and professor_form.is_valid():
+            if user.role == "prof" and professor_form.is_valid():
                 professor = professor_form.save(commit=False)
                 professor.user = user
                 professor.save()
@@ -50,8 +51,8 @@ def register(request):
                 employee.user = user
                 employee.save()
 
-            # Connexion auto pour membersite
-            if user.role == "membersite" and user.is_active:
+            # Connexion auto pour abonné
+            if user.role == "abonne" and user.is_active:
                 login(request, user)
                 return redirect("membersite_dashboard")
 
