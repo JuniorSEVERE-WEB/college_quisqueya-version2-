@@ -1,0 +1,56 @@
+[
+  {
+    "model": "schoollife.club",
+    "pk": 1,
+    "fields": {
+      "name": "Club de Débat",
+      "description": "Développer l’art oratoire et la pensée critique."
+    }
+  },
+  {
+    "model": "schoollife.club",
+    "pk": 2,
+    "fields": {
+      "name": "Club de Programmation",
+      "description": "Initiation et perfectionnement en algorithmique et développement web."
+    }
+  },
+  {
+    "model": "schoollife.club",
+    "pk": 3,
+    "fields": {
+      "name": "Club de Musique",
+      "description": "Pratique instrumentale et chorale pour tous les passionnés de musique."
+    }
+  },
+  {
+    "model": "schoollife.event",
+    "pk": 1,
+    "fields": {
+      "title": "Fête de Fin d’Année",
+      "description": "Célébration avec musique, danse et remise de prix.",
+      "date": "2025-06-20",
+      "club": 3
+    }
+  },
+  {
+    "model": "schoollife.event",
+    "pk": 2,
+    "fields": {
+      "title": "Tournoi de Débat Inter-écoles",
+      "description": "Concours annuel de débats avec plusieurs établissements invités.",
+      "date": "2025-03-15",
+      "club": 1
+    }
+  },
+  {
+    "model": "schoollife.event",
+    "pk": 3,
+    "fields": {
+      "title": "Hackathon Étudiant",
+      "description": "Compétition de 48h pour créer des applications innovantes.",
+      "date": "2025-04-10",
+      "club": 2
+    }
+  }
+]

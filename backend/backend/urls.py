@@ -11,23 +11,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    # ---- Admin ----
     path("admin/", admin.site.urls),
 
     # ---- API publiques (inscriptions + endpoints ouverts) ----
-    path("api/programs/", include("programs.api_urls")),     # programmes publics
-    path("api/classrooms/", include("programs.api_urls")),   # classes publiques
-    path("api/subjects/", include("programs.api_urls")),     # matières publiques
+    path("api/schoollife/", include("schoollife.api_urls")),   # ✅ Vie scolaire
+    path("api/programs/", include("programs.api_urls")),       # programmes publics
+    path("api/classrooms/", include("programs.api_urls")),     # classes publiques
+    path("api/subjects/", include("programs.api_urls")),       # matières publiques
     path("api/", include("programs.api_urls")),
     path("api/", include("communication.api_urls")),
-
-    path("api/professors/", include("professors.api_urls")), # inscription publique professeurs
-    path("api/students/", include("students.urls")),         # inscription publique étudiants
+    path("api/professors/", include("professors.api_urls")),   # inscription publique professeurs
+    path("api/students/", include("students.urls")),           # inscription publique étudiants
 
     # ---- API privées (auth requise) ----
-    path("api/", include("students.urls")),      
-    path("api/", include("professors.urls")),    
+    path("api/", include("students.urls")),
+    path("api/", include("professors.urls")),
     path("api/", include("employees.urls")),
-    path("api/", include("programs.urls")),      
+    path("api/", include("programs.urls")),
     path("api/", include("academics.urls")),
     path("api/payments/", include("payments.api_urls")),
     path("api/blog/", include("blog.api_urls")),
@@ -36,9 +37,9 @@ urlpatterns = [
     path("api/communication/", include("communication.api_urls")),
 
     # ---- Auth & comptes ----
-    path("api/auth/", include("accounts.api_urls")),   # ✅ inclut register/abonne, token, me...
+    path("api/auth/", include("accounts.api_urls")),  # register abonné(e), token, me...
 
-    # ---- Apps non-API ----
+    # ---- Apps non-API (templates Django classiques) ----
     path("blog/", include("blog.urls")),
     path("payments/", include(("payments.urls", "payments"), namespace="payments")),
     path("messages/", include(("communication.urls", "communication"), namespace="communication")),
@@ -57,5 +58,6 @@ urlpatterns = [
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 ]
 
+# ---- Fichiers médias en mode DEBUG ----
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

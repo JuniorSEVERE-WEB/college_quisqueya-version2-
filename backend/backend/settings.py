@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'membersite',
     'blog',
     'programs.apps.ProgramsConfig',  # <-- garder UNE SEULE entrée pour programs
+    'schoollife',
 
     # Libs
     'rest_framework',
