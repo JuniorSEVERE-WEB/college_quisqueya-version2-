@@ -55,7 +55,7 @@ export function HeaderPage()
                 </div>
                 <ul>
                     <li><Link to="/" onClick={handleLinkClick}>Accueil</Link></li>
-                    <li><Link to="/about-us" onClick={handleLinkClick}>A propos</Link></li>
+                    <li><Link to="/about" onClick={handleLinkClick}>A propos</Link></li>
                     <li><Link to="/news" onClick={handleLinkClick}>Actualité</Link></li>
                     {!isLoggedIn && <li><Link to="/login" onClick={handleLinkClick}>Connexion</Link></li>}
                     {!isLoggedIn && <li><Link to="/register" onClick={handleLinkClick}>Inscription</Link></li>}

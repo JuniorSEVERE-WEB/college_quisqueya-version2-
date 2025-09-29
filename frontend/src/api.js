@@ -1,11 +1,14 @@
 import axios from "axios";
 
+// 👉 constante qu'on peut réutiliser dans les composants (pour afficher les images)
+const BASE_URL = "http://127.0.0.1:8000";
+
 const API = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/",
+  baseURL: `${BASE_URL}/api/`,
   withCredentials: false,
 });
 
-// Ajoute le token à chaque requête si présent
+// ---- Ajoute le token à chaque requête si présent ----
 API.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   if (token) {
@@ -14,10 +17,11 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// Helper: tente refresh sur /auth/token/refresh/ puis fallback /token/refresh/
+// ---- Helper: rafraîchit le token ----
 async function refreshAccessToken() {
   const refresh = localStorage.getItem("refresh_token");
   if (!refresh) throw new Error("No refresh token");
+
   try {
     const { data } = await API.post("auth/token/refresh/", { refresh });
     return data.access;
@@ -30,14 +34,14 @@ async function refreshAccessToken() {
   }
 }
 
-// Rafraîchissement auto du token sur 401
+// ---- Rafraîchissement auto du token sur 401 ----
 API.interceptors.response.use(
   (res) => res,
   async (error) => {
     const original = error.config || {};
     const status = error.response?.status;
 
-    // Évite boucle infinie et double essai (pour les deux patterns)
+    // évite boucle infinie et double essai
     const isRefreshCall = /(auth\/)?token\/refresh\/$/.test(original.url || "");
 
     if (status === 401 && !original._retry && !isRefreshCall) {
@@ -54,7 +58,7 @@ API.interceptors.response.use(
         window.dispatchEvent(new Event("authChanged"));
         return API(original);
       } catch (e) {
-        // Échec du refresh: nettoyage et propagation
+        // échec du refresh: nettoyage et propagation
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("user");
@@ -68,3 +72,4 @@ API.interceptors.response.use(
 );
 
 export default API;
+export { BASE_URL }; // 👉 on exporte aussi BASE_URL pour les images
