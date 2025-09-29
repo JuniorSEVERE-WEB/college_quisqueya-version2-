@@ -5,7 +5,7 @@ import './App.css'
 
 
 
-
+import {SchoolLife} from './pages/SchoolLife'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
@@ -26,6 +26,7 @@ function App() {
   <Route path="/profile" element={<ProfilePage />} />
   <Route path="/contact" element={<ContactPage />} />
   <Route path="/news" element={<NewsPage />} />
+  <Route path="/schoollife" element={<SchoolLife />} />
       </Routes>
     </Router>
   );

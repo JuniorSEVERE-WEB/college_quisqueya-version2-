@@ -58,7 +58,8 @@ export function HeaderPage()
                     <li><Link to="/about-us" onClick={handleLinkClick}>A propos</Link></li>
                     <li><Link to="/news" onClick={handleLinkClick}>Actualité</Link></li>
                     {!isLoggedIn && <li><Link to="/login" onClick={handleLinkClick}>Connexion</Link></li>}
-                    {!isLoggedIn && <li><Link to="/register" onClick={handleLinkClick}>Vie scolaire</Link></li>}
+                    {!isLoggedIn && <li><Link to="/register" onClick={handleLinkClick}>Inscription</Link></li>}
+                    <li><Link to="/schoollife" onClick={handleLinkClick}>Vie Scolaire</Link></li>
                     {isLoggedIn && <li><a href="#" onClick={handleLogoutClick}>Déconnexion</a></li>}
                 </ul>
 
