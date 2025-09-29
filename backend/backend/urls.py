@@ -48,6 +48,9 @@ urlpatterns = [
     path("reports/", include("reports.urls")),
     path("chaining/", include("smart_selects.urls")),
 
+    # ---- Nouvelle app About ----
+    path("api/", include("about.urls")),   # ✅ il manquait une virgule après cette ligne
+
     # ---- JWT Auth ----
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/auth/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
