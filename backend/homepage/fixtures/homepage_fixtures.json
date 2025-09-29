@@ -1,0 +1,70 @@
+[
+  {
+    "model": "homepage.slide",
+    "pk": 1,
+    "fields": {
+      "image": "homepage/slides/slide1.jpg",
+      "text": "Bienvenue au Collège Quisqueya de Léogâne"
+    }
+  },
+  {
+    "model": "homepage.slide",
+    "pk": 2,
+    "fields": {
+      "image": "homepage/slides/slide2.jpg",
+      "text": "Découvrez nos programmes éducatifs innovants"
+    }
+  },
+  {
+    "model": "homepage.slide",
+    "pk": 3,
+    "fields": {
+      "image": "homepage/slides/slide3.jpg",
+      "text": "Rejoignez une communauté scolaire dynamique"
+    }
+  },
+  {
+    "model": "homepage.welcome",
+    "pk": 1,
+    "fields": {
+      "title": "Bienvenue au Collège Quisqueya",
+      "content": "Le Collège Quisqueya est un établissement d’enseignement moderne et dynamique, engagé à offrir à chaque élève un cadre éducatif stimulant et bienveillant. Nous cultivons l’excellence, la discipline et l’éthique pour permettre à chaque apprenant de réaliser son plein potentiel."
+    }
+  },
+  {
+    "model": "homepage.value",
+    "pk": 1,
+    "fields": {
+      "icon": "🎯",
+      "title": "Mission",
+      "description": "Offrir une éducation de qualité alliant rigueur académique et innovation pédagogique."
+    }
+  },
+  {
+    "model": "homepage.value",
+    "pk": 2,
+    "fields": {
+      "icon": "👁️",
+      "title": "Vision",
+      "description": "Former des leaders responsables, créatifs et ouverts sur le monde."
+    }
+  },
+  {
+    "model": "homepage.value",
+    "pk": 3,
+    "fields": {
+      "icon": "🌟",
+      "title": "Valeurs",
+      "description": "Discipline, respect, solidarité et excellence, qui reflètent l’esprit du Collège Quisqueya."
+    }
+  },
+  {
+    "model": "homepage.value",
+    "pk": 4,
+    "fields": {
+      "icon": "🤝",
+      "title": "Engagement",
+      "description": "Encourager la participation active à la vie de l’école et au service communautaire."
+    }
+  }
+]

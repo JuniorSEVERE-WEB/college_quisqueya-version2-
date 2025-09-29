@@ -16,6 +16,7 @@ urlpatterns = [
 
     # ---- API publiques (inscriptions + endpoints ouverts) ----
     path("api/schoollife/", include("schoollife.api_urls")),   # ✅ Vie scolaire
+    path("api/homepage/", include("homepage.api_urls")),
     path("api/programs/", include("programs.api_urls")),       # programmes publics
     path("api/classrooms/", include("programs.api_urls")),     # classes publiques
     path("api/subjects/", include("programs.api_urls")),       # matières publiques
