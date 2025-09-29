@@ -27,30 +27,74 @@
     "model": "schoollife.event",
     "pk": 1,
     "fields": {
-      "title": "Fête de Fin d’Année",
-      "description": "Célébration avec musique, danse et remise de prix.",
-      "date": "2025-06-20",
-      "club": 3
+      "club": 1,
+      "title": "Tournoi de Débat Inter-Écoles",
+      "description": "Concours entre plusieurs écoles de la région.",
+      "date": "2025-10-15"
     }
   },
   {
     "model": "schoollife.event",
     "pk": 2,
     "fields": {
-      "title": "Tournoi de Débat Inter-écoles",
-      "description": "Concours annuel de débats avec plusieurs établissements invités.",
-      "date": "2025-03-15",
-      "club": 1
+      "club": 2,
+      "title": "Hackathon Étudiant",
+      "description": "24h pour créer une application innovante.",
+      "date": "2025-11-20"
     }
   },
   {
     "model": "schoollife.event",
     "pk": 3,
     "fields": {
-      "title": "Hackathon Étudiant",
-      "description": "Compétition de 48h pour créer des applications innovantes.",
-      "date": "2025-04-10",
-      "club": 2
+      "club": 3,
+      "title": "Concert de Noël",
+      "description": "Représentation musicale annuelle avec chorale et orchestre.",
+      "date": "2025-12-22"
+    }
+  },
+  {
+    "model": "schoollife.testimonial",
+    "pk": 1,
+    "fields": {
+      "name": "Marie Dupont",
+      "role": "Élève",
+      "message": "Faire partie du club de débat m’a aidée à prendre confiance.",
+      "photo": null
+    }
+  },
+  {
+    "model": "schoollife.testimonial",
+    "pk": 2,
+    "fields": {
+      "name": "Jean Pierre",
+      "role": "Étudiant en informatique",
+      "message": "Grâce au club de programmation, j’ai découvert ma passion pour le code.",
+      "photo": null
+    }
+  },
+  {
+    "model": "schoollife.galleryitem",
+    "pk": 1,
+    "fields": {
+      "title": "Tournoi de débat",
+      "image": "gallery/ecole-website1.jpg"
+    }
+  },
+  {
+    "model": "schoollife.galleryitem",
+    "pk": 2,
+    "fields": {
+      "title": "Hackathon étudiants",
+      "image": "gallery/ecole-website2.jpg"
+    }
+  },
+  {
+    "model": "schoollife.galleryitem",
+    "pk": 3,
+    "fields": {
+      "title": "Concert de Noël",
+      "image": "gallery/ecole-website3.jpg"
     }
   }
 ]
