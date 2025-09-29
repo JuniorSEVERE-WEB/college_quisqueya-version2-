@@ -13,7 +13,13 @@ export function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Récupérer les données du backend
+  // 🔹 États pour l'animation typewriter
+  const [titleIndex, setTitleIndex] = useState(0); // index du mot
+  const [charIndex, setCharIndex] = useState(0); // index de la lettre
+  const [displayedText, setDisplayedText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Charger les données
   useEffect(() => {
     async function fetchData() {
       try {
@@ -39,18 +45,55 @@ export function HomePage() {
     fetchData();
   }, []);
 
-  // Carrousel navigation
-  const prev = () =>
-    setCurrent(c => (slides.length > 0 ? (c - 1 + slides.length) % slides.length : 0));
-  const next = () =>
-    setCurrent(c => (slides.length > 0 ? (c + 1) % slides.length : 0));
+  // Effet machine à écrire
+  useEffect(() => {
+    if (slides.length === 0) return;
 
-  // Construire l’URL des images (backend -> frontend)
-  const getImageUrl = img => {
+    const titles = slides[current]?.titles || [];
+    if (titles.length === 0) return;
+
+    const currentTitle = titles[titleIndex]?.title || '';
+
+    let timeout;
+
+    if (!isDeleting && charIndex < currentTitle.length) {
+      // Écrire le mot lettre par lettre
+      timeout = setTimeout(() => {
+        setDisplayedText(currentTitle.substring(0, charIndex + 1));
+        setCharIndex(charIndex + 1);
+      }, 120);
+    } else if (!isDeleting && charIndex === currentTitle.length) {
+      // Pause avant de supprimer
+      timeout = setTimeout(() => setIsDeleting(true), 1200);
+    } else if (isDeleting && charIndex > 0) {
+      // Effacer le mot lettre par lettre
+      timeout = setTimeout(() => {
+        setDisplayedText(currentTitle.substring(0, charIndex - 1));
+        setCharIndex(charIndex - 1);
+      }, 80);
+    } else if (isDeleting && charIndex === 0) {
+      // Passer au mot suivant
+      setIsDeleting(false);
+      setTitleIndex((prev) => (prev + 1) % titles.length);
+    }
+
+    return () => clearTimeout(timeout);
+  }, [charIndex, isDeleting, titleIndex, slides, current]);
+
+  // Navigation carrousel
+  const prev = () =>
+    setCurrent((c) =>
+      slides.length > 0 ? (c - 1 + slides.length) % slides.length : 0
+    );
+  const next = () =>
+    setCurrent((c) => (slides.length > 0 ? (c + 1) % slides.length : 0));
+
+  // Construire URL images
+  const getImageUrl = (img) => {
     if (!img) return '';
     if (/^https?:\/\//i.test(img)) return img;
     const base = API?.defaults?.baseURL || '';
-    const root = base.replace(/\/api\/?.*$/, ''); // ex: http://127.0.0.1:8000
+    const root = base.replace(/\/api\/?.*$/, ''); 
     return `${root}${img.startsWith('/') ? '' : '/'}${img}`;
   };
 
@@ -63,16 +106,31 @@ export function HomePage() {
 
       {!loading && !error && (
         <>
-          {/* Carrousel dynamique */}
+          {/* Carrousel */}
           {slides.length > 0 && (
             <div className="carroussel">
               <div
                 className="carroussel-img"
-                style={{ backgroundImage: `url(${getImageUrl(slides[current].image)})` }}
+                style={{
+                  backgroundImage: `url(${getImageUrl(slides[current].image)})`,
+                }}
               >
-                <div className="carroussel-text">{slides[current].text}</div>
-                
+                <div className="carroussel-overlay">
+                  {/* 🔹 Titre animé */}
+                  <h2 className="carroussel-titles">
+                    {displayedText}
+                    <span className="cursor">|</span>
+                  </h2>
+
+                  {/* Texte statique */}
+                  <p className="carroussel-description">
+                    {slides[current].text}
+                  </p>
+                </div>
               </div>
+
+              {/* Boutons */}
+              
             </div>
           )}
 
@@ -88,13 +146,13 @@ export function HomePage() {
             </section>
           )}
 
-          {/* Section Valeurs & Missions */}
+          {/* Section Valeurs */}
           {values.length > 0 && (
             <section className="valeurs-section">
               <div className="container">
                 <h2 className="valeurs-title">Nos Valeurs & Missions</h2>
                 <div className="valeurs-grid">
-                  {values.map(v => (
+                  {values.map((v) => (
                     <div key={v.id} className="valeur-card">
                       <div className="valeur-icon">{v.icon}</div>
                       <h3>{v.title}</h3>
