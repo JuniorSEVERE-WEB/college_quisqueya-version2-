@@ -37,7 +37,7 @@ export function HeaderPage() {
     <>
       {isMenuOpen && <div className="menu-overlay" onClick={handleMenuClick}></div>}
       <div className="header">
-        {/* Section gauche (logo) */}
+        {/* Section gauche (logo principal, toujours visible) */}
         <div className="left-section">
           <Link to="/" onClick={handleLinkClick}>
             <ul>
@@ -47,16 +47,14 @@ export function HeaderPage() {
           </Link>
         </div>
 
-        {/* Section menu */}
+        {/* Section menu (mobile) */}
         <div className={`middle-section${isMenuOpen ? " show-menu" : ""}`}>
           <div className="menu-header-row">
-            <div className="menu-logo">
-              <img src="/logo-19-aout.png" alt="Logo" />
-            </div>
+            {/* ✅ Logo supprimé, on laisse juste la croix centrée */}
             <button
               className="close-menu"
               onClick={handleMenuClick}
-              style={{ display: isMenuOpen ? 'block' : 'none' }}
+              style={{ display: isMenuOpen ? 'block' : 'none', margin: "0 auto" }}
             >
               ✕
             </button>
@@ -68,12 +66,13 @@ export function HeaderPage() {
             {!isLoggedIn && <li><Link to="/login" onClick={handleLinkClick}>Connexion</Link></li>}
             <li><Link to="/schoollife" onClick={handleLinkClick}>Vie Scolaire</Link></li>
             {isLoggedIn && <li><a href="#" onClick={handleLogoutClick}>Déconnexion</a></li>}
+            {/* ✅ Ajout Contact directement dans le menu */}
+            {!isLoggedIn && (
+              <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
+            )}
           </ul>
 
-          {/* Mobile only */}
-          <button className="deconnexion mobile-only">
-            <Link to="/contact" onClick={handleLinkClick}>Contact</Link>
-          </button>
+          {/* Mobile only extra buttons */}
           {isLoggedIn && (
             <button className="mobile-only" onClick={handleLogoutClick}>Déconnexion</button>
           )}

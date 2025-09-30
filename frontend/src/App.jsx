@@ -11,6 +11,7 @@ import RegisterPage from './pages/RegisterPage'
 import ProfilePage from './pages/ProfilePage'
 import {ContactPage} from './pages/ContactPage'
 import { HomePage } from './pages/HomePage'
+import { DonationPage } from "./pages/DonationPage";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
   <Route path="/contact" element={<ContactPage />} />
   <Route path="/news" element={<NewsPage />} />
   <Route path="/schoollife" element={<SchoolLife />} />
+  <Route path="/donation" element={<DonationPage />} />
       </Routes>
     </Router>
   );
