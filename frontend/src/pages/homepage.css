@@ -356,8 +356,7 @@ html, body {
 
 .btn-read:hover {
   background: white;   /* bleu pâle au hover */
-  color: rgb(1, 1, 32);
-  border: 1px solid rgb(1, 1, 32);
+  color: rgb(1, 1,32);
 }
 
 /* Masque carrousel sur desktop */
@@ -378,3 +377,27 @@ html, body {
   .articles-grid { display: none; }
   .articles-carousel { display: flex; }
 }
+
+.more-articles {
+  text-align: center;
+  margin-top: 30px;
+}
+.btn-more {
+  display: inline-block;
+  padding: 12px 24px;
+  background: rgb(1, 1, 32);  /* fond sombre */
+  color: #ffffff;             /* texte blanc */
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 25px;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  margin-bottom: 5px;
+}
+
+.btn-more:hover {
+  background: white;   /* bleu pâle */
+  color: rgb(1, 1, 32);
+  border: 1px solid rgb(1, 1, 32);
+}
+/* */

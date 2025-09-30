@@ -1,56 +1,93 @@
+import { Link } from "react-router-dom";
+import { FaMapMarkerAlt, FaEnvelope, FaPhone } from "react-icons/fa";
+import { motion } from "framer-motion"; // ✅ Import Framer Motion
 import "./footerpage.css";
 
 export function FooterPage() {
+  // Variantes d'animation réutilisables
+  const fadeInUp = {
+    hidden: { opacity: 0, y: 40 },
+    visible: { opacity: 1, y: 0 },
+  };
+
   return (
-    <>
-      <div className="foot-page">
-        <div className="part1">
-          <h2 className="centre">College Quisqueya de Leogane</h2>
-          <p>Une plateforme qui apuie sur CS50 pour etre plus explicite</p>
-        </div>
-        <div className="part2">
-          <h2>Menu</h2>
-          <ul>
+    <footer className="footer">
+      <div className="footer-container">
+        {/* Colonne Présentation */}
+        <motion.div
+          className="footer-col"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          transition={{ duration: 0.8, delay: 0.2 }}
+          viewport={{ once: false, amount: 0.3 }} // 🔹 rejoue si on remonte/redescend
+        >
+          <h2 className="footer-title">Collège Quisqueya de Léogâne</h2>
+          <p className="footer-text">
+            Établissement d’excellence, le Collège Quisqueya de Léogâne accompagne
+            chaque élève vers la réussite grâce à un encadrement exigeant et bienveillant.
+          </p>
+        </motion.div>
+
+        {/* Colonne Menu */}
+        <motion.div
+          className="footer-col"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          transition={{ duration: 0.8, delay: 1 }}
+          viewport={{ once: false, amount: 0.3 }}
+        >
+          <h2 className="footer-title">Menu</h2>
+          <ul className="footer-links">
+            <li><Link to="/donation">Donation</Link></li>
+            <li><Link to="/">Accueil</Link></li>
+            <li><Link to="/about">À propos</Link></li>
+            <li><Link to="/contact">Contact</Link></li>
+            <li><Link to="/login">Connexion</Link></li>
+            <li><Link to="/logout">Déconnexion</Link></li>
+          </ul>
+        </motion.div>
+
+        {/* Colonne Contact */}
+        <motion.div
+          className="footer-col"
+          variants={fadeInUp}
+          initial="hidden"
+          whileInView="visible"
+          transition={{ duration: 0.8, delay: 2 }}
+          viewport={{ once: false, amount: 0.3 }}
+        >
+          <h2 className="footer-title">Contactez-nous</h2>
+          <ul className="footer-contact">
             <li>
-              <a href="#">Donation</a>
+              <FaMapMarkerAlt className="footer-icon" /> #56, Léogâne, Haïti
             </li>
             <li>
-              <a href="sommesnous.html">Acceuil</a>
+              <FaEnvelope className="footer-icon" /> collegequisqueyadeleogane@gmail.com
             </li>
             <li>
-              <a href="mission.html">Mission</a>
-            </li>
-            <li>
-              <a href="contact.html">Contact</a>
-            </li>
-            <li>
-              <a href="connexion.html">Connexion</a>
-            </li>
-            <li>
-              <a href="deconnexion.html">Deconnexion</a>
+              <FaPhone className="footer-icon" /> +509 1234 5678
             </li>
           </ul>
-        </div>
-        <div className="part3">
-          <h2 className="centre">Contactez-nous</h2>
-          <p>#56, Leogane, Haiti</p>
-          <p>collegequisqueyadeleogane@gmail.com</p>
-        </div>
+        </motion.div>
       </div>
 
-      <div className="copyright-inscrire">
-        <div>Copyright © 2025 Quisqueya All rights reserved</div>
-        <div>
-          <ul>
-            <li>
-              <a href="connexion.html">Connexion</a>
-            </li>
-            <li>
-              <a href="deconnexion.html">Deconnexion</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </>
+      {/* Bas du footer */}
+      <motion.div
+        className="footer-bottom"
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        transition={{ duration: 0.8, delay: 2.5 }}
+        viewport={{ once: false, amount: 0.3 }}
+      >
+        <p>© 2025 Collège Quisqueya — Tous droits réservés</p>
+        <ul className="footer-bottom-links">
+          <li><Link to="/login">Connexion</Link></li>
+          <li><Link to="/logout">Déconnexion</Link></li>
+        </ul>
+      </motion.div>
+    </footer>
   );
 }
