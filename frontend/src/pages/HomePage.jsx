@@ -9,13 +9,14 @@ export function HomePage() {
   const [current, setCurrent] = useState(0);
   const [welcome, setWelcome] = useState(null);
   const [values, setValues] = useState([]);
+  const [articles, setArticles] = useState([]); // 🔹 Nouvel état pour articles
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   // 🔹 États pour l'animation typewriter
-  const [titleIndex, setTitleIndex] = useState(0); // index du mot
-  const [charIndex, setCharIndex] = useState(0); // index de la lettre
+  const [titleIndex, setTitleIndex] = useState(0);
+  const [charIndex, setCharIndex] = useState(0);
   const [displayedText, setDisplayedText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -23,17 +24,21 @@ export function HomePage() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const [slidesRes, welcomeRes, valuesRes] = await Promise.all([
+        const [slidesRes, welcomeRes, valuesRes, articlesRes] = await Promise.all([
           API.get('homepage/slides/'),
           API.get('homepage/welcome/'),
-          API.get('homepage/values/')
+          API.get('homepage/values/'),
+          API.get('blog/articles/?is_published=true') // 🔹 Récupère articles publiés
         ]);
 
         setSlides(slidesRes.data.results || slidesRes.data || []);
         setWelcome(
-          Array.isArray(welcomeRes.data) ? welcomeRes.data[0] : welcomeRes.data
+          welcomeRes.data.results
+            ? welcomeRes.data.results[0]
+            : (Array.isArray(welcomeRes.data) ? welcomeRes.data[0] : welcomeRes.data)
         );
         setValues(valuesRes.data.results || valuesRes.data || []);
+        setArticles(articlesRes.data.results || articlesRes.data || []); // 🔹 Enregistre articles
         setError('');
       } catch (err) {
         console.error('Erreur chargement homepage:', err);
@@ -48,31 +53,25 @@ export function HomePage() {
   // Effet machine à écrire
   useEffect(() => {
     if (slides.length === 0) return;
-
     const titles = slides[current]?.titles || [];
     if (titles.length === 0) return;
 
     const currentTitle = titles[titleIndex]?.title || '';
-
     let timeout;
 
     if (!isDeleting && charIndex < currentTitle.length) {
-      // Écrire le mot lettre par lettre
       timeout = setTimeout(() => {
         setDisplayedText(currentTitle.substring(0, charIndex + 1));
         setCharIndex(charIndex + 1);
       }, 120);
     } else if (!isDeleting && charIndex === currentTitle.length) {
-      // Pause avant de supprimer
       timeout = setTimeout(() => setIsDeleting(true), 1200);
     } else if (isDeleting && charIndex > 0) {
-      // Effacer le mot lettre par lettre
       timeout = setTimeout(() => {
         setDisplayedText(currentTitle.substring(0, charIndex - 1));
         setCharIndex(charIndex - 1);
       }, 80);
     } else if (isDeleting && charIndex === 0) {
-      // Passer au mot suivant
       setIsDeleting(false);
       setTitleIndex((prev) => (prev + 1) % titles.length);
     }
@@ -121,16 +120,11 @@ export function HomePage() {
                     {displayedText}
                     <span className="cursor">|</span>
                   </h2>
-
-                  {/* Texte statique */}
                   <p className="carroussel-description">
                     {slides[current].text}
                   </p>
                 </div>
               </div>
-
-              {/* Boutons */}
-              
             </div>
           )}
 
@@ -157,6 +151,67 @@ export function HomePage() {
                       <div className="valeur-icon">{v.icon}</div>
                       <h3>{v.title}</h3>
                       <p>{v.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* 🔹 Section Articles */}
+          {articles.length > 0 && (
+            <section className="articles-home">
+              <div className="container">
+                <h2>Actualités & Articles</h2>
+
+                {/* Grille Desktop */}
+                <div className="articles-grid">
+                  {articles.slice(0, 4).map((a) => (
+                    <div key={a.id} className="article-card">
+                      <div
+                        className="article-card-img"
+                        style={{ backgroundImage: `url(${getImageUrl(a.image)})` }}
+                      />
+                      <div className="article-card-body">
+                        <div className="article-meta">
+                          {new Date(a.date_published).toLocaleDateString("fr-FR")}
+                        </div>
+                        <h3 className="article-title">{a.title}</h3>
+                        <p className="article-desc">
+                          {a.description.length > 120
+                            ? a.description.substring(0, 120) + "..."
+                            : a.description}
+                        </p>
+                        <a href={`/news/${a.id}`} className="btn-read">
+                          Lire plus
+                        </a>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Carrousel Mobile (simple version) */}
+                <div className="articles-carousel">
+                  {articles.slice(0, 4).map((a) => (
+                    <div key={a.id} className="article-card">
+                      <div
+                        className="article-card-img"
+                        style={{ backgroundImage: `url(${getImageUrl(a.image)})` }}
+                      />
+                      <div className="article-card-body">
+                        <div className="article-meta">
+                          {new Date(a.date_published).toLocaleDateString("fr-FR")}
+                        </div>
+                        <h3 className="article-title">{a.title}</h3>
+                        <p className="article-desc">
+                          {a.description.length > 120
+                            ? a.description.substring(0, 120) + "..."
+                            : a.description}
+                        </p>
+                        <a href={`/news/${a.id}`} className="btn-read">
+                          Lire plus
+                        </a>
+                      </div>
                     </div>
                   ))}
                 </div>

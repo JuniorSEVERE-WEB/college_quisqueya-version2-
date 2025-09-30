@@ -35,7 +35,7 @@ button {
   display: block;
   margin-top: 1rem;
   padding: 0.8rem 1.5rem;
-  background: #2563eb;
+  background: rgb(1, 1, 32);
   color: white;
   border: none;
   border-radius: 4px;
@@ -43,7 +43,8 @@ button {
 }
 
 button:hover {
-  background: #1e40af;
+  background: white;
+  color:rgb(1, 1, 32)
 }
 
 .status-message {

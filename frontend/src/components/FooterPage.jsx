@@ -12,10 +12,10 @@ export function FooterPage() {
           <h2>Menu</h2>
           <ul>
             <li>
-              <a href="#">Acceuil</a>
+              <a href="#">Donation</a>
             </li>
             <li>
-              <a href="sommesnous.html">Qui sommes nous</a>
+              <a href="sommesnous.html">Acceuil</a>
             </li>
             <li>
               <a href="mission.html">Mission</a>
