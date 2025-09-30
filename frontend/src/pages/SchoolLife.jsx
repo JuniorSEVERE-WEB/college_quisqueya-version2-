@@ -12,37 +12,56 @@ export function SchoolLife() {
   const [gallery, setGallery] = useState([]);
   const [error, setError] = useState("");
 
+  // Charger données
   useEffect(() => {
-    // Charger les clubs
     API.get("schoollife/clubs/")
       .then((res) => setClubs(res.data.results || res.data))
       .catch(() => setError("Impossible de charger les clubs."));
 
-    // Charger les événements
     API.get("schoollife/events/")
       .then((res) => setEvents(res.data.results || res.data))
       .catch(() => setError("Impossible de charger les événements."));
 
-    // Charger les témoignages
     API.get("schoollife/testimonials/")
       .then((res) => setTestimonials(res.data.results || res.data))
       .catch(() => setError("Impossible de charger les témoignages."));
 
-    // Charger la galerie
     API.get("schoollife/gallery/")
       .then((res) => setGallery(res.data.results || res.data))
       .catch(() => setError("Impossible de charger la galerie."));
   }, []);
 
+  // 🎨 Animation au scroll (comme HomePage.jsx)
+  useEffect(() => {
+    const reveals = document.querySelectorAll(".reveal");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("active");
+          } else {
+            // ✅ Permet de rejouer l'animation si on remonte/redescend
+            entry.target.classList.remove("active");
+          }
+        });
+      },
+      { threshold: 0.15 }
+    );
+
+    reveals.forEach((el) => observer.observe(el));
+    return () => reveals.forEach((el) => observer.unobserve(el));
+  }, [clubs, events, testimonials, gallery]);
+
   return (
     <>
       <HeaderPage />
       <div className="schoollife-container">
-        <h1 className="title">🌟 Vie Scolaire</h1>
+        <h1 className="title reveal">🌟 Vie Scolaire</h1>
         {error && <p className="error">{error}</p>}
 
         {/* Clubs */}
-        <section className="section">
+        <section className="section reveal">
           <h2>Nos Clubs</h2>
           <div className="grid">
             {clubs.map((club) => (
@@ -55,7 +74,7 @@ export function SchoolLife() {
         </section>
 
         {/* Événements */}
-        <section className="section">
+        <section className="section reveal">
           <h2>Événements</h2>
           <div className="grid">
             {events.map((event) => (
@@ -69,7 +88,7 @@ export function SchoolLife() {
         </section>
 
         {/* Témoignages */}
-        <section className="section">
+        <section className="section reveal">
           <h2>Témoignages</h2>
           <div className="grid">
             {testimonials.map((t) => (
@@ -91,7 +110,7 @@ export function SchoolLife() {
         </section>
 
         {/* Galerie */}
-        <section className="section">
+        <section className="section reveal">
           <h2>Galerie</h2>
           <div className="grid gallery">
             {gallery.map((g) => (

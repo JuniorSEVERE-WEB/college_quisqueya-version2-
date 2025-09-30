@@ -2,16 +2,16 @@
 
 .schoollife-container {
   padding: 40px 20px;
-  background-color: #ffffff;
+  background-color: rgb(235, 245, 243); /* ✅ fond principal */
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: #2c3e50;
+  color: rgb(1, 1, 32); /* ✅ couleur texte global */
 }
 
 .title {
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
-  color: #1abc9c;
+  color: rgb(1, 1, 32); /* ✅ titre principal sombre */
   margin-bottom: 30px;
 }
 
@@ -25,19 +25,19 @@
 /* Sections */
 .section {
   margin-bottom: 60px;
-  background: #f8f9fa;
+  background: transparent; /* ✅ pas de fond ici, seule la page est colorée */
   padding: 25px;
   border-radius: 15px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .section h2 {
   font-size: 1.8rem;
-  color: #1abc9c;
+  color: white; /* ✅ titres en sombre */
   margin-bottom: 20px;
-  border-bottom: 2px solid #1abc9c;
+  background-color: rgb(1, 1, 32); /* ✅ fond spécial pour les titres de section */
   display: inline-block;
-  padding-bottom: 5px;
+  padding: 6px 14px;
+  border-radius: 8px;
 }
 
 /* Grilles */
@@ -49,7 +49,7 @@
 
 /* Cartes */
 .card {
-  background: #ffffff;
+  background: #ffffff; /* ✅ toujours blanc */
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
@@ -63,12 +63,12 @@
 
 .card h3 {
   margin-bottom: 10px;
-  color: #3498db;
+  color: rgb(1, 1, 32); /* ✅ titres internes des cartes */
 }
 
 .date {
   font-size: 0.9rem;
-  color: #7f8c8d;
+  color: rgb(1, 1, 32); /* ✅ cohérent avec le thème */
   margin-top: 10px;
 }
 
@@ -83,13 +83,13 @@
 
 blockquote {
   font-style: italic;
-  color: #34495e;
+  color: rgb(1, 1, 32); /* ✅ texte sombre */
   margin-bottom: 10px;
 }
 
 .author {
   font-weight: bold;
-  color: #2c3e50;
+  color: rgb(1, 1, 32); /* ✅ sombre */
 }
 
 /* Galerie */
@@ -106,6 +106,18 @@ blockquote {
 .gallery-item p {
   margin-top: 8px;
   text-align: center;
-  color: #34495e;
+  color: rgb(1, 1, 32); /* ✅ cohérent */
   font-size: 0.95rem;
+}
+
+/* Animations (reprise du style HomePage.jsx) */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: all 0.8s ease-in-out;
+}
+
+.reveal.active {
+  opacity: 1;
+  transform: translateY(0);
 }

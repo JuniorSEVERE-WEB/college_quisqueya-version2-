@@ -1,88 +1,97 @@
 .news-page {
+  padding: 40px 20px;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px 16px 28px;
+  margin: auto;
 }
 
 .news-page h2 {
   text-align: center;
-  margin: 0 auto 12px;
+  margin-bottom: 40px;
+  font-size: 2rem;
+  color: rgb(1, 1, 32);
 }
 
-/* Grille: 1 colonne par défaut (mobile), 4 colonnes sur grand écran */
+/* Grille responsive */
 .news-grid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 18px;
-  margin-top: 8px;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
 }
 
-@media (min-width: 992px) {
-  .news-grid {
-    grid-template-columns: repeat(4, 1fr);
-  }
-}
-
+/* Carte article */
 .news-card {
   display: flex;
   flex-direction: column;
+  background: #ffffff;
   border-radius: 12px;
   overflow: hidden;
-  background: #ffffff;
-  box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-  transition: transform .2s ease, box-shadow .2s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+
 .news-card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.15);
 }
 
 .news-card-img {
   aspect-ratio: 16 / 9;
   background-size: cover;
-  background-position: center 30%;
-  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .news-card-body {
-  padding: 12px 14px 16px;
+  padding: 16px 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  flex: 1; /* prend toute la hauteur disponible */
 }
 
+/* Meta */
 .news-meta {
-  font-size: 13px;
+  font-size: 0.85rem;
   color: #566;
-  opacity: .9;
+  margin-bottom: 8px;
 }
 
+/* Titre */
 .news-title {
-  font-size: clamp(1rem, 1.4vw, 1.15rem);
-  margin: 0;
-  color: #0f2742;
+  font-size: 1.2rem;
+  margin: 0 0 10px;
+  color: rgb(1, 1, 32);
+  font-weight: bold;
 }
 
+/* Description */
 .news-desc {
   font-size: 0.95rem;
-  line-height: 1.55;
-  color: #2b2b2b;
+  line-height: 1.5;
+  color: #333;
+  margin-bottom: 14px;
+  flex-grow: 1; /* pousse le bouton vers le bas */
 }
 
+/* Actions */
 .news-actions {
-  margin-top: 6px;
+  margin-top: auto;
+  text-align: left;
 }
 
+/* Bouton Lire l’article */
 .btn-read {
   display: inline-block;
-  padding: 8px 14px;
+  padding: 10px 16px;
   background: rgb(1, 1, 32);
-  color: #102a43;
+  color: #ffffff;
   border-radius: 8px;
   font-weight: 600;
   text-decoration: none;
   text-align: center;
+  transition: all 0.3s ease;
 }
+
 .btn-read:hover {
-  background: #c3991c;
+  background: white;
+  color: rgb(1, 1, 32);
+  border: 1px solid rgb(1, 1, 32);
 }

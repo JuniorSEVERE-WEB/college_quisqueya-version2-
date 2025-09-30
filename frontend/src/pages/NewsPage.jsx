@@ -1,3 +1,4 @@
+// frontend/src/pages/NewsPage.jsx
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import API from "../api";
@@ -24,7 +25,6 @@ export default function NewsPage() {
       try {
         let url = "blog/articles/";
         const all = [];
-        // Récupère toutes les pages si pagination DRF
         while (url) {
           const res = await API.get(url, {
             params: { is_published: true, ordering: "-date_published", page_size: 12 },
@@ -47,7 +47,9 @@ export default function NewsPage() {
       }
     }
     fetchAll();
-    return () => { canceled = true; };
+    return () => {
+      canceled = true;
+    };
   }, []);
 
   return (
@@ -73,7 +75,9 @@ export default function NewsPage() {
                 <div className="news-card-body">
                   <div className="news-meta">
                     Posté le{" "}
-                    {new Date(a.date_published || a.published_at || a.created_at).toLocaleDateString("fr-FR")}{" "}
+                    {new Date(
+                      a.date_published || a.published_at || a.created_at
+                    ).toLocaleDateString("fr-FR")}{" "}
                     par {a.author?.username || a.author_name || "l'Admin"}
                   </div>
                   <h3 className="news-title">{a.title}</h3>
@@ -82,7 +86,11 @@ export default function NewsPage() {
                     {(a.description || a.content || "").length > 150 ? "…" : ""}
                   </p>
                   <div className="news-actions">
-                    <Link to={`/news/${a.slug || a.id}`} className="btn-read" aria-label={`Lire l’article: ${a.title}`}>
+                    <Link
+                      to={`/news/${a.slug || a.id}`}
+                      className="btn-read"
+                      aria-label={`Lire l’article: ${a.title}`}
+                    >
                       Lire l’article
                     </Link>
                   </div>
