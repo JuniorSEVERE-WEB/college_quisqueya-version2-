@@ -16,6 +16,27 @@ class User(AbstractUser):
         verbose_name="Adresse email"
     )
 
+    # 🔹 Nouveau champ téléphone
+    phone = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        verbose_name="Téléphone"
+    )
+
+    # 🔹 Champ sexe
+    SEXE_CHOICES = [
+        ('homme', 'Homme'),
+        ('femme', 'Femme'),
+    ]
+    sexe = models.CharField(
+        max_length=10,
+        choices=SEXE_CHOICES,
+        blank=True,   # pour ne pas casser les anciens comptes
+        null=True,
+        verbose_name="Sexe"
+    )
+
     ROLE_CHOICES = [
         ('admin', 'Admin'),
         ('prof', 'Professeur'),
@@ -24,9 +45,8 @@ class User(AbstractUser):
         ('alumni_student', 'Ancien Étudiant'),
         ('alumni_prof', 'Ancien Professeur'),
         ('alumni_employee', 'Ancien Employé'),
-        ('abonne', 'Abonné(e)'),   # ✅ renommé pour correspondre au frontend
+        ('abonne', 'Abonné(e)'),
     ]
-
     role = models.CharField(
         max_length=20,
         choices=ROLE_CHOICES,
@@ -34,11 +54,9 @@ class User(AbstractUser):
     )
 
     def save(self, *args, **kwargs):
-        # Validation automatique pour abonné
         if self.role == "abonne":
             self.is_active = True
         else:
-            # Les autres attendent l'activation admin
-            if not self.pk:  # si c’est une nouvelle inscription
+            if not self.pk:
                 self.is_active = False
         super().save(*args, **kwargs)

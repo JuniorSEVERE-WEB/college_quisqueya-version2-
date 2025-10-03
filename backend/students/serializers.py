@@ -4,19 +4,43 @@ from academics.models import AcademicYear
 from programs.models import Classroom
 from .models import Student
 
-class StudentSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.filter(role="student"))
-    academic_year = serializers.SlugRelatedField(slug_field="name", queryset=AcademicYear.objects.all())
-    classroom = serializers.PrimaryKeyRelatedField(queryset=Classroom.objects.all())
-    classroom_label = serializers.CharField(source="classroom.name", read_only=True)
 
-    birth_certificate = serializers.FileField(required=False, allow_null=True, help_text="PDF uniquement, max 3MB")
-    last_school_report = serializers.FileField(required=False, allow_null=True, help_text="PDF uniquement, max 3MB")
+class StudentSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.filter(role="student")
+    )
+    academic_year = serializers.SlugRelatedField(
+        slug_field="name",
+        queryset=AcademicYear.objects.all()
+    )
+    classroom = serializers.PrimaryKeyRelatedField(
+        queryset=Classroom.objects.all()
+    )
+    classroom_label = serializers.CharField(
+        source="classroom.name",
+        read_only=True
+    )
+
+    # 🔹 nouveaux champs exposés à l’API
+    father_job = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True
+    )
+    mother_job = serializers.CharField(
+        required=False, allow_blank=True, allow_null=True
+    )
+
+    birth_certificate = serializers.FileField(
+        required=False, allow_null=True,
+        help_text="PDF uniquement, max 3MB"
+    )
+    last_school_report = serializers.FileField(
+        required=False, allow_null=True,
+        help_text="PDF uniquement, max 3MB"
+    )
 
     class Meta:
         model = Student
         fields = "__all__"
-        
 
     def validate_birth_certificate(self, file):
         if file:

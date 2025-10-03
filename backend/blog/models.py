@@ -25,6 +25,52 @@ class Article(models.Model):
         ("alumni", "Alumni"),
         ("custom", "Groupe personnalisé"),  # ex: combiner certains rôles
     ]
+    CATEGORY_CHOICES = [
+    # Déjà existantes
+    ("politique", "Politique"),
+    ("genie", "Génie"),
+    ("sport", "Sport"),
+    ("education", "Éducation"),
+    ("technologie", "Technologie"),
+    ("metier", "Métier professionnel"),
+    ("divertissement", "Divertissement"),
+
+    # Monde & Société
+    ("economie", "Économie"),
+    ("environnement", "Environnement"),
+    ("sante", "Santé"),
+    ("societe", "Société"),
+    ("culture", "Culture"),
+    ("religion", "Religion & Spiritualité"),
+    ("histoire", "Histoire"),
+
+    #  Sciences & Innovation
+    ("sciences", "Sciences"),
+    ("innovation", "Innovation"),
+    ("ia", "Intelligence Artificielle"),
+    ("startups", "Startups"),
+
+    #  Vie & Carrière
+    ("developpement", "Développement personnel"),
+    ("entrepreneuriat", "Entrepreneuriat"),
+    ("carriere", "Carrière & Emploi"),
+    ("leadership", "Leadership"),
+
+    #  Lifestyle & Loisirs
+    ("voyage", "Voyage & Tourisme"),
+    ("gastronomie", "Gastronomie"),
+    ("mode", "Mode & Style"),
+    ("musique", "Musique"),
+    ("cinema", "Cinéma & Séries"),
+    ("jeuxvideo", "Jeux vidéo"),
+    ]
+    category = models.CharField(
+        max_length=30,
+        choices=CATEGORY_CHOICES,
+        default="divertissement",   # ou bien blank=True, null=True si tu veux laisser vide
+        verbose_name="Catégorie"
+    )
+
 
     title = models.CharField(max_length=200)
     image = models.ImageField(

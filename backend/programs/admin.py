@@ -5,17 +5,28 @@ from .models import Program, Classroom, Subject
 from students.models import Student
 
 
-# --- Inline pour les élèves (lecture seule, déjà fait par toi) ---
+# --- Inline pour les élèves ---
 class StudentInline(admin.TabularInline):
     model = Student
     extra = 0
-    fields = ("first_name", "last_name", "student_phone")
+    fields = ("first_name", "last_name")  # student_phone retiré si inexistant
+    readonly_fields = ("first_name", "last_name")
     show_change_link = True
-    can_delete = True  # L'admin peut supprimer un élève
-    readonly_fields = ("first_name", "last_name", "student_phone")  # Lecture seule
+    can_delete = True
 
     def has_add_permission(self, request, obj=None):
         return False  # Empêche l'ajout d'élèves depuis l'admin de la classe
+
+    # 🔹 méthodes pour afficher prénom et nom depuis User
+    def first_name(self, obj):
+        return obj.user.first_name
+    first_name.admin_order_field = "user__first_name"
+    first_name.short_description = "Prénom"
+
+    def last_name(self, obj):
+        return obj.user.last_name
+    last_name.admin_order_field = "user__last_name"
+    last_name.short_description = "Nom"
 
 
 # --- Inline pour afficher les classes dans Program (avec lien cliquable) ---
@@ -35,7 +46,7 @@ class ClassroomLinkInline(admin.TabularInline):
 # --- Inline pour les matières dans une classe ---
 class SubjectInline(admin.TabularInline):
     model = Subject
-    extra = 1  # permet d’ajouter plusieurs matières rapidement
+    extra = 1
     fields = ("name",)
     show_change_link = True
 
@@ -52,10 +63,10 @@ class ProgramAdmin(admin.ModelAdmin):
 class ClassroomAdmin(admin.ModelAdmin):
     list_display = ("name", "program")
     list_display_links = ("name",)
-    inlines = [StudentInline, SubjectInline]  # Ajout des élèves + matières
+    inlines = [StudentInline, SubjectInline]
 
 
-# --- Admin Subject (indépendant, pour une vue globale) ---
+# --- Admin Subject ---
 @admin.register(Subject)
 class SubjectAdmin(admin.ModelAdmin):
     list_display = ("name", "classroom", "get_program")

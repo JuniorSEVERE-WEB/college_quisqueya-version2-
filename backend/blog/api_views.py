@@ -2,11 +2,10 @@ from rest_framework import viewsets, permissions
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .models import Article, Comment, Reaction, Tag
 from .serializers import ArticleSerializer, CommentSerializer, ReactionSerializer, TagSerializer
-
+from rest_framework.pagination import PageNumberPagination
 
 class IsAuthenticatedOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
     pass
-
 
 class ArticleViewSet(viewsets.ModelViewSet):
     queryset = Article.objects.all().order_by("-date_published")
@@ -14,28 +13,40 @@ class ArticleViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     parser_classes = [MultiPartParser, FormParser, JSONParser]
 
-    # Ajouts DRF
-    filterset_fields = ["is_published", "visibility", "tags"]
+    # 🔹 Ajouts DRF pour filtrage et recherche
+    filterset_fields = ["is_published", "visibility", "tags", "category"]
     search_fields = ["title", "description"]
     ordering_fields = ["date_published", "id"]
 
     def get_queryset(self):
         qs = super().get_queryset()
+
+        # Afficher uniquement les articles publiés si pas admin
         if not self.request.user.is_authenticated or not self.request.user.is_staff:
             qs = qs.filter(is_published=True)
+
+        # Filtrer par tag si présent
         tag_id = self.request.query_params.get("tag")
         if tag_id:
             qs = qs.filter(tags__id=tag_id)
+
         return qs
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
 
+class CommentPagination(PageNumberPagination):
+    page_size = 10  # 10 commentaires par défaut
+    page_size_query_param = "page_size"
+    max_page_size = 100
+
+
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.select_related("article", "user").all().order_by("-date_posted")
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]
+    pagination_class = CommentPagination  
 
     # Ajouts DRF
     filterset_fields = ["article", "user", "parent"]

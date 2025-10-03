@@ -17,9 +17,11 @@ class ArticleSerializer(serializers.ModelSerializer):
         fields = [
             "id", "title", "image", "description", "date_published",
             "is_published", "visibility", "author", "tags",
+            "category",           # 🔹 nouveau champ
             "likes_count", "dislikes_count"
         ]
         read_only_fields = ["date_published"]
+
 
 class CommentSerializer(serializers.ModelSerializer):
     user = serializers.PrimaryKeyRelatedField(read_only=True)

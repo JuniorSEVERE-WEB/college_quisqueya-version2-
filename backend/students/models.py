@@ -1,37 +1,55 @@
-# students/models.py
 from django.db import models
-from django.conf import settings
+from accounts.models import User
 from academics.models import AcademicYear
 from programs.models import Classroom
 
+
 class Student(models.Model):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="student_profile")
-    academic_year = models.ForeignKey(AcademicYear, on_delete=models.PROTECT, related_name="students")
-    classroom = models.ForeignKey(Classroom, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="student_profile",
+        limit_choices_to={'role': 'student'}
+    )
+    academic_year = models.ForeignKey(
+        AcademicYear,
+        on_delete=models.CASCADE,
+        help_text="Année académique de l'étudiant"
+    )
+    classroom = models.ForeignKey(
+        Classroom,
+        on_delete=models.CASCADE,
+        help_text="Classe assignée"
+    )
 
-    # Infos perso
-    first_name = models.CharField(max_length=100)
-    last_name = models.CharField(max_length=100)
-    date_of_birth = models.DateField(blank=True, null=True)
+    # 🔹 Nouveaux champs facultatifs (aucune perte de données)
+    father_job = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Métier du père"
+    )
+    mother_job = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        verbose_name="Métier de la mère"
+    )
 
-    # Infos parent
-    mother_activity = models.CharField(max_length=200, blank=True, null=True)
-    father_activity = models.CharField(max_length=200, blank=True, null=True)
-    parent_phone = models.CharField(max_length=20, blank=True, null=True)
-    parent_email = models.EmailField(blank=True, null=True)
-
-    # Autres
-    last_school = models.CharField(max_length=200, blank=True, null=True)
-    student_phone = models.CharField(max_length=20, blank=True, null=True)
-    matricule = models.CharField(max_length=50, unique=True)
-    birth_certificate = models.FileField(upload_to="students/birth_certificates/", blank=True, null=True)
-    last_school_report = models.FileField(upload_to="students/last_school_reports/", blank=True, null=True)
+    birth_certificate = models.FileField(
+        upload_to="students/certificates/",
+        blank=True,
+        null=True,
+        help_text="Certificat de naissance (PDF max 3MB)"
+    )
+    last_school_report = models.FileField(
+        upload_to="students/reports/",
+        blank=True,
+        null=True,
+        help_text="Bulletin de la dernière école (PDF max 3MB)"
+    )
 
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
-        unique_together = ("user", "academic_year")
-        ordering = ["-created_at"]
-
     def __str__(self):
-        return f"{self.first_name} {self.last_name} ({self.user.username})"
+        return f"{self.user.get_full_name()} - {self.classroom.name}"

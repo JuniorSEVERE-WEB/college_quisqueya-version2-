@@ -7,6 +7,7 @@ from django.utils.html import format_html
 from django.core.mail import EmailMessage
 from reports.views import student_report_pdf
 
+
 class StudentForm(forms.ModelForm):
     class Meta:
         model = Student
@@ -15,12 +16,24 @@ class StudentForm(forms.ModelForm):
     class Media:
         js = ("js/filter_classrooms.js",)
 
+
 @admin.register(Student)
 class StudentAdmin(admin.ModelAdmin):
     list_display = ("first_name", "last_name", "classroom", "user_status", "view_report_links")
     list_filter = ("classroom",)
-    search_fields = ("first_name", "last_name")
+    search_fields = ("user__first_name", "user__last_name", "user__email")
     actions = ["send_report_card_email", "deactivate_students"]
+
+    # 🔹 méthodes pour accéder aux infos du User lié
+    def first_name(self, obj):
+        return obj.user.first_name
+    first_name.admin_order_field = "user__first_name"
+    first_name.short_description = "Prénom"
+
+    def last_name(self, obj):
+        return obj.user.last_name
+    last_name.admin_order_field = "user__last_name"
+    last_name.short_description = "Nom"
 
     def user_status(self, obj):
         return "✅ Actif" if obj.user.is_active else "⏳ En attente"
@@ -33,7 +46,6 @@ class StudentAdmin(admin.ModelAdmin):
             pdf_url
         )
     view_report_links.short_description = "Bulletin"
-    view_report_links.allow_tags = True
 
     def send_report_card_email(self, request, queryset):
         for student in queryset:
@@ -45,14 +57,18 @@ class StudentAdmin(admin.ModelAdmin):
                 body="Please find attached your individual report card.",
                 to=[student.user.email],
             )
-            email.attach(f"ReportCard_{student.first_name}_{student.last_name}.pdf", pdf_content, "application/pdf")
+            # 🔹 on va chercher prénom et nom dans user
+            filename = f"ReportCard_{student.user.first_name}_{student.user.last_name}.pdf"
+            email.attach(filename, pdf_content, "application/pdf")
             email.send()
         self.message_user(request, "Report cards sent to selected students.")
 
-    send_report_card_email.short_description = "Send report card to selected students by email"
+    send_report_card_email.short_description = "Envoyer bulletin par email aux étudiants sélectionnés"
 
     def deactivate_students(self, request, queryset):
-        queryset.update(is_active=False)
-        self.message_user(request, "Selected students have been deactivated.")
+        for student in queryset:
+            student.user.is_active = False
+            student.user.save()
+        self.message_user(request, "Comptes des étudiants sélectionnés désactivés.")
 
-    deactivate_students.short_description = "Deactivate selected students"
+    deactivate_students.short_description = "Désactiver comptes des étudiants sélectionnés"

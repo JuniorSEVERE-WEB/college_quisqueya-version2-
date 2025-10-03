@@ -42,8 +42,11 @@ class AbonneRegisterView(generics.CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        serializer.save()
+        user = serializer.save()
         return Response(
-            {"detail": "Compte abonné(e) créé avec succès."},
+            {
+                "detail": "Compte abonné(e) créé avec succès.",
+                "user": UserMeSerializer(user).data,
+            },
             status=status.HTTP_201_CREATED
         )

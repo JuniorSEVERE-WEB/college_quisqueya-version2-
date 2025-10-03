@@ -23,6 +23,10 @@ urlpatterns = [
     path("api/", include("programs.api_urls")),
     path("api/", include("communication.api_urls")),
     path("api/professors/", include("professors.api_urls")),   # inscription publique professeurs
+    path("api/employees/", include("employees.api_urls")),
+    path("api/students/", include("students.api_urls")),
+    path("api/", include("blog.api_urls")),
+
     path("api/students/", include("students.urls")),           # inscription publique étudiants
 
     # ---- API privées (auth requise) ----

@@ -6,22 +6,24 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 
 User = get_user_model()
 
-# Utilise les formulaires dédiés s’ils existent, sinon fallback local
+# Essaye d’importer des formulaires personnalisés si présents
 try:
-    from .forms import AdminUserCreationForm, AdminUserChangeForm  # si définis dans accounts/forms.py
+    from .forms import AdminUserCreationForm, AdminUserChangeForm  # noqa: F401
 except Exception:
     class AdminUserCreationForm(UserCreationForm):
         class Meta(UserCreationForm.Meta):
             model = User
-            fields = ("username", "email", "first_name", "last_name")
+            fields = ("username", "email", "first_name", "last_name", "sexe", "role")
 
     class AdminUserChangeForm(UserChangeForm):
         class Meta(UserChangeForm.Meta):
             model = User
             fields = (
-                "username", "email", "first_name", "last_name",
+                "username", "email", "first_name", "last_name", "photo",
+                "sexe", "role",
                 "is_active", "is_staff", "is_superuser", "groups", "user_permissions"
             )
+
 
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
@@ -29,14 +31,14 @@ class UserAdmin(DjangoUserAdmin):
     form = AdminUserChangeForm
     model = User
 
-    list_display = ("username", "email", "is_active", "is_staff", "is_superuser")
-    list_filter = ("is_active", "is_staff", "is_superuser", "groups")
+    list_display = ("username", "email", "role", "sexe", "is_active", "is_staff", "is_superuser")
+    list_filter = ("role", "sexe", "is_active", "is_staff", "is_superuser", "groups")
     search_fields = ("username", "email", "first_name", "last_name")
     ordering = ("username",)
 
     fieldsets = (
         (_("Identifiants"), {"fields": ("username", "password")}),
-        (_("Informations personnelles"), {"fields": ("first_name", "last_name", "email", "photo")}),
+        (_("Informations personnelles"), {"fields": ("first_name", "last_name", "email", "photo", "sexe", "role")}),
         (_("Permissions"), {"fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions")}),
         (_("Dates importantes"), {"fields": ("last_login", "date_joined")}),
     )
@@ -44,7 +46,7 @@ class UserAdmin(DjangoUserAdmin):
     add_fieldsets = (
         (_("Création d’utilisateur"), {
             "classes": ("wide",),
-            "fields": ("username", "email", "first_name", "last_name", "photo", "password1", "password2"),
+            "fields": ("username", "email", "first_name", "last_name", "photo", "sexe", "role", "password1", "password2"),
         }),
     )
 

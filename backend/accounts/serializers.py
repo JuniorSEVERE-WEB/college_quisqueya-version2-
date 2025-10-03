@@ -7,16 +7,21 @@ User = get_user_model()
 class UserMeSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ("id", "username", "email", "first_name", "last_name")
+        fields = (
+            "id", "username", "email", "first_name", "last_name",
+            "role", "sexe", "photo"
+        )
 
 
 class AbonneRegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
+    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
+    phone = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ["username", "email", "password1", "password2"]
+        fields = ["username", "email", "password1", "password2", "sexe", "phone"]
 
     def validate(self, data):
         if data["password1"] != data["password2"]:
@@ -29,5 +34,8 @@ class AbonneRegisterSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             password=validated_data["password1"],
             role="abonne",
+            sexe=validated_data["sexe"],
+            phone=validated_data["phone"]
         )
         return user
+

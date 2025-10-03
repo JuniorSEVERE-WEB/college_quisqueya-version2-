@@ -1,12 +1,13 @@
-# alumni/serializers_register.py
+# employees/serializers_register.py
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Alumni
+from academics.models import AcademicYear
+from .models import Employee
 
 User = get_user_model()
 
 
-class AlumniRegisterSerializer(serializers.ModelSerializer):
+class EmployeeRegisterSerializer(serializers.ModelSerializer):
     # Champs User
     username = serializers.CharField(write_only=True)
     email = serializers.EmailField(write_only=True)
@@ -14,38 +15,42 @@ class AlumniRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
-    phone = serializers.CharField(required=True)
-    # 🔹 Nouveau champ obligatoire
     sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
+    phone = serializers.CharField(required=True)
+
+    # Champs Employee
+    position = serializers.CharField(required=True)
+    hire_date = serializers.DateField(required=True)
+    department = serializers.CharField(required=False, allow_blank=True, allow_null=True)
 
     class Meta:
-        model = Alumni
+        model = Employee
         fields = [
+            # User
             "username", "email", "password1", "password2",
-            "first_name", "last_name", "sexe",   # ⬅️ ajouté ici
-            "year_left", "promo_name", "years_interval",
-            "proof_document",
+            "first_name", "last_name", "sexe",
+            # Employee
+            "position", "hire_date", "department"
         ]
 
     def validate(self, attrs):
         if attrs["password1"] != attrs["password2"]:
             raise serializers.ValidationError("Les mots de passe ne correspondent pas.")
         if User.objects.filter(username=attrs["username"]).exists():
-            raise serializers.ValidationError("Ce nom d’utilisateur existe déjà. Veuillez en choisir un autre.")
+            raise serializers.ValidationError("Ce nom d’utilisateur existe déjà.")
         if User.objects.filter(email=attrs["email"]).exists():
-            raise serializers.ValidationError("Cet email est déjà utilisé. Veuillez en choisir un autre.")
+            raise serializers.ValidationError("Cet email est déjà utilisé.")
         return attrs
 
     def create(self, validated_data):
-        # Extraire champs User
+        # Extraire infos User
         username = validated_data.pop("username")
         email = validated_data.pop("email")
         password = validated_data.pop("password1")
         validated_data.pop("password2", None)
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
-        sexe = validated_data.pop("sexe")   # ⬅️ récupération du sexe
-        
+        sexe = validated_data.pop("sexe")
 
         # Créer User
         user = User.objects.create_user(
@@ -54,14 +59,20 @@ class AlumniRegisterSerializer(serializers.ModelSerializer):
             password=password,
             first_name=first_name,
             last_name=last_name,
-            sexe=sexe,      # ⬅️ propagé dans User
-            role="alumni",
-            is_active=False,  # en attente validation admin
+            sexe=sexe,         # 🔹 propagé
+            role="employee",
+            is_active=False,   # attend validation admin
         )
 
-        # Créer Alumni
-        alumni = Alumni.objects.create(
+        # Année académique active
+        active_year = AcademicYear.objects.filter(is_active=True).first()
+        if not active_year:
+            raise serializers.ValidationError("Aucune année académique active.")
+
+        # Créer Employee
+        employee = Employee.objects.create(
             user=user,
+            academic_year=active_year,
             **validated_data
         )
-        return alumni
+        return employee
