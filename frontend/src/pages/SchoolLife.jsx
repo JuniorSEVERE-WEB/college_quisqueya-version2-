@@ -31,17 +31,15 @@ export function SchoolLife() {
       .catch(() => setError("Impossible de charger la galerie."));
   }, []);
 
-  // 🎨 Animation au scroll (comme HomePage.jsx)
+  // 🎨 Animation au scroll
   useEffect(() => {
     const reveals = document.querySelectorAll(".reveal");
-
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("active");
           } else {
-            // ✅ Permet de rejouer l'animation si on remonte/redescend
             entry.target.classList.remove("active");
           }
         });
@@ -66,6 +64,13 @@ export function SchoolLife() {
           <div className="grid">
             {clubs.map((club) => (
               <div key={club.id} className="card">
+                {club.photo && (
+                  <img
+                    src={club.photo}
+                    alt={club.name}
+                    className="club-photo"
+                  />
+                )}
                 <h3>{club.name}</h3>
                 <p>{club.description}</p>
               </div>
@@ -79,6 +84,13 @@ export function SchoolLife() {
           <div className="grid">
             {events.map((event) => (
               <div key={event.id} className="card">
+                {event.logo && (
+                  <img
+                    src={event.logo}
+                    alt={event.title}
+                    className="event-logo"
+                  />
+                )}
                 <h3>{event.title}</h3>
                 <p>{event.description}</p>
                 <p className="date">📅 {event.date}</p>

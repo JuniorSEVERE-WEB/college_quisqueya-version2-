@@ -2,16 +2,16 @@
 
 .schoollife-container {
   padding: 40px 20px;
-  background-color: rgb(235, 245, 243); /* ✅ fond principal */
+  background-color: rgb(235, 245, 243);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-  color: rgb(1, 1, 32); /* ✅ couleur texte global */
+  color: rgb(1, 1, 32);
 }
 
 .title {
   text-align: center;
   font-size: 2.5rem;
   font-weight: bold;
-  color: rgb(1, 1, 32); /* ✅ titre principal sombre */
+  color: rgb(1, 1, 32);
   margin-bottom: 30px;
 }
 
@@ -25,16 +25,15 @@
 /* Sections */
 .section {
   margin-bottom: 60px;
-  background: transparent; /* ✅ pas de fond ici, seule la page est colorée */
   padding: 25px;
   border-radius: 15px;
 }
 
 .section h2 {
   font-size: 1.8rem;
-  color: white; /* ✅ titres en sombre */
+  color: white;
   margin-bottom: 20px;
-  background-color: rgb(1, 1, 32); /* ✅ fond spécial pour les titres de section */
+  background-color: rgb(1, 1, 32);
   display: inline-block;
   padding: 6px 14px;
   border-radius: 8px;
@@ -49,11 +48,12 @@
 
 /* Cartes */
 .card {
-  background: #ffffff; /* ✅ toujours blanc */
+  background: #ffffff;
   border-radius: 12px;
   padding: 20px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
   transition: transform 0.2s, box-shadow 0.2s;
+  text-align: center;
 }
 
 .card:hover {
@@ -62,14 +62,31 @@
 }
 
 .card h3 {
-  margin-bottom: 10px;
-  color: rgb(1, 1, 32); /* ✅ titres internes des cartes */
+  margin: 10px 0;
+  color: rgb(1, 1, 32);
 }
 
 .date {
   font-size: 0.9rem;
-  color: rgb(1, 1, 32); /* ✅ cohérent avec le thème */
+  color: rgb(1, 1, 32);
   margin-top: 10px;
+}
+
+/* Clubs */
+.club-photo {
+  width: 100%;
+  max-height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+
+/* Events */
+.event-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 12px;
 }
 
 /* Témoignages */
@@ -83,13 +100,13 @@
 
 blockquote {
   font-style: italic;
-  color: rgb(1, 1, 32); /* ✅ texte sombre */
+  color: rgb(1, 1, 32);
   margin-bottom: 10px;
 }
 
 .author {
   font-weight: bold;
-  color: rgb(1, 1, 32); /* ✅ sombre */
+  color: rgb(1, 1, 32);
 }
 
 /* Galerie */
@@ -106,11 +123,11 @@ blockquote {
 .gallery-item p {
   margin-top: 8px;
   text-align: center;
-  color: rgb(1, 1, 32); /* ✅ cohérent */
+  color: rgb(1, 1, 32);
   font-size: 0.95rem;
 }
 
-/* Animations (reprise du style HomePage.jsx) */
+/* Animations */
 .reveal {
   opacity: 0;
   transform: translateY(30px);
@@ -121,3 +138,8 @@ blockquote {
   opacity: 1;
   transform: translateY(0);
 }
+
+
+
+
+
