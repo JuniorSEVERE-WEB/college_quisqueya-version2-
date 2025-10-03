@@ -3,24 +3,18 @@
     "model": "schoollife.club",
     "pk": 1,
     "fields": {
-      "name": "Club de Débat",
-      "description": "Développer l’art oratoire et la pensée critique."
+      "name": "Club Informatique",
+      "description": "Un club pour apprendre la programmation, la robotique et l'intelligence artificielle.",
+      "photo": "clubs/club_informatique.png"
     }
   },
   {
     "model": "schoollife.club",
     "pk": 2,
     "fields": {
-      "name": "Club de Programmation",
-      "description": "Initiation et perfectionnement en algorithmique et développement web."
-    }
-  },
-  {
-    "model": "schoollife.club",
-    "pk": 3,
-    "fields": {
-      "name": "Club de Musique",
-      "description": "Pratique instrumentale et chorale pour tous les passionnés de musique."
+      "name": "Club Sportif",
+      "description": "Le club des sportifs de l'école : football, basketball et athlétisme.",
+      "photo": "clubs/club_sportif.png"
     }
   },
   {
@@ -28,9 +22,10 @@
     "pk": 1,
     "fields": {
       "club": 1,
-      "title": "Tournoi de Débat Inter-Écoles",
-      "description": "Concours entre plusieurs écoles de la région.",
-      "date": "2025-10-15"
+      "title": "Hackathon Scolaire",
+      "description": "Un concours de programmation de 48h ouvert à tous les élèves.",
+      "date": "2025-11-10",
+      "logo": "events/hackathon.png"
     }
   },
   {
@@ -38,63 +33,48 @@
     "pk": 2,
     "fields": {
       "club": 2,
-      "title": "Hackathon Étudiant",
-      "description": "24h pour créer une application innovante.",
-      "date": "2025-11-20"
-    }
-  },
-  {
-    "model": "schoollife.event",
-    "pk": 3,
-    "fields": {
-      "club": 3,
-      "title": "Concert de Noël",
-      "description": "Représentation musicale annuelle avec chorale et orchestre.",
-      "date": "2025-12-22"
+      "title": "Tournoi Interclasses",
+      "description": "Un grand tournoi sportif opposant toutes les classes de l'école.",
+      "date": "2025-12-05",
+      "logo": "events/tournoi.png"
     }
   },
   {
     "model": "schoollife.testimonial",
     "pk": 1,
     "fields": {
-      "name": "Marie Dupont",
-      "role": "Élève",
-      "message": "Faire partie du club de débat m’a aidée à prendre confiance.",
-      "photo": null
+      "name": "Jean Dupont",
+      "role": "Ancien étudiant",
+      "message": "Grâce au Collège Quisqueya, j'ai pu développer mes compétences et réussir mes études supérieures.",
+      "photo": "testimonials/jean.png"
     }
   },
   {
     "model": "schoollife.testimonial",
     "pk": 2,
     "fields": {
-      "name": "Jean Pierre",
-      "role": "Étudiant en informatique",
-      "message": "Grâce au club de programmation, j’ai découvert ma passion pour le code.",
-      "photo": null
+      "name": "Marie Joseph",
+      "role": "Étudiante en NS4",
+      "message": "Les clubs et événements m’ont permis de m’épanouir en dehors des cours.",
+      "photo": "testimonials/marie.png"
     }
   },
   {
     "model": "schoollife.galleryitem",
     "pk": 1,
     "fields": {
-      "title": "Tournoi de débat",
-      "image": "gallery/ecole-website1.jpg"
+      "title": "Cérémonie de remise des prix",
+      "image": "gallery/remise_prix.png",
+      "date_added": "2025-10-01T10:00:00Z"
     }
   },
   {
     "model": "schoollife.galleryitem",
     "pk": 2,
     "fields": {
-      "title": "Hackathon étudiants",
-      "image": "gallery/ecole-website2.jpg"
-    }
-  },
-  {
-    "model": "schoollife.galleryitem",
-    "pk": 3,
-    "fields": {
-      "title": "Concert de Noël",
-      "image": "gallery/ecole-website3.jpg"
+      "title": "Exposition scientifique",
+      "image": "gallery/expo_science.png",
+      "date_added": "2025-09-20T15:30:00Z"
     }
   }
 ]

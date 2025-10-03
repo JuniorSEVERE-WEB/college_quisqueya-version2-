@@ -1,22 +1,26 @@
 from rest_framework import serializers
 from .models import Club, Event, Testimonial, GalleryItem
 
+
 class ClubSerializer(serializers.ModelSerializer):
     class Meta:
         model = Club
-        fields = "__all__"
+        fields = ["id", "name", "description", "photo"]  # ✅ ajout photo
+
 
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = "__all__"
+        fields = ["id", "club", "title", "description", "date", "logo"]  # ✅ ajout logo
+
 
 class TestimonialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Testimonial
-        fields = "__all__"
+        fields = ["id", "name", "role", "message", "photo"]
+
 
 class GalleryItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = GalleryItem
-        fields = "__all__"
+        fields = ["id", "title", "image", "date_added"]
