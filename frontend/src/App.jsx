@@ -13,6 +13,8 @@ import {ContactPage} from './pages/ContactPage'
 import { HomePage } from './pages/HomePage'
 import { DonationPage } from "./pages/DonationPage";
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import ArticleDetailPage from "./pages/ArticleDetailPage";
+
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
   <Route path="/news" element={<NewsPage />} />
   <Route path="/schoollife" element={<SchoolLife />} />
   <Route path="/donation" element={<DonationPage />} />
+  <Route path="/news/:id" element={<ArticleDetailPage />} />
+
       </Routes>
     </Router>
   );
