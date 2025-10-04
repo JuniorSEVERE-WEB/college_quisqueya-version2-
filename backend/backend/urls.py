@@ -39,6 +39,7 @@ urlpatterns = [
     path("api/blog/", include("blog.api_urls")),
     path("api/reports/", include("reports.api_urls")),
     path("api/alumni/", include("alumni.api_urls")),
+    path("api/", include("communication.api_urls")),
     path("api/communication/", include("communication.api_urls")),
 
     # ---- Auth & comptes ----
@@ -49,12 +50,14 @@ urlpatterns = [
     path("payments/", include(("payments.urls", "payments"), namespace="payments")),
     path("messages/", include(("communication.urls", "communication"), namespace="communication")),
     path("i18n/set-language/", set_language, name="set_language"),
-    path("core/", include("core.urls")),
+    
     path("reports/", include("reports.urls")),
     path("chaining/", include("smart_selects.urls")),
 
     # ---- Nouvelle app About ----
     path("api/", include("about.urls")),   # ✅ il manquait une virgule après cette ligne
+    path("api/core/", include("core.urls")),
+
 
     # ---- JWT Auth ----
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -64,6 +67,7 @@ urlpatterns = [
     # ---- Documentation API ----
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+    
 ]
 
 # ---- Fichiers médias en mode DEBUG ----
