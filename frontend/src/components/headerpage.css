@@ -94,7 +94,7 @@
 .right-section ul li {
   list-style: none;
   display: flex;
-  align-items: center; /* ✅ centre verticalement */
+  align-items: center;
 }
 .contact-btn {
   background-color: rgb(1,1,32);
@@ -158,11 +158,6 @@
     height: 75px;
     padding: 0 10px;
   }
-  .middle-section.show-menu .menu-header-row .menu-logo img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-  }
   .middle-section.show-menu ul {
     padding-top: 20px;
     display: flex;
@@ -190,16 +185,9 @@
     background-color: #ffffff;
     color: rgb(1,1,32);
   }
-  .mobile-only a {
-    text-decoration: none;
-    color: #ffffff;
-  }
-  .mobile-only a:hover {
-    color: rgb(1,1,32);
-  }
 
   .right-section ul li .contact-btn {
-    display: none; /* bouton caché en mobile, on garde version mobile-only */
+    display: none; /* bouton caché en mobile, version mobile-only dans menu */
   }
 
   .right-section .menu-icon {
@@ -209,3 +197,35 @@
     color: rgb(1,1,32);
   }
 }
+
+/* Par défaut : desktop visible, mobile caché */
+.desktop-only {
+  display: block;
+}
+.mobile-only {
+  display: none;
+}
+
+/* En mobile : on inverse */
+@media(max-width: 1124px) {
+  .desktop-only {
+    display: none; /* cache le bouton Déconnexion desktop */
+  }
+  .mobile-only {
+    display: inline-block; /* bouton rouge visible UNIQUEMENT dans menu mobile */
+    margin: 10px 0;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid #b00020;
+    background-color: #b00020;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+  }
+  .mobile-only:hover {
+    background: #fff;
+    color: #b00020;
+  }
+}
+

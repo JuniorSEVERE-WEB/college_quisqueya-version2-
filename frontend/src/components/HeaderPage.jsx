@@ -59,38 +59,32 @@ export function HeaderPage() {
               ✕
             </button>
           </div>
+        
           <ul>
             <li><Link to="/" onClick={handleLinkClick}>Accueil</Link></li>
             <li><Link to="/about" onClick={handleLinkClick}>A propos</Link></li>
             <li><Link to="/news" onClick={handleLinkClick}>Actualité</Link></li>
-            {!isLoggedIn && <li><Link to="/login" onClick={handleLinkClick}>Connexion</Link></li>}
             <li><Link to="/schoollife" onClick={handleLinkClick}>Vie Scolaire</Link></li>
+
+            {!isLoggedIn && <li><Link to="/login" onClick={handleLinkClick}>Connexion</Link></li>}
             {isLoggedIn && <li><a href="#" onClick={handleLogoutClick}>Déconnexion</a></li>}
             {/* ✅ Ajout Contact directement dans le menu */}
-            {!isLoggedIn && (
-              <li><Link to="/contact" onClick={handleLinkClick}>Contact</Link></li>
-            )}
           </ul>
 
           {/* Mobile only extra buttons */}
-          {isLoggedIn && (
-            <button className="mobile-only" onClick={handleLogoutClick}>Déconnexion</button>
-          )}
+          
+         
         </div>
 
         {/* Section droite */}
         <div className="right-section">
           <ul>
-            {!isLoggedIn && (
+            
               <li>
                 <Link to="/contact" className="contact-btn">Contact</Link>
               </li>
-            )}
-            {isLoggedIn && (
-              <li>
-                <button className="logout" onClick={handleLogoutClick}>Déconnexion</button>
-              </li>
-            )}
+        
+           
             <li className="menu-icon" onClick={handleMenuClick}>
               {isMenuOpen ? '✕' : '☰'}
             </li>
