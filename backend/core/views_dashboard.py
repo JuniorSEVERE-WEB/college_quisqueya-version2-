@@ -2,6 +2,9 @@ from django.db import models
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from accounts.models import User  # pour les abonnés
+
+
 
 # Import des modèles
 from academics.models import AcademicYear
@@ -56,23 +59,26 @@ def dashboard_stats(request):
 
     # 4️⃣ Données finales
     data = {
-        "academic_year": academic_year.name,
-        "students_total": students_qs.count(),
-        "professors_total": professors_qs.count(),
-        "employees_total": employees_qs.count(),
-        "payments_total": payments_qs.aggregate(total=models.Sum("amount"))["total"] or 0,
-        "donations_total": donations_qs.aggregate(total=models.Sum("amount"))["total"] or 0,
-        "messages_total": messages_qs.count(),
-        "alumni_total": alumni_qs.count(),
-        "articles_total": articles_qs.count(),
-        "comments_total": comments_qs.count(),
-        # ✅ Répartition par sexe (fiable)
-        "students_male": students_male,
-        "students_female": students_female,
-        "professors_male": professors_male,
-        "professors_female": professors_female,
-        "employees_male": employees_male,
-        "employees_female": employees_female,
+    "academic_year": academic_year.name,
+    "students_total": students_qs.count(),
+    "professors_total": professors_qs.count(),
+    "employees_total": employees_qs.count(),
+    "payments_total": payments_qs.aggregate(total=models.Sum("amount"))["total"] or 0,
+    "donations_total": donations_qs.aggregate(total=models.Sum("amount"))["total"] or 0,
+    "messages_total": messages_qs.count(),
+    "alumni_total": alumni_qs.count(),
+    "subscribers_total": User.objects.filter(role="subscriber").count(),  # 👈 ajout abonnés
+    "articles_total": articles_qs.count(),
+    "comments_total": comments_qs.count(),
+
+    # ✅ Répartition par sexe (fiable)
+    "students_male": students_male,
+    "students_female": students_female,
+    "professors_male": professors_male,
+    "professors_female": professors_female,
+    "employees_male": employees_male,
+    "employees_female": employees_female,
     }
+
 
     return Response(data)
