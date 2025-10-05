@@ -1,0 +1,92 @@
+.dashboard-container {
+  padding: 20px;
+  font-family: "Poppins", sans-serif;
+}
+
+.dashboard-title {
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+  color: rgb(1, 1, 32);
+}
+
+.academic-year {
+  text-align: center;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.kpi-card {
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease;
+}
+
+.kpi-card:hover {
+  transform: scale(1.03);
+}
+
+.kpi-card h3 {
+  font-size: 1rem;
+  color: #333;
+}
+
+.kpi-card p {
+  font-size: 1.4rem;
+  color: rgb(1, 1, 32);
+  font-weight: bold;
+}
+
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+}
+
+.chart-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.chart-box h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  color: rgb(1, 1, 32);
+}
+
+.loading {
+  text-align: center;
+  color: #777;
+  margin-top: 50px;
+}
+.charts-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.chart-box {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s ease;
+}
+
+.chart-box:hover {
+  transform: scale(1.02);
+}
