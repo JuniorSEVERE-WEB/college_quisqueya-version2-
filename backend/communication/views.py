@@ -3,11 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from academics.models import Classroom
-from .models import Message
+from .models import Message, ContactMessage
 from .forms import MessageForm
 from django.http import JsonResponse
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from .serializers import ContactMessageSerializer
 
 
 

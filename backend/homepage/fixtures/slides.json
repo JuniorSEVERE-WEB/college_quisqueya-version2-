@@ -1,0 +1,34 @@
+[
+  {
+    "model": "homepage.slide",
+    "pk": 1,
+    "fields": {
+      "image": "homepage/slides/slide1.jpg",
+      "text": "Bienvenue à Quisqueya"
+    }
+  },
+  {
+    "model": "homepage.slidetitle",
+    "pk": 1,
+    "fields": {
+      "slide": 1,
+      "title": "SAVOIR"
+    }
+  },
+  {
+    "model": "homepage.slidetitle",
+    "pk": 2,
+    "fields": {
+      "slide": 1,
+      "title": "DISCIPLINE"
+    }
+  },
+  {
+    "model": "homepage.slidetitle",
+    "pk": 3,
+    "fields": {
+      "slide": 1,
+      "title": "INNOVER"
+    }
+  }
+]

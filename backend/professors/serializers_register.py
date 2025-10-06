@@ -7,6 +7,7 @@ from .models import Professor
 
 User = get_user_model()
 
+
 class ProfessorRegisterSerializer(serializers.ModelSerializer):
     # Champs User
     username = serializers.CharField(write_only=True)
@@ -15,8 +16,11 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
+    phone = serializers.CharField(required=True)
+    # 🔹 Nouveau champ obligatoire
+    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
 
-    # Champs spécifiques
+    # Champs spécifiques Professeur
     program = serializers.PrimaryKeyRelatedField(
         queryset=Program.objects.all(),
         required=True
@@ -31,12 +35,12 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
         model = Professor
         fields = [
             "username", "email", "password1", "password2",
-            "first_name", "last_name",
+            "first_name", "last_name", "sexe",  # ⬅️ ajouté ici
             "department", "hire_date",
             "program", "subjects",
         ]
 
-    # 🔹 Validation supplémentaire pour éviter les doublons
+    # Validation supplémentaire
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
             raise serializers.ValidationError("Ce nom d’utilisateur existe déjà. Veuillez en choisir un autre.")
@@ -58,9 +62,10 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
         username = validated_data.pop("username")
         email = validated_data.pop("email")
         password = validated_data.pop("password1")
-        validated_data.pop("password2", None)  # ✅ enlever password2
+        validated_data.pop("password2", None)
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
+        sexe = validated_data.pop("sexe")  # ⬅️ récupérer le sexe
 
         # Créer User
         user = User.objects.create_user(
@@ -69,7 +74,8 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
             password=password,
             first_name=first_name,
             last_name=last_name,
-            role="professor",
+            sexe=sexe,   # ⬅️ propagé ici
+            role="prof",
             is_active=False,  # en attente validation admin
         )
 

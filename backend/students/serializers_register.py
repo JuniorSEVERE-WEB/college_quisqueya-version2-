@@ -16,6 +16,7 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
+    phone = serializers.CharField(required=True)
     # 🔹 Nouveau champ obligatoire
     sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
 

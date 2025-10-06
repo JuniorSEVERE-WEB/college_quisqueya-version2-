@@ -21,11 +21,11 @@ def send_contact_email(sender, instance, created, **kwargs):
             subject_admin,
             message_admin,
             settings.DEFAULT_FROM_EMAIL,
-            ["admin@collegequisqueya.ht"],  # 👉 change par ton email staff
+            ["severejunior2017@gmail.com"],  # 👉 change par ton email staff
             fail_silently=False,
         )
 
-        # 📩 Accusé de réception au visiteur
+        # Accusé de réception au visiteur
         subject_user = "Merci de nous avoir contactés - Collège Quisqueya"
         message_user = (
             f"Bonjour {instance.name},\n\n"

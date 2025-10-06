@@ -37,3 +37,7 @@ class AlumniViewSet(viewsets.ModelViewSet):
         # Si aucun user n’est envoyé, on met l’utilisateur courant
         user = serializer.validated_data.get("user") or self.request.user if self.request.user.is_authenticated else None
         serializer.save(user=user)
+
+
+
+
