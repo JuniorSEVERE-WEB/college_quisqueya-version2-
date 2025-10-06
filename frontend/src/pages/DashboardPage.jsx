@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { Doughnut, Bar } from "react-chartjs-2";
 import {
   Chart,
@@ -9,7 +10,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import API from "../api"; // axios configuré
+import API from "../api";
 import "./dashboard.css";
 
 Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -17,27 +18,18 @@ Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 export function DashboardPage() {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const location = useLocation();
 
-  // 1️⃣ Charger les statistiques du backend
   useEffect(() => {
-    const token = localStorage.getItem("access_token");
-    console.log("🎫 Access token trouvé :", token ? "✅ Oui" : "❌ Non");
-
     API.get("core/dashboard/stats/")
-      .then((res) => {
-        console.log("✅ Réponse API :", res.data);
-        setStats(res.data);
-      })
-      .catch((err) => {
-        console.error("❌ Erreur API :", err.response || err);
-        setError("Impossible de charger les statistiques.");
-      });
+      .then((res) => setStats(res.data))
+      .catch(() => setError("Impossible de charger les statistiques."));
   }, []);
 
   if (error) return <p className="error">{error}</p>;
   if (!stats) return <p className="loading">Chargement des statistiques...</p>;
 
-  // 2️⃣ Graphique Doughnut : Répartition garçons / filles
   const sexData = {
     labels: ["Garçons", "Filles"],
     datasets: [
@@ -49,7 +41,6 @@ export function DashboardPage() {
     ],
   };
 
-  // 3️⃣ Graphique Bar : Statistiques globales
   const totalsData = {
     labels: [
       "Élèves",
@@ -85,41 +76,86 @@ export function DashboardPage() {
     ],
   };
 
+  const links = [
+    { path: "/dashboard", label: "📊 Dashboard" },
+    { path: "/dashboard/students", label: "👩‍🎓 Students" },
+    { path: "/dashboard/professors", label: "👨‍🏫 Professors" },
+    { path: "/dashboard/employees", label: "💼 Employees" },
+    { path: "/dashboard/payments", label: "💰 Payments" },
+    { path: "/dashboard/blog", label: "📰 Blog" },
+  ];
+
   return (
-    <div className="dashboard-container">
-      <h1 className="dashboard-title">📊 Tableau de bord de l’école</h1>
-      <p className="academic-year">
-        Année académique active : <strong>{stats.academic_year}</strong>
-      </p>
+    <div className="dashboard-layout">
+      {/* ===== HEADER MOBILE ===== */}
+      <header className="dashboard-header">
+        <button
+          className="menu-toggle"
+          onClick={() => setSidebarOpen((prev) => !prev)}
+        >
+          ☰
+        </button>
+        <h1>Tableau de bord</h1>
+      </header>
 
-      {/* 4️⃣ Cartes KPI principales */}
-      <div className="kpi-grid">
-        <KpiCard title="👩‍🎓 Étudiants" value={stats.students_total} />
-        <KpiCard title="👨‍🏫 Professeurs" value={stats.professors_total} />
-        <KpiCard title="💼 Employés" value={stats.employees_total} />
-        <KpiCard title="💰 Paiements" value={`${stats.payments_total} Gdes`} />
-        <KpiCard title="🎁 Dons" value={`${stats.donations_total} Gdes`} />
-        <KpiCard title="🎓 Alumni" value={stats.alumni_total} />
-        <KpiCard title="📰 Abonnés" value={stats.subscribers_total} />
-      </div>
+      {/* ===== SIDEBAR ===== */}
+      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
+        <h2 className="sidebar-title">Collège Quisqueya</h2>
+        <nav>
+          {links.map((link) => (
+            <Link
+              key={link.path}
+              to={link.path}
+              className={location.pathname === link.path ? "active" : ""}
+              onClick={() => setSidebarOpen(false)} // referme après clic mobile
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <button
+          className="logout-btn"
+          onClick={() => {
+            localStorage.clear();
+            window.location.href = "/";
+          }}
+        >
+          🚪 Logout
+        </button>
+      </aside>
 
-      {/* 5️⃣ Graphiques */}
-      <div className="charts-container">
-        <div className="chart-box">
-          <h2>Répartition Filles / Garçons</h2>
-          <Doughnut data={sexData} />
+      {/* ===== MAIN ===== */}
+      <main className="dashboard-main" onClick={() => sidebarOpen && setSidebarOpen(false)}>
+        <p className="academic-year">
+          Année académique : <strong>{stats.academic_year}</strong>
+        </p>
+
+        <div className="kpi-grid">
+          <KpiCard title="👩‍🎓 Étudiants" value={stats.students_total} />
+          <KpiCard title="👨‍🏫 Professeurs" value={stats.professors_total} />
+          <KpiCard title="💼 Employés" value={stats.employees_total} />
+          <KpiCard title="💰 Paiements" value={`${stats.payments_total} Gdes`} />
+          <KpiCard title="🎁 Dons" value={`${stats.donations_total} Gdes`} />
+          <KpiCard title="🎓 Alumni" value={stats.alumni_total} />
+          <KpiCard title="📰 Abonnés" value={stats.subscribers_total} />
         </div>
 
-        <div className="chart-box">
-          <h2>Statistiques globales</h2>
-          <Bar data={totalsData} />
+        <div className="charts-container">
+          <div className="chart-box">
+            <h2>Répartition Filles / Garçons</h2>
+            <Doughnut data={sexData} />
+          </div>
+
+          <div className="chart-box">
+            <h2>Statistiques globales</h2>
+            <Bar data={totalsData} />
+          </div>
         </div>
-      </div>
+      </main>
     </div>
   );
 }
 
-// ✅ Composant pour afficher les KPI Cards
 function KpiCard({ title, value }) {
   return (
     <div className="kpi-card">

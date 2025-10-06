@@ -1,13 +1,103 @@
-.dashboard-container {
-  padding: 20px;
+/* === GLOBAL === */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f5f7fa;
   font-family: "Poppins", sans-serif;
+  overflow-x: hidden;
 }
 
-.dashboard-title {
+/* === SIDEBAR === */
+.sidebar {
+  width: 220px;
+  background-color: rgb(1, 1, 32);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px 15px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: 100%;
+  overflow-y: auto; /* ✅ défilement interne */
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 1000;
+}
+
+.sidebar-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin-bottom: 30px;
   text-align: center;
-  font-size: 1.8rem;
-  margin-bottom: 10px;
+}
+
+.sidebar nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar nav a {
+  color: white;
+  text-decoration: none;
+  padding: 10px 12px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.sidebar nav a:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.sidebar nav a.active {
+  background-color: white;
   color: rgb(1, 1, 32);
+  font-weight: bold;
+}
+
+.logout-btn {
+  background: #e11d48;
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+  margin-top: 100px;
+}
+
+.logout-btn:hover {
+  opacity: 0.8;
+}
+
+/* === HEADER (Mobile) === */
+.dashboard-header {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  background: rgb(1, 1, 32);
+  color: white;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 900;
+}
+
+.menu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.8rem;
+  cursor: pointer;
+}
+
+/* === MAIN CONTENT === */
+.dashboard-main {
+  margin-left: 240px;
+  padding: 30px;
+  flex: 1;
+  overflow-y: auto; /* ✅ le contenu principal défile */
 }
 
 .academic-year {
@@ -48,30 +138,7 @@
   font-weight: bold;
 }
 
-.charts-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
-}
-
-.chart-box {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.chart-box h2 {
-  text-align: center;
-  margin-bottom: 10px;
-  color: rgb(1, 1, 32);
-}
-
-.loading {
-  text-align: center;
-  color: #777;
-  margin-top: 50px;
-}
+/* === CHARTS === */
 .charts-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -89,4 +156,51 @@
 
 .chart-box:hover {
   transform: scale(1.02);
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 900px) {
+  .dashboard-header {
+    display: flex;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 75%;
+    max-width: 260px;
+    opacity: 0;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+    opacity: 1;
+  }
+
+  .dashboard-main {
+    margin-left: 0;
+    margin-top: 60px;
+  }
+
+  /* ✅ overlay semi-transparent */
+  .sidebar.open::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: -1;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* ✅ animation fondu */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
 }
