@@ -21,20 +21,12 @@ class Student(models.Model):
         on_delete=models.CASCADE,
         help_text="Classe assignée"
     )
+    father_job = models.CharField(max_length=100, blank=True, null=True, default="Non renseigné")
+    mother_job = models.CharField(max_length=100, blank=True, null=True, default="Non renseigné")
+
 
     # 🔹 Nouveaux champs facultatifs (aucune perte de données)
-    father_job = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-        verbose_name="Métier du père"
-    )
-    mother_job = models.CharField(
-        max_length=100,
-        blank=True,
-        null=True,
-        verbose_name="Métier de la mère"
-    )
+    
 
     birth_certificate = models.FileField(
         upload_to="students/certificates/",

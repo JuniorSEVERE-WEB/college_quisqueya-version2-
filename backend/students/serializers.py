@@ -5,10 +5,14 @@ from programs.models import Classroom
 from .models import Student
 
 
+class UserNestedSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "last_name", "email", "sexe", "phone"]
+
+
 class StudentSerializer(serializers.ModelSerializer):
-    user = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.filter(role="student")
-    )
+    user = UserNestedSerializer(read_only=True)
     academic_year = serializers.SlugRelatedField(
         slug_field="name",
         queryset=AcademicYear.objects.all()
@@ -21,39 +25,12 @@ class StudentSerializer(serializers.ModelSerializer):
         read_only=True
     )
 
-    # 🔹 nouveaux champs exposés à l’API
-    father_job = serializers.CharField(
-        required=False, allow_blank=True, allow_null=True
-    )
-    mother_job = serializers.CharField(
-        required=False, allow_blank=True, allow_null=True
-    )
-
-    birth_certificate = serializers.FileField(
-        required=False, allow_null=True,
-        help_text="PDF uniquement, max 3MB"
-    )
-    last_school_report = serializers.FileField(
-        required=False, allow_null=True,
-        help_text="PDF uniquement, max 3MB"
-    )
+    # ✅ Assure-toi que ces champs sont inclus :
+    father_job = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    mother_job = serializers.CharField(required=False, allow_blank=True, allow_null=True)
+    birth_certificate = serializers.FileField(required=False, allow_null=True)
+    last_school_report = serializers.FileField(required=False, allow_null=True)
 
     class Meta:
         model = Student
         fields = "__all__"
-
-    def validate_birth_certificate(self, file):
-        if file:
-            if file.size > 3 * 1024 * 1024:
-                raise serializers.ValidationError("Le fichier ne doit pas dépasser 3 MB.")
-            if not file.name.lower().endswith('.pdf'):
-                raise serializers.ValidationError("Le fichier doit être au format PDF.")
-        return file
-
-    def validate_last_school_report(self, file):
-        if file:
-            if file.size > 3 * 1024 * 1024:
-                raise serializers.ValidationError("Le fichier ne doit pas dépasser 3 MB.")
-            if not file.name.lower().endswith('.pdf'):
-                raise serializers.ValidationError("Le fichier doit être au format PDF.")
-        return file
