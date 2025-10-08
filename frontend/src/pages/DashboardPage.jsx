@@ -21,21 +21,41 @@ export function DashboardPage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    // Charger les statistiques
     API.get("core/dashboard/stats/")
       .then((res) => setStats(res.data))
       .catch(() => setError("Erreur de chargement des statistiques"));
 
-    // Charger les graphiques
     API.get("core/dashboard/chart-data/")
       .then((res) => setChartData(res.data))
       .catch(() => setError("Erreur de chargement des graphiques"));
   }, []);
 
-  if (error) return <p className="error">{error}</p>;
-  if (!stats || !chartData) return <p>Chargement des données...</p>;
+  useEffect(() => {
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
+    const updateTheme = () => {
+      if (prefersDark.matches) document.body.classList.add("dark");
+      else document.body.classList.remove("dark");
+    };
+    updateTheme();
+    prefersDark.addEventListener("change", updateTheme);
+    return () => prefersDark.removeEventListener("change", updateTheme);
+  }, []);
 
-  // ✅ Protection contre undefined
+  if (error) return <p className="error">{error}</p>;
+
+  if (!stats || !chartData) {
+    return (
+      <div className="dashboard-loading-screen">
+        <div>
+          <div className="dashboard-spinner"></div>
+          <div className="dashboard-loading-text">
+            Chargement du tableau de bord...
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const genderData = {
     labels: stats.gender_ratio_students?.labels || [],
     datasets: [
@@ -68,68 +88,95 @@ export function DashboardPage() {
     ],
   };
 
+  const abonnesData = {
+    labels: chartData.abonnes_per_month?.labels || [],
+    datasets: [
+      {
+        label: "Nouveaux abonnés",
+        data: chartData.abonnes_per_month?.data || [],
+        backgroundColor: "#4CAF50",
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        labels: {
+          color: document.body.classList.contains("dark") ? "#f4f4f4" : "#333",
+        },
+      },
+    },
+    animation: {
+      duration: 1200,
+      easing: "easeOutQuart",
+      delay: (context) => context.dataIndex * 100,
+    },
+    scales: {
+      x: {
+        ticks: {
+          color: document.body.classList.contains("dark") ? "#f4f4f4" : "#333",
+        },
+      },
+      y: {
+        ticks: {
+          color: document.body.classList.contains("dark") ? "#f4f4f4" : "#333",
+        },
+      },
+    },
+  };
+
   return (
     <div className="dashboard-container">
-      <h1>Tableau de bord</h1>
+      <h1 className="dashboard-title">📊 Tableau de bord</h1>
 
-      <div className="stats-grid">
-        <div className="card">
+      <div className="dashboard-stats-grid">
+        <div className="dashboard-card dashboard-card-blue">
           <h3>Étudiants</h3>
           <p>{stats.students_count}</p>
         </div>
-        <div className="card">
+        <div className="dashboard-card dashboard-card-purple">
           <h3>Professeurs</h3>
           <p>{stats.professors_count}</p>
         </div>
-        <div className="card">
-            <h3>Abonnés</h3>
-            <p>{stats.abonnes_count}</p>
-       </div>
-        <div className="card">
+        <div className="dashboard-card dashboard-card-green">
+          <h3>Abonnés</h3>
+          <p>{stats.abonnes_count}</p>
+        </div>
+        <div className="dashboard-card dashboard-card-gray">
           <h3>Total utilisateurs</h3>
           <p>{stats.total_users}</p>
         </div>
-        <div className="card">
+        <div className="dashboard-card dashboard-card-orange">
           <h3>Messages non lus</h3>
           <p>{stats.unread_messages}</p>
         </div>
       </div>
 
-      <div className="charts">
-        <div className="chart-card">
-          <h3>Répartition par sexe (étudiants)</h3>
-          <Doughnut data={genderData} />
+      <div className="dashboard-charts">
+        <div className="dashboard-chart-card">
+          <h3>Répartition par sexe (Étudiants)</h3>
+          <Doughnut data={genderData} options={chartOptions} />
         </div>
 
-
-        <div className="chart-card">
+        <div className="dashboard-chart-card">
           <h3>Inscriptions par mois</h3>
-          <Bar data={monthlyData} />
+          <Bar data={monthlyData} options={chartOptions} />
         </div>
 
-        <div className="chart-card">
+        <div className="dashboard-chart-card">
           <h3>Répartition par programme</h3>
-          <Bar data={programData} />
+          <Bar data={programData} options={chartOptions} />
+        </div>
+
+        <div className="dashboard-chart-card">
+          <h3>Abonnés par mois</h3>
+          <Bar data={abonnesData} options={chartOptions} />
         </div>
       </div>
 
-      <div className="chart-card">
-            <h3>Abonnés par mois</h3>
-            <Bar
-                data={{
-                labels: chartData.abonnes_per_month?.labels || [],
-                datasets: [
-                    {
-                    label: "Nouveaux abonnés",
-                    data: chartData.abonnes_per_month?.data || [],
-                    backgroundColor: "#4CAF50",
-                    },
-                ],
-                }}
-            />
-        </div>
-
-      <div className="footer">
+      <div className="dashboard-footer">
         <p>
           Année académique active : <strong>{stats.active_year}</strong>
         </p>

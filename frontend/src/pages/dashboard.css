@@ -1,129 +1,6 @@
-.dashboard-container {
-  padding: 20px;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 15px;
-  margin-bottom: 30px;
-}
-
-.card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 15px;
-  text-align: center;
-}
-
-.chart-card {
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  padding: 20px;
-  max-width: 400px;
-  margin: auto;
-}
-
-.footer {
-  margin-top: 30px;
-  text-align: center;
-}
-
-
-.dashboard-container {
-  padding: 30px;
-  font-family: "Poppins", sans-serif;
-  background: #f8f9fb;
-  min-height: 100vh;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 30px;
-  color: rgb(1, 1, 32);
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
-}
-
-.card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  padding: 15px;
-  text-align: center;
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  transform: scale(1.05);
-}
-
-.card h3 {
-  font-size: 16px;
-  color: #333;
-}
-
-.card p {
-  font-size: 26px;
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-/* 🎨 Couleurs spécifiques */
-.card-blue {
-  border-left: 5px solid #36a2eb;
-}
-
-.card-purple {
-  border-left: 5px solid #9c27b0;
-}
-
-.card-green {
-  border-left: 5px solid #4caf50;
-}
-
-.card-orange {
-  border-left: 5px solid #ff9800;
-}
-
-.card-gray {
-  border-left: 5px solid #607d8b;
-}
-
-.charts {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-  gap: 30px;
-}
-
-.chart-card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: center;
-}
-
-.chart-card h3 {
-  margin-bottom: 20px;
-  color: rgb(1, 1, 32);
-}
-
-.footer {
-  margin-top: 40px;
-  text-align: center;
-  color: #555;
-  font-size: 15px;
-}
-
-
+/* ==============================
+   🎨 DASHBOARD - VERSION PRO ISOLÉE
+   ============================== */
 
 :root {
   --bg-light: #f8f9fb;
@@ -131,7 +8,6 @@ h1 {
   --text-light: #333;
   --text-dark: #f4f4f4;
 
-  /* Couleurs de cartes */
   --blue: #36a2eb;
   --purple: #9c27b0;
   --green: #4caf50;
@@ -139,81 +15,302 @@ h1 {
   --gray: #607d8b;
 }
 
-/* 🌞 Mode clair (par défaut) */
+/* 🌞 MODE CLAIR */
 .dashboard-container {
   padding: 30px;
   font-family: "Poppins", sans-serif;
   background: var(--bg-light);
   min-height: 100vh;
   color: var(--text-light);
-  transition: background 0.3s ease, color 0.3s ease;
+  transition: background 0.5s ease, color 0.5s ease;
+  animation: dashboard-fadeIn 0.7s ease;
 }
 
-h1 {
+.dashboard-title {
   text-align: center;
   margin-bottom: 30px;
   color: rgb(1, 1, 32);
+  opacity: 0;
+  animation: dashboard-fadeUp 0.8s ease forwards;
 }
 
-.stats-grid {
+/* ===============================
+   🧮 STAT CARDS
+   =============================== */
+.dashboard-stats-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 20px;
   margin-bottom: 40px;
 }
 
-.card {
+.dashboard-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   padding: 15px;
   text-align: center;
+  transform: translateY(20px);
+  opacity: 0;
+  animation: dashboard-fadeUp 0.8s ease forwards;
   transition: all 0.3s ease;
 }
 
-.card:hover {
+.dashboard-card:nth-child(1) { animation-delay: 0.1s; }
+.dashboard-card:nth-child(2) { animation-delay: 0.2s; }
+.dashboard-card:nth-child(3) { animation-delay: 0.3s; }
+.dashboard-card:nth-child(4) { animation-delay: 0.4s; }
+.dashboard-card:nth-child(5) { animation-delay: 0.5s; }
+
+.dashboard-card:hover {
   transform: scale(1.05);
 }
 
-.card h3 {
+.dashboard-card h3 {
   font-size: 16px;
+  margin-bottom: 8px;
 }
 
-.card p {
+.dashboard-card p {
   font-size: 26px;
   font-weight: bold;
   margin-top: 10px;
 }
 
 /* 🎨 Couleurs spécifiques */
-.card-blue { border-left: 5px solid var(--blue); }
-.card-purple { border-left: 5px solid var(--purple); }
-.card-green { border-left: 5px solid var(--green); }
-.card-orange { border-left: 5px solid var(--orange); }
-.card-gray { border-left: 5px solid var(--gray); }
+.dashboard-card-blue { border-left: 5px solid var(--blue); }
+.dashboard-card-purple { border-left: 5px solid var(--purple); }
+.dashboard-card-green { border-left: 5px solid var(--green); }
+.dashboard-card-orange { border-left: 5px solid var(--orange); }
+.dashboard-card-gray { border-left: 5px solid var(--gray); }
 
-.charts {
+/* ===============================
+   📊 CHARTS
+   =============================== */
+.dashboard-charts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
   gap: 30px;
 }
 
-.chart-card {
+.dashboard-chart-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   text-align: center;
+  transform: translateY(30px);
+  opacity: 0;
+  animation: dashboard-fadeUp 1s ease forwards;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.chart-card h3 {
+.dashboard-chart-card h3 {
   margin-bottom: 20px;
   color: rgb(1, 1, 32);
 }
 
-.footer {
+.dashboard-chart-card:hover {
+  transform: scale(1.03) translateY(-5px);
+  box-shadow: 0 8px 20px rgba(54, 162, 235, 0.2);
+}
+
+body.dark .dashboard-chart-card:hover {
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.08);
+}
+
+canvas {
+  transition: transform 0.3s ease;
+}
+
+.dashboard-chart-card:hover canvas {
+  transform: scale(1.02);
+}
+
+/* ===============================
+   ⚙️ FOOTER
+   =============================== */
+.dashboard-footer {
   margin-top: 40px;
   text-align: center;
   color: #555;
   font-size: 15px;
+  opacity: 0;
+  animation: dashboard-fadeIn 1.2s ease forwards;
+}
+
+/* ===============================
+   🌙 MODE SOMBRE
+   =============================== */
+body.dark .dashboard-container {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+body.dark .dashboard-card,
+body.dark .dashboard-chart-card {
+  background: #2a2a3c;
+  color: var(--text-dark);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+body.dark .dashboard-title,
+body.dark .dashboard-card h3,
+body.dark .dashboard-chart-card h3,
+body.dark .dashboard-footer {
+  color: var(--text-dark);
+}
+
+/* ===============================
+   ✨ ANIMATIONS
+   =============================== */
+@keyframes dashboard-fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes dashboard-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   💫 LOADER
+   =============================== */
+.dashboard-loading-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: var(--bg-light);
+  color: var(--text-light);
+  animation: dashboard-fadeIn 0.5s ease;
+}
+
+body.dark .dashboard-loading-screen {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+.dashboard-spinner {
+  width: 60px;
+  height: 60px;
+  border: 5px solid rgba(0,0,0,0.1);
+  border-top: 5px solid var(--blue);
+  border-radius: 50%;
+  animation: dashboard-spin 1s linear infinite;
+}
+
+@keyframes dashboard-spin {
+  to { transform: rotate(360deg); }
+}
+
+.dashboard-loading-text {
+  margin-top: 15px;
+  font-size: 16px;
+  font-weight: 500;
+  animation: dashboard-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes dashboard-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+
+/* ===============================
+   🧭 LAYOUT DU DASHBOARD
+   =============================== */
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.dashboard-sidebar {
+  width: 230px;
+  background: rgb(1, 1, 32);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 10px;
+}
+
+.dashboard-logo {
+  font-weight: bold;
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.dashboard-link {
+  color: #ccc;
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 6px;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.dashboard-link:hover {
+  background: #2b2b52;
+  color: white;
+}
+
+.dashboard-link.active {
+  background: #007bff;
+  color: white;
+}
+
+.dashboard-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-light);
+  color: var(--text-light);
+  transition: background 0.5s ease;
+}
+
+body.dark .dashboard-main {
+  background: var(--bg-dark);
+  color: var(--text-dark);
+}
+
+/* HEADER DU DASHBOARD */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 25px;
+  background: white;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+body.dark .dashboard-header {
+  background: #2a2a3c;
+  border-bottom: 1px solid #3d3d5c;
+}
+
+.dashboard-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dashboard-user-img {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 2px solid #007bff;
+}
+
+.dashboard-content {
+  padding: 25px;
+  overflow-y: auto;
 }
