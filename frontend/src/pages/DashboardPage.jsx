@@ -1,5 +1,5 @@
+// src/pages/DashboardPage.jsx
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
 import { Doughnut, Bar } from "react-chartjs-2";
 import {
   Chart,
@@ -17,150 +17,125 @@ Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Lege
 
 export function DashboardPage() {
   const [stats, setStats] = useState(null);
+  const [chartData, setChartData] = useState(null);
   const [error, setError] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const location = useLocation();
 
   useEffect(() => {
+    // Charger les statistiques
     API.get("core/dashboard/stats/")
       .then((res) => setStats(res.data))
-      .catch(() => setError("Impossible de charger les statistiques."));
+      .catch(() => setError("Erreur de chargement des statistiques"));
+
+    // Charger les graphiques
+    API.get("core/dashboard/chart-data/")
+      .then((res) => setChartData(res.data))
+      .catch(() => setError("Erreur de chargement des graphiques"));
   }, []);
 
   if (error) return <p className="error">{error}</p>;
-  if (!stats) return <p className="loading">Chargement des statistiques...</p>;
+  if (!stats || !chartData) return <p>Chargement des données...</p>;
 
-  const sexData = {
-    labels: ["Garçons", "Filles"],
+  // ✅ Protection contre undefined
+  const genderData = {
+    labels: stats.gender_ratio_students?.labels || [],
     datasets: [
       {
-        data: [stats.students_male, stats.students_female],
-        backgroundColor: ["#1E3A8A", "#F472B6"],
-        borderWidth: 1,
+        data: stats.gender_ratio_students?.data || [],
+        backgroundColor: ["#FF6384", "#36A2EB"],
       },
     ],
   };
 
-  const totalsData = {
-    labels: [
-      "Élèves",
-      "Professeurs",
-      "Employés",
-      "Alumni",
-      "Abonnés",
-      "Articles",
-      "Commentaires",
-    ],
+  const monthlyData = {
+    labels: chartData?.monthly_registrations?.labels || [],
     datasets: [
       {
-        label: "Totaux",
-        data: [
-          stats.students_total,
-          stats.professors_total,
-          stats.employees_total,
-          stats.alumni_total,
-          stats.subscribers_total,
-          stats.articles_total,
-          stats.comments_total,
-        ],
-        backgroundColor: [
-          "#3B82F6",
-          "#22C55E",
-          "#F59E0B",
-          "#8B5CF6",
-          "#0EA5E9",
-          "#F43F5E",
-          "#14B8A6",
-        ],
+        label: "Inscriptions",
+        data: chartData?.monthly_registrations?.data || [],
+        backgroundColor: "#36A2EB",
       },
     ],
   };
 
-  const links = [
-    { path: "/dashboard", label: "📊 Dashboard" },
-    { path: "/dashboard/students", label: "👩‍🎓 Students" },
-    { path: "/dashboard/professors", label: "👨‍🏫 Professors" },
-    { path: "/dashboard/employees", label: "💼 Employees" },
-    { path: "/dashboard/payments", label: "💰 Payments" },
-    { path: "/dashboard/blog", label: "📰 Blog" },
-  ];
+  const programData = {
+    labels: chartData?.program_distribution?.labels || [],
+    datasets: [
+      {
+        label: "Étudiants par programme",
+        data: chartData?.program_distribution?.data || [],
+        backgroundColor: "#FF6384",
+      },
+    ],
+  };
 
   return (
-    <div className="dashboard-layout">
-      {/* ===== HEADER MOBILE ===== */}
-      <header className="dashboard-header">
-        <button
-          className="menu-toggle"
-          onClick={() => setSidebarOpen((prev) => !prev)}
-        >
-          ☰
-        </button>
-        <h1>Tableau de bord</h1>
-      </header>
+    <div className="dashboard-container">
+      <h1>Tableau de bord</h1>
 
-      {/* ===== SIDEBAR ===== */}
-      <aside className={`sidebar ${sidebarOpen ? "open" : ""}`}>
-        <h2 className="sidebar-title">Collège Quisqueya</h2>
-        <nav>
-          {links.map((link) => (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={location.pathname === link.path ? "active" : ""}
-              onClick={() => setSidebarOpen(false)} // referme après clic mobile
-            >
-              {link.label}
-            </Link>
-          ))}
-        </nav>
-        <button
-          className="logout-btn"
-          onClick={() => {
-            localStorage.clear();
-            window.location.href = "/";
-          }}
-        >
-          🚪 Logout
-        </button>
-      </aside>
+      <div className="stats-grid">
+        <div className="card">
+          <h3>Étudiants</h3>
+          <p>{stats.students_count}</p>
+        </div>
+        <div className="card">
+          <h3>Professeurs</h3>
+          <p>{stats.professors_count}</p>
+        </div>
+        <div className="card">
+            <h3>Abonnés</h3>
+            <p>{stats.abonnes_count}</p>
+       </div>
+        <div className="card">
+          <h3>Total utilisateurs</h3>
+          <p>{stats.total_users}</p>
+        </div>
+        <div className="card">
+          <h3>Messages non lus</h3>
+          <p>{stats.unread_messages}</p>
+        </div>
+      </div>
 
-      {/* ===== MAIN ===== */}
-      <main className="dashboard-main" onClick={() => sidebarOpen && setSidebarOpen(false)}>
-        <p className="academic-year">
-          Année académique : <strong>{stats.academic_year}</strong>
+      <div className="charts">
+        <div className="chart-card">
+          <h3>Répartition par sexe (étudiants)</h3>
+          <Doughnut data={genderData} />
+        </div>
+
+
+        <div className="chart-card">
+          <h3>Inscriptions par mois</h3>
+          <Bar data={monthlyData} />
+        </div>
+
+        <div className="chart-card">
+          <h3>Répartition par programme</h3>
+          <Bar data={programData} />
+        </div>
+      </div>
+
+      <div className="chart-card">
+            <h3>Abonnés par mois</h3>
+            <Bar
+                data={{
+                labels: chartData.abonnes_per_month?.labels || [],
+                datasets: [
+                    {
+                    label: "Nouveaux abonnés",
+                    data: chartData.abonnes_per_month?.data || [],
+                    backgroundColor: "#4CAF50",
+                    },
+                ],
+                }}
+            />
+        </div>
+
+      <div className="footer">
+        <p>
+          Année académique active : <strong>{stats.active_year}</strong>
         </p>
-
-        <div className="kpi-grid">
-          <KpiCard title="👩‍🎓 Étudiants" value={stats.students_total} />
-          <KpiCard title="👨‍🏫 Professeurs" value={stats.professors_total} />
-          <KpiCard title="💼 Employés" value={stats.employees_total} />
-          <KpiCard title="💰 Paiements" value={`${stats.payments_total} Gdes`} />
-          <KpiCard title="🎁 Dons" value={`${stats.donations_total} Gdes`} />
-          <KpiCard title="🎓 Alumni" value={stats.alumni_total} />
-          <KpiCard title="📰 Abonnés" value={stats.subscribers_total} />
-        </div>
-
-        <div className="charts-container">
-          <div className="chart-box">
-            <h2>Répartition Filles / Garçons</h2>
-            <Doughnut data={sexData} />
-          </div>
-
-          <div className="chart-box">
-            <h2>Statistiques globales</h2>
-            <Bar data={totalsData} />
-          </div>
-        </div>
-      </main>
+      </div>
     </div>
   );
 }
 
-function KpiCard({ title, value }) {
-  return (
-    <div className="kpi-card">
-      <h3>{title}</h3>
-      <p>{value}</p>
-    </div>
-  );
-}
+export default DashboardPage;
