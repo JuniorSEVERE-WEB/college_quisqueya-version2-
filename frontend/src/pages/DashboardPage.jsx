@@ -10,6 +10,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { DashboardSidebar } from "../components/DashboardSidebar";
+import { DashboardHeader } from "../components/DashboardHeader";
 import API from "../api";
 import "./dashboard.css";
 
@@ -19,7 +21,9 @@ export function DashboardPage() {
   const [stats, setStats] = useState(null);
   const [chartData, setChartData] = useState(null);
   const [error, setError] = useState("");
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  // 🔹 Charger les données
   useEffect(() => {
     API.get("core/dashboard/stats/")
       .then((res) => setStats(res.data))
@@ -30,6 +34,7 @@ export function DashboardPage() {
       .catch(() => setError("Erreur de chargement des graphiques"));
   }, []);
 
+  // 🌙 Mode sombre auto
   useEffect(() => {
     const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
     const updateTheme = () => {
@@ -41,8 +46,10 @@ export function DashboardPage() {
     return () => prefersDark.removeEventListener("change", updateTheme);
   }, []);
 
+  // ⚠️ Gestion des erreurs
   if (error) return <p className="error">{error}</p>;
 
+  // 🌀 Écran de chargement
   if (!stats || !chartData) {
     return (
       <div className="dashboard-loading-screen">
@@ -56,6 +63,7 @@ export function DashboardPage() {
     );
   }
 
+  // 📊 Données des graphiques
   const genderData = {
     labels: stats.gender_ratio_students?.labels || [],
     datasets: [
@@ -99,6 +107,7 @@ export function DashboardPage() {
     ],
   };
 
+  // ⚙️ Options de Chart.js
   const chartOptions = {
     responsive: true,
     plugins: {
@@ -127,60 +136,89 @@ export function DashboardPage() {
     },
   };
 
+  // ============================
+  // 💠 Structure principale
+  // ============================
   return (
-    <div className="dashboard-container">
-      <h1 className="dashboard-title">📊 Tableau de bord</h1>
+    <div
+      className={`dashboard-layout ${
+        sidebarOpen ? "sidebar-open" : "sidebar-closed"
+      }`}
+    >
+      {/* 🔹 Barre latérale */}
+      <DashboardSidebar onToggle={setSidebarOpen} />
 
-      <div className="dashboard-stats-grid">
-        <div className="dashboard-card dashboard-card-blue">
-          <h3>Étudiants</h3>
-          <p>{stats.students_count}</p>
-        </div>
-        <div className="dashboard-card dashboard-card-purple">
-          <h3>Professeurs</h3>
-          <p>{stats.professors_count}</p>
-        </div>
-        <div className="dashboard-card dashboard-card-green">
-          <h3>Abonnés</h3>
-          <p>{stats.abonnes_count}</p>
-        </div>
-        <div className="dashboard-card dashboard-card-gray">
-          <h3>Total utilisateurs</h3>
-          <p>{stats.total_users}</p>
-        </div>
-        <div className="dashboard-card dashboard-card-orange">
-          <h3>Messages non lus</h3>
-          <p>{stats.unread_messages}</p>
-        </div>
-      </div>
+      {/* 🌫️ Overlay flouté sur mobile */}
+      <div
+        className="dashboard-overlay"
+        onClick={() => setSidebarOpen(false)}
+      ></div>
 
-      <div className="dashboard-charts">
-        <div className="dashboard-chart-card">
-          <h3>Répartition par sexe (Étudiants)</h3>
-          <Doughnut data={genderData} options={chartOptions} />
-        </div>
+      {/* 🔹 Contenu principal */}
+      <main className="dashboard-main">
+        <DashboardHeader
+          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
+          sidebarOpen={sidebarOpen}
+        />
 
-        <div className="dashboard-chart-card">
-          <h3>Inscriptions par mois</h3>
-          <Bar data={monthlyData} options={chartOptions} />
-        </div>
+        <div className="dashboard-container">
+          <h1 className="dashboard-title">📊 Tableau de bord</h1>
 
-        <div className="dashboard-chart-card">
-          <h3>Répartition par programme</h3>
-          <Bar data={programData} options={chartOptions} />
-        </div>
+          {/* Cartes de statistiques */}
+          <div className="dashboard-stats-grid">
+            <div className="dashboard-card dashboard-card-blue">
+              <h3>Étudiants</h3>
+              <p>{stats.students_count}</p>
+            </div>
+            <div className="dashboard-card dashboard-card-purple">
+              <h3>Professeurs</h3>
+              <p>{stats.professors_count}</p>
+            </div>
+            <div className="dashboard-card dashboard-card-green">
+              <h3>Abonnés</h3>
+              <p>{stats.abonnes_count}</p>
+            </div>
+            <div className="dashboard-card dashboard-card-gray">
+              <h3>Total utilisateurs</h3>
+              <p>{stats.total_users}</p>
+            </div>
+            <div className="dashboard-card dashboard-card-orange">
+              <h3>Messages non lus</h3>
+              <p>{stats.unread_messages}</p>
+            </div>
+          </div>
 
-        <div className="dashboard-chart-card">
-          <h3>Abonnés par mois</h3>
-          <Bar data={abonnesData} options={chartOptions} />
-        </div>
-      </div>
+          {/* Graphiques */}
+          <div className="dashboard-charts">
+            <div className="dashboard-chart-card">
+              <h3>Répartition par sexe (Étudiants)</h3>
+              <Doughnut data={genderData} options={chartOptions} />
+            </div>
 
-      <div className="dashboard-footer">
-        <p>
-          Année académique active : <strong>{stats.active_year}</strong>
-        </p>
-      </div>
+            <div className="dashboard-chart-card">
+              <h3>Inscriptions par mois</h3>
+              <Bar data={monthlyData} options={chartOptions} />
+            </div>
+
+            <div className="dashboard-chart-card">
+              <h3>Répartition par programme</h3>
+              <Bar data={programData} options={chartOptions} />
+            </div>
+
+            <div className="dashboard-chart-card">
+              <h3>Abonnés par mois</h3>
+              <Bar data={abonnesData} options={chartOptions} />
+            </div>
+          </div>
+
+          {/* Pied de page */}
+          <div className="dashboard-footer">
+            <p>
+              Année académique active : <strong>{stats.active_year}</strong>
+            </p>
+          </div>
+        </div>
+      </main>
     </div>
   );
 }
