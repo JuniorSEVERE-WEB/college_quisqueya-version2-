@@ -1,0 +1,84 @@
+/* ✅ src/layouts/dashboard-layout.css */
+
+:root {
+  --dark-blue: rgb(1, 1, 32);
+  --gold: #ffd700;
+  --light-gray: #f8f9fa;
+  --white: #ffffff;
+}
+
+/* 🧱 Structure du layout */
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--light-gray);
+}
+
+/* 🧭 Barre latérale */
+.sidebar {
+  width: 220px;
+  background-color: var(--dark-blue);
+  color: var(--white);
+  padding: 30px 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.sidebar-nav a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  transition: background 0.3s;
+}
+
+.sidebar-nav a:hover {
+  background-color: var(--gold);
+  color: var(--dark-blue);
+}
+
+/* 📄 Zone de contenu */
+.dashboard-content {
+  flex-grow: 1;
+  padding: 30px;
+  overflow-y: auto;
+}
+
+/* 📱 Responsive */
+@media (max-width: 768px) {
+  .dashboard-layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
+  .sidebar-nav {
+    flex-direction: row;
+    gap: 10px;
+  }
+}
+.sidebar-nav .active-link {
+  background-color: var(--gold);
+  color: var(--dark-blue);
+  font-weight: 600;
+}
+

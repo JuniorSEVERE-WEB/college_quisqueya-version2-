@@ -1,6 +1,10 @@
-import NewsPage from "./pages/NewsPage";
+// ✅ src/App.jsx
 import "./App.css";
 
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+// 🌐 Pages principales
+import NewsPage from "./pages/NewsPage";
 import { AboutPage } from "./pages/AboutPage";
 import { SchoolLife } from "./pages/SchoolLife";
 import LoginPage from "./pages/LoginPage";
@@ -10,34 +14,18 @@ import { ContactPage } from "./pages/ContactPage";
 import { HomePage } from "./pages/HomePage";
 import { DonationPage } from "./pages/DonationPage";
 import ArticleDetailPage from "./pages/ArticleDetailPage";
+
+// 🧭 Dashboard et sous-pages
+import { DashboardLayout } from "./layouts/DashboardLayout";
 import { DashboardPage } from "./pages/DashboardPage";
 import { StudentsManager } from "./pages/StudentsManager";
 import { ProfessorsManager } from "./pages/ProfessorsManager";
 
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import { useEffect } from "react";
-import { DashboardLayout } from "./layouts/DashboardLayout";
-
-// ✅ Chargement conditionnel du CSS du dashboard
-function ConditionalDashboardCSS() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (location.pathname.startsWith("/dashboard")) {
-      import("./pages/dashboard.css");
-    }
-  }, [location.pathname]);
-
-  return null;
-}
-
 function App() {
   return (
     <Router>
-      <ConditionalDashboardCSS />
-
       <Routes>
-        {/* 🌐 Pages principales */}
+        {/* 🌐 Pages publiques */}
         <Route path="/" element={<HomePage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/schoollife" element={<SchoolLife />} />
@@ -46,16 +34,16 @@ function App() {
         <Route path="/news" element={<NewsPage />} />
         <Route path="/news/:id" element={<ArticleDetailPage />} />
 
-        {/* 🔐 Auth */}
+        {/* 🔐 Authentification */}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/profile" element={<ProfilePage />} />
 
-        {/* 🧭 Dashboard (avec Layout dédié) */}
-        <Route element={<DashboardLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/dashboard/students" element={<StudentsManager />} />
-          <Route path="/dashboard/professors" element={<ProfessorsManager />} />
+        {/* 🧭 Tableau de bord (avec Layout commun) */}
+        <Route path="/dashboard" element={<DashboardLayout />}>
+          <Route index element={<DashboardPage />} /> {/* /dashboard */}
+          <Route path="students" element={<StudentsManager />} /> {/* /dashboard/students */}
+          <Route path="professors" element={<ProfessorsManager />} /> {/* /dashboard/professors */}
         </Route>
       </Routes>
     </Router>

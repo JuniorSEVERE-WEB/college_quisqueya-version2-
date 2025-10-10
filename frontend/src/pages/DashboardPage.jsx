@@ -1,6 +1,5 @@
-// src/pages/DashboardPage.jsx
+// ✅ src/pages/DashboardPage.jsx
 import { useEffect, useState } from "react";
-import { Doughnut, Bar } from "react-chartjs-2";
 import {
   Chart,
   ArcElement,
@@ -10,217 +9,132 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { DashboardSidebar } from "../components/DashboardSidebar";
-import { DashboardHeader } from "../components/DashboardHeader";
+import { Doughnut, Bar } from "react-chartjs-2";
+import { motion } from "framer-motion";
 import API from "../api";
-import "./dashboard.css";
+import "./dashboard.css"; // ✅ déplacer le fichier ici
 
 Chart.register(ArcElement, BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 export function DashboardPage() {
   const [stats, setStats] = useState(null);
-  const [chartData, setChartData] = useState(null);
-  const [error, setError] = useState("");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
 
-  // 🔹 Charger les données
   useEffect(() => {
     API.get("core/dashboard/stats/")
-      .then((res) => setStats(res.data))
-      .catch(() => setError("Erreur de chargement des statistiques"));
-
-    API.get("core/dashboard/chart-data/")
-      .then((res) => setChartData(res.data))
-      .catch(() => setError("Erreur de chargement des graphiques"));
+      .then((res) => {
+        setStats(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erreur API :", err);
+        setLoading(false);
+      });
   }, []);
 
-  // 🌙 Mode sombre auto
-  useEffect(() => {
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)");
-    const updateTheme = () => {
-      if (prefersDark.matches) document.body.classList.add("dark");
-      else document.body.classList.remove("dark");
-    };
-    updateTheme();
-    prefersDark.addEventListener("change", updateTheme);
-    return () => prefersDark.removeEventListener("change", updateTheme);
-  }, []);
-
-  // ⚠️ Gestion des erreurs
-  if (error) return <p className="error">{error}</p>;
-
-  // 🌀 Écran de chargement
-  if (!stats || !chartData) {
+  if (loading)
     return (
-      <div className="dashboard-loading-screen">
-        <div>
-          <div className="dashboard-spinner"></div>
-          <div className="dashboard-loading-text">
-            Chargement du tableau de bord...
-          </div>
-        </div>
+      <div className="loader-container">
+        <div className="spinner"></div>
+        <p>Chargement du tableau de bord...</p>
       </div>
     );
-  }
 
-  // 📊 Données des graphiques
-  const genderData = {
-    labels: stats.gender_ratio_students?.labels || [],
+  if (!stats) return <p className="error">Aucune donnée disponible.</p>;
+
+  const barData = {
+    labels: ["Étudiants", "Professeurs", "Programmes", "Articles", "Messages"],
     datasets: [
       {
-        data: stats.gender_ratio_students?.data || [],
-        backgroundColor: ["#FF6384", "#36A2EB"],
+        label: "Effectifs et contenus",
+        data: [
+          stats.students_count,
+          stats.professors_count,
+          stats.programs_count,
+          stats.articles_count,
+          stats.messages_count,
+        ],
+        backgroundColor: ["#FFD700", "#00b4d8", "#010120", "#e63946", "#009688"],
       },
     ],
   };
 
-  const monthlyData = {
-    labels: chartData?.monthly_registrations?.labels || [],
+  const activityData = {
+    labels: ["Likes", "Unlikes", "Commentaires", "Abonnés"],
     datasets: [
       {
-        label: "Inscriptions",
-        data: chartData?.monthly_registrations?.data || [],
-        backgroundColor: "#36A2EB",
+        data: [
+          stats.likes_count,
+          stats.unlikes_count,
+          stats.comments_count,
+          stats.abonnes_count,
+        ],
+        backgroundColor: ["#FFD700", "#e63946", "#010120", "#00b4d8"],
+        borderColor: "#ffffff",
+        borderWidth: 2,
       },
     ],
   };
 
-  const programData = {
-    labels: chartData?.program_distribution?.labels || [],
-    datasets: [
-      {
-        label: "Étudiants par programme",
-        data: chartData?.program_distribution?.data || [],
-        backgroundColor: "#FF6384",
-      },
-    ],
-  };
-
-  const abonnesData = {
-    labels: chartData.abonnes_per_month?.labels || [],
-    datasets: [
-      {
-        label: "Nouveaux abonnés",
-        data: chartData.abonnes_per_month?.data || [],
-        backgroundColor: "#4CAF50",
-      },
-    ],
-  };
-
-  // ⚙️ Options de Chart.js
-  const chartOptions = {
-    responsive: true,
-    plugins: {
-      legend: {
-        labels: {
-          color: document.body.classList.contains("dark") ? "#f4f4f4" : "#333",
-        },
-      },
-    },
-    animation: {
-      duration: 1200,
-      easing: "easeOutQuart",
-      delay: (context) => context.dataIndex * 100,
-    },
-    scales: {
-      x: {
-        ticks: {
-          color: document.body.classList.contains("dark") ? "#f4f4f4" : "#333",
-        },
-      },
-      y: {
-        ticks: {
-          color: document.body.classList.contains("dark") ? "#f4f4f4" : "#333",
-        },
-      },
-    },
-  };
-
-  // ============================
-  // 💠 Structure principale
-  // ============================
   return (
-    <div
-      className={`dashboard-layout ${
-        sidebarOpen ? "sidebar-open" : "sidebar-closed"
-      }`}
+    <motion.div
+      className="dashboard-wrapper"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.8 }}
     >
-      {/* 🔹 Barre latérale */}
-      <DashboardSidebar onToggle={setSidebarOpen} />
+      <header className="dashboard-header">
+        <h1>🏫 Collège Quisqueya — Tableau de bord</h1>
+        <p>
+          Année académique active : <strong>{stats.active_year}</strong>
+        </p>
+      </header>
 
-      {/* 🌫️ Overlay flouté sur mobile */}
-      <div
-        className="dashboard-overlay"
-        onClick={() => setSidebarOpen(false)}
-      ></div>
+      <section className="stats-section">
+        {[
+          { label: "Étudiants", value: stats.students_count, icon: "👩‍🎓" },
+          { label: "Professeurs", value: stats.professors_count, icon: "👨‍🏫" },
+          { label: "Articles", value: stats.articles_count, icon: "📰" },
+          { label: "Messages", value: stats.messages_count, icon: "💬" },
+          { label: "Dons", value: stats.donations_count, icon: "💰" },
+          { label: "Utilisateurs", value: stats.total_users, icon: "👥" },
+        ].map((item, index) => (
+          <motion.div
+            key={index}
+            className="stat-card"
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ delay: index * 0.1 }}
+          >
+            <div className="icon">{item.icon}</div>
+            <h3>{item.label}</h3>
+            <p>{item.value}</p>
+          </motion.div>
+        ))}
+      </section>
 
-      {/* 🔹 Contenu principal */}
-      <main className="dashboard-main">
-        <DashboardHeader
-          onToggleSidebar={() => setSidebarOpen(!sidebarOpen)}
-          sidebarOpen={sidebarOpen}
-        />
-
-        <div className="dashboard-container">
-          <h1 className="dashboard-title">📊 Tableau de bord</h1>
-
-          {/* Cartes de statistiques */}
-          <div className="dashboard-stats-grid">
-            <div className="dashboard-card dashboard-card-blue">
-              <h3>Étudiants</h3>
-              <p>{stats.students_count}</p>
-            </div>
-            <div className="dashboard-card dashboard-card-purple">
-              <h3>Professeurs</h3>
-              <p>{stats.professors_count}</p>
-            </div>
-            <div className="dashboard-card dashboard-card-green">
-              <h3>Abonnés</h3>
-              <p>{stats.abonnes_count}</p>
-            </div>
-            <div className="dashboard-card dashboard-card-gray">
-              <h3>Total utilisateurs</h3>
-              <p>{stats.total_users}</p>
-            </div>
-            <div className="dashboard-card dashboard-card-orange">
-              <h3>Messages non lus</h3>
-              <p>{stats.unread_messages}</p>
-            </div>
-          </div>
-
-          {/* Graphiques */}
-          <div className="dashboard-charts">
-            <div className="dashboard-chart-card">
-              <h3>Répartition par sexe (Étudiants)</h3>
-              <Doughnut data={genderData} options={chartOptions} />
-            </div>
-
-            <div className="dashboard-chart-card">
-              <h3>Inscriptions par mois</h3>
-              <Bar data={monthlyData} options={chartOptions} />
-            </div>
-
-            <div className="dashboard-chart-card">
-              <h3>Répartition par programme</h3>
-              <Bar data={programData} options={chartOptions} />
-            </div>
-
-            <div className="dashboard-chart-card">
-              <h3>Abonnés par mois</h3>
-              <Bar data={abonnesData} options={chartOptions} />
-            </div>
-          </div>
-
-          {/* Pied de page */}
-          <div className="dashboard-footer">
-            <p>
-              Année académique active : <strong>{stats.active_year}</strong>
-            </p>
-          </div>
+      <section className="charts-section">
+        <div className="chart-card">
+          <h4>Répartition globale</h4>
+          <Bar data={barData} />
         </div>
-      </main>
-    </div>
+
+        <div className="chart-card">
+          <h4>Interactions</h4>
+          <Doughnut data={activityData} />
+        </div>
+      </section>
+
+      <div className="admin-access">
+        <a
+          href="http://localhost:8000/admin/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="admin-btn"
+        >
+          🛠️ Ouvrir le panneau d'administration Django
+        </a>
+      </div>
+    </motion.div>
   );
 }
-
-export default DashboardPage;
