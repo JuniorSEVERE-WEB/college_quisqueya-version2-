@@ -11,7 +11,6 @@ export default function LoginPage({ onLogin }) {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // Tente /auth/token/, puis fallback /token/
   const loginRequest = async (username, password) => {
     try {
       return await API.post("auth/token/", { username, password });
@@ -34,13 +33,17 @@ export default function LoginPage({ onLogin }) {
       try {
         const me = await API.get("auth/me/");
         localStorage.setItem("user", JSON.stringify(me.data));
+        if (me.data?.role) {
+          localStorage.setItem("role", me.data.role);
+        }
       } catch (_) {}
 
       if (onLogin) onLogin();
       window.dispatchEvent(new Event("authChanged"));
       navigate("/");
     } catch (err) {
-      const detail = err?.response?.data?.detail || "Identifiants invalides";
+      const detail =
+        err?.response?.data?.detail || "Identifiants invalides";
       setError(detail);
     }
   };
@@ -48,9 +51,19 @@ export default function LoginPage({ onLogin }) {
   return (
     <>
       <HeaderPage />
-      <div className="login-page" style={{ maxWidth: 420, margin: "24px auto", padding: "0 16px" }}>
+      <div
+        className="login-page"
+        style={{
+          maxWidth: 420,
+          margin: "24px auto",
+          padding: "0 16px",
+        }}
+      >
         <h2 style={{ textAlign: "center", marginBottom: 16 }}>Connexion</h2>
-        <form onSubmit={handleSubmit} style={{ display: "grid", gap: 12 }}>
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "grid", gap: 12 }}
+        >
           <input
             type="text"
             placeholder="Nom d'utilisateur ou email"
@@ -67,17 +80,18 @@ export default function LoginPage({ onLogin }) {
             required
             autoComplete="current-password"
           />
-          <button type="submit" style={{ padding: "10px 14px", fontWeight: 600 }}>
+          <button
+            type="submit"
+            style={{ padding: "10px 14px", fontWeight: 600 }}
+          >
             Se connecter
           </button>
         </form>
-        {error && <div style={{ color: "red", marginTop: 10 }}>{error}</div>}
-
+        {error && (
+          <div style={{ color: "red", marginTop: 10 }}>{error}</div>
+        )}
         <div style={{ marginTop: 16, textAlign: "center" }}>
-          Pas de compte ?{" "}
-          <Link to="/register">
-            Créer un compte
-          </Link>
+          Pas de compte ? <Link to="/register">Créer un compte</Link>
         </div>
       </div>
       <FooterPage />
