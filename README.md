@@ -1,50 +1,42 @@
-College Quisqueya
-A modern school management system built with Django (backend) and Vite/React (frontend).
+# 🎓 College Quisqueya
 
-Features
-User authentication (students, teachers, parents, employees, admin)
-Student and teacher management
-Enrollments and approvals
-Report cards and grades
-Donations management
-Programs, sections, and classrooms
-Modern Django admin interface (Jazzmin)
-Easy customization for educational institutions
-Tech Stack
-Backend: Django, Django REST Framework, Jazzmin
-Frontend: React, Vite
-Getting Started
-Backend
-Clone the repository and navigate to the backend folder:
+A **modern full-stack school management system** built with **Django REST Framework** (backend) and **React + Vite** (frontend).  
+Designed for educational institutions that need a scalable, elegant, and efficient management solution.
 
-git clone https://github.com/JuniorSEVERE-WEB/college_quisqueya.git
-cd college_quisqueya/backend
-Create and activate a virtual environment:
+---
 
-python -m venv env
-env\Scripts\activate  # On Windows
-Install dependencies:
+## 🚀 Features
 
-pip install -r requirements.txt
-Run migrations and create a superuser:
+- 🔐 **User Authentication & Roles**
+  - Students, Teachers, Admins, Employees, Alumni, Parents
+- 🎓 **Academic Management**
+  - Programs, Classrooms, Subjects, Trimesters, Steps, Grades
+- 🧾 **Reports & Evaluations**
+  - Report cards, Subject coefficients, Automated grade reports
+- 💬 **Communication**
+  - Internal messaging system, contact forms
+- 💰 **Donations & Financials**
+  - Online donation management and tracking
+- 🏫 **Homepage Management**
+  - Slides, welcome messages, values, and gallery
+- 🧑‍💼 **Modern Admin Interface**
+  - Powered by **Jazzmin** for an elegant and responsive Django admin
+- ⚡ **Fast Frontend**
+  - Built with **React + Vite** for a modern, reactive user experience
 
-python manage.py makemigrations
-python manage.py migrate
-python manage.py createsuperuser
-Start the development server:
+---
 
-python manage.py runserver
-Access the admin interface at http://localhost:8000/admin/
+## 🛠️ Tech Stack
 
-Frontend
-Navigate to the frontend folder:
+| Layer | Technology |
+|-------|-------------|
+| **Backend** | Django, Django REST Framework, Jazzmin |
+| **Frontend** | React, Vite, Axios, TailwindCSS |
+| **Database** | SQLite (development) / PostgreSQL (production) |
+| **API Auth** | JWT (SimpleJWT) |
+| **Deployment (suggested)** | Render / Railway / Docker |
 
-cd ../frontend
-Install dependencies:
+---
 
-npm install
-Start the development server:
+## 🧩 Project Structure
 
-npm run dev
-License
-This project is licensed under the MIT License.
