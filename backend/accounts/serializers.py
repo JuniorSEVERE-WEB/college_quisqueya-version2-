@@ -16,8 +16,8 @@ class UserMeSerializer(serializers.ModelSerializer):
 class AbonneRegisterSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True)
     password2 = serializers.CharField(write_only=True)
-    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
-    phone = serializers.CharField(required=True)
+    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=False, allow_blank=True)
+    phone = serializers.CharField(required=False, allow_blank=True)
 
     class Meta:
         model = User
@@ -34,8 +34,8 @@ class AbonneRegisterSerializer(serializers.ModelSerializer):
             email=validated_data["email"],
             password=validated_data["password1"],
             role="abonne",
-            sexe=validated_data["sexe"],
-            phone=validated_data["phone"]
+            sexe=validated_data.get("sexe", ""),
+            phone=validated_data.get("phone", "")
         )
         return user
 
