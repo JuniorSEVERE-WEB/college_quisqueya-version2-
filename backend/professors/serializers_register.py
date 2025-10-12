@@ -16,11 +16,12 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
-    phone = serializers.CharField(required=True)
-    # 🔹 Nouveau champ obligatoire
-    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
 
-    # Champs spécifiques Professeur
+    # 🔹 Champs facultatifs
+    phone = serializers.CharField(required=False, allow_blank=True)
+    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=False, allow_blank=True)
+
+    # Champs Professeur
     program = serializers.PrimaryKeyRelatedField(
         queryset=Program.objects.all(),
         required=True
@@ -35,60 +36,55 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
         model = Professor
         fields = [
             "username", "email", "password1", "password2",
-            "first_name", "last_name", "sexe",  # ⬅️ ajouté ici
-            "department", "hire_date",
-            "program", "subjects",
+            "first_name", "last_name", "sexe", "phone",
+            "department", "hire_date", "program", "subjects",
         ]
 
-    # Validation supplémentaire
     def validate_username(self, value):
         if User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("Ce nom d’utilisateur existe déjà. Veuillez en choisir un autre.")
+            raise serializers.ValidationError("Ce nom d’utilisateur existe déjà.")
         return value
 
     def validate_email(self, value):
         if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Cet email est déjà utilisé. Veuillez en choisir un autre.")
+            raise serializers.ValidationError("Cet email est déjà utilisé.")
         return value
 
     def validate(self, attrs):
-        # Vérifier la correspondance des mots de passe
         if attrs["password1"] != attrs["password2"]:
             raise serializers.ValidationError("Les mots de passe ne correspondent pas.")
         return attrs
 
     def create(self, validated_data):
-        # Extraire et nettoyer les champs User
         username = validated_data.pop("username")
         email = validated_data.pop("email")
         password = validated_data.pop("password1")
         validated_data.pop("password2", None)
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
-        sexe = validated_data.pop("sexe")  # ⬅️ récupérer le sexe
+        sexe = validated_data.pop("sexe", "")
+        phone = validated_data.pop("phone", "")
 
-        # Créer User
+        # Créer l'utilisateur
         user = User.objects.create_user(
             username=username,
             email=email,
             password=password,
             first_name=first_name,
             last_name=last_name,
-            sexe=sexe,   # ⬅️ propagé ici
+            sexe=sexe,
+            phone=phone,
             role="prof",
-            is_active=False,  # en attente validation admin
+            is_active=False,
         )
 
-        # Année académique active
         active_year = AcademicYear.objects.filter(is_active=True).first()
         if not active_year:
             raise serializers.ValidationError("Aucune année académique active.")
 
-        # Subjects et program
         subjects = validated_data.pop("subjects", [])
         program = validated_data.pop("program")
 
-        # Créer le professeur
         professor = Professor.objects.create(
             user=user,
             academic_year=active_year,
@@ -96,5 +92,4 @@ class ProfessorRegisterSerializer(serializers.ModelSerializer):
             **validated_data
         )
         professor.subjects.set(subjects)
-
         return professor

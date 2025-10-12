@@ -16,9 +16,10 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(write_only=True)
     first_name = serializers.CharField(write_only=True)
     last_name = serializers.CharField(write_only=True)
-    phone = serializers.CharField(required=True)
-    # 🔹 Nouveau champ obligatoire
-    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=True)
+
+    # 🔹 Champs facultatifs
+    phone = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    sexe = serializers.ChoiceField(choices=User.SEXE_CHOICES, required=False, allow_blank=True)
 
     # Champs Student
     classroom = serializers.PrimaryKeyRelatedField(
@@ -39,12 +40,11 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
         fields = [
             # Champs User
             "username", "email", "password1", "password2",
-            "first_name", "last_name", "sexe",
+            "first_name", "last_name", "sexe", "phone",
             # Champs Student
             "classroom", "birth_certificate", "last_school_report",
         ]
 
-    # 🔎 Validation
     def validate(self, attrs):
         if attrs["password1"] != attrs["password2"]:
             raise serializers.ValidationError("Les mots de passe ne correspondent pas.")
@@ -55,14 +55,14 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        # Extraire infos User
         username = validated_data.pop("username")
         email = validated_data.pop("email")
         password = validated_data.pop("password1")
         validated_data.pop("password2", None)
         first_name = validated_data.pop("first_name")
         last_name = validated_data.pop("last_name")
-        sexe = validated_data.pop("sexe")
+        sexe = validated_data.pop("sexe", "")
+        phone = validated_data.pop("phone", "")
 
         # Créer User
         user = User.objects.create_user(
@@ -71,9 +71,10 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
             password=password,
             first_name=first_name,
             last_name=last_name,
-            sexe=sexe,          # ⬅️ propagé
+            sexe=sexe,
+            phone=phone,
             role="student",
-            is_active=False,    # en attente validation admin
+            is_active=False,  # attente validation admin
         )
 
         # Année académique active

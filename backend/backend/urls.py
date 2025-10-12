@@ -1,3 +1,4 @@
+# backend/urls.py
 from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
@@ -17,17 +18,18 @@ urlpatterns = [
     # ---- API publiques (inscriptions + endpoints ouverts) ----
     path("api/schoollife/", include("schoollife.api_urls")),   # ✅ Vie scolaire
     path("api/homepage/", include("homepage.api_urls")),
-    path("api/programs/", include("programs.api_urls")),       # programmes publics
-    path("api/classrooms/", include("programs.api_urls")),     # classes publiques
-    path("api/subjects/", include("programs.api_urls")),       # matières publiques
+    path("api/programs/", include("programs.api_urls")),       # Programmes publics
+    path("api/academics/", include("academics.api_urls")),     # ✅ AJOUTÉ ICI (pour active classrooms)
+    path("api/classrooms/", include("programs.api_urls")),     # Classes publiques
+    path("api/subjects/", include("programs.api_urls")),       # Matières publiques
     path("api/", include("programs.api_urls")),
     path("api/", include("communication.api_urls")),
-    path("api/professors/", include("professors.api_urls")),   # inscription publique professeurs
+    path("api/professors/", include("professors.api_urls")),   # Inscription publique professeurs
     path("api/employees/", include("employees.api_urls")),
     path("api/students/", include("students.api_urls")),
     path("api/", include("blog.api_urls")),
 
-    path("api/students/", include("students.urls")),           # inscription publique étudiants
+    path("api/students/", include("students.urls")),           # Inscription publique étudiants
 
     # ---- API privées (auth requise) ----
     path("api/", include("students.urls")),
@@ -43,21 +45,20 @@ urlpatterns = [
     path("api/communication/", include("communication.api_urls")),
 
     # ---- Auth & comptes ----
-    path("api/auth/", include("accounts.api_urls")),  # register abonné(e), token, me...
+    path("api/auth/", include("accounts.api_urls")),  # Register abonné(e), token, me...
 
     # ---- Apps non-API (templates Django classiques) ----
     path("blog/", include("blog.urls")),
     path("payments/", include(("payments.urls", "payments"), namespace="payments")),
     path("messages/", include(("communication.urls", "communication"), namespace="communication")),
     path("i18n/set-language/", set_language, name="set_language"),
-    
+
     path("reports/", include("reports.urls")),
     path("chaining/", include("smart_selects.urls")),
 
     # ---- Nouvelle app About ----
-    path("api/", include("about.urls")),   # ✅ il manquait une virgule après cette ligne
+    path("api/", include("about.urls")),
     path("api/core/", include("core.urls")),
-
 
     # ---- JWT Auth ----
     path("api/auth/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
@@ -67,7 +68,6 @@ urlpatterns = [
     # ---- Documentation API ----
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
-    
 ]
 
 # ---- Fichiers médias en mode DEBUG ----
