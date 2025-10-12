@@ -135,6 +135,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Vite
     "http://localhost:3000",  # React dev server
 ]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 # ...existing code...
 
 CORS_ALLOWED_ORIGINS = [
@@ -226,7 +227,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # ...existing code...
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.IsAuthenticated"],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny"  # 👈 Rendre public par défaut
+    ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -240,6 +243,8 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
+
+
 # ...existing code...
 
 

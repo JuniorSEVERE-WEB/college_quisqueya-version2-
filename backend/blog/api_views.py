@@ -7,11 +7,14 @@ from rest_framework.pagination import PageNumberPagination
 class IsAuthenticatedOrReadOnly(permissions.IsAuthenticatedOrReadOnly):
     pass
 
+from rest_framework.permissions import AllowAny
+
 class ArticleViewSet(viewsets.ModelViewSet):
-    queryset = Article.objects.all().order_by("-date_published")
+    queryset = Article.objects.filter(is_published=True).order_by("-date_published")
     serializer_class = ArticleSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
-    parser_classes = [MultiPartParser, FormParser, JSONParser]
+    permission_classes = [AllowAny]  # 👈 Tout le monde peut lire
+
+
 
     # 🔹 Ajouts DRF pour filtrage et recherche
     filterset_fields = ["is_published", "visibility", "tags", "category"]
