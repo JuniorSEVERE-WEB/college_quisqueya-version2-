@@ -1,0 +1,34 @@
+/* ✅ Fixe le layout global sur toute la hauteur */
+html, body, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Chaque page principale prend toute la hauteur restante */
+.page-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* S'assure que le footer reste toujours en bas */
+footer.footer {
+  margin-top: auto;
+}
+.error, .loading {
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #b30000;
+  font-weight: 600;
+  font-size: 1.1rem;
+  text-align: center;
+}

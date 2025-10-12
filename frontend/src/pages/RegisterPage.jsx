@@ -31,6 +31,22 @@ export default function RegisterPage() {
     setErr("");
   }, [role]);
 
+  // ⏱️ Efface automatiquement le message de succès après 5 secondes
+  useEffect(() => {
+    if (msg) {
+      const timer = setTimeout(() => setMsg(""), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [msg]);
+
+  // ⏱️ Efface automatiquement le message d’erreur après 5 secondes
+  useEffect(() => {
+    if (err) {
+      const timer = setTimeout(() => setErr(""), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [err]);
+
   // Charger les classes (programs d'abord, puis fallback academics)
   useEffect(() => {
     if (role === "student") {
@@ -236,7 +252,7 @@ export default function RegisterPage() {
               name="username"
               placeholder="Nom d'utilisateur"
               required
-              autoComplete="off"   // ✅ empêche le remplissage automatique
+              autoComplete="off"
             />
             <input
               className="form-input"
@@ -252,7 +268,7 @@ export default function RegisterPage() {
               type="password"
               placeholder="Mot de passe"
               required
-              autoComplete="new-password"   // ✅ évite les "........"
+              autoComplete="new-password"
             />
             <input
               className="form-input"
@@ -494,8 +510,18 @@ export default function RegisterPage() {
             <button type="submit" className="form-button">
               Valider l'inscription
             </button>
-            {msg && <div style={{ color: "green" }}>{msg}</div>}
-            {err && <div style={{ color: "red" }}>{err}</div>}
+
+            {msg && (
+              <div className="alert-message alert-success">
+                ✅ {msg}
+              </div>
+            )}
+
+            {err && (
+              <div className="alert-message alert-error">
+                ⚠️ {typeof err === "string" ? err : JSON.stringify(err)}
+              </div>
+            )}
           </form>
         )}
       </div>
