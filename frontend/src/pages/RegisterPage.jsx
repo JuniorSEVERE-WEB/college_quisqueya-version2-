@@ -48,23 +48,34 @@ export default function RegisterPage() {
   }, [err]);
 
   // Charger les classes (programs d'abord, puis fallback academics)
-  useEffect(() => {
-    if (role === "student") {
-      setLoadingClasses(true);
-      setClasses([]);
-      API.get("classrooms/public/")
-        .then((res) =>
-          setClasses(Array.isArray(res.data) ? res.data : res.data?.results || [])
-        )
-        .catch(() =>
-          API.get("academics/classrooms/active/").then((res) =>
-            setClasses(Array.isArray(res.data) ? res.data : res.data?.results || [])
-          )
-        )
-        .catch(() => setErr("Impossible de charger les classes."))
-        .finally(() => setLoadingClasses(false));
-    }
-  }, [role]);
+  // ✅ Charger les classes (endpoint corrigé et logique nettoyée)
+   // ✅ Charger les classes pour les étudiants depuis la même source que le backend
+useEffect(() => {
+  if (role === "student") {
+    setLoadingClasses(true);
+    setClasses([]);
+    setErr("");
+
+    // on va chercher les classes via l'endpoint utilisé aussi par l’inscription backend
+    API.get("academics/classrooms/active/")
+      .then((res) => {
+        const data = Array.isArray(res.data)
+          ? res.data
+          : res.data?.results || [];
+        console.log("🎓 Classes chargées :", data);
+        setClasses(data);
+      })
+      .catch((error) => {
+        console.error("Erreur lors du chargement des classes :", error);
+        setErr("Impossible de charger les classes. Veuillez réessayer.");
+      })
+      .finally(() => setLoadingClasses(false));
+  } else {
+    setClasses([]);
+  }
+}, [role]);
+
+
 
   // Charger programmes et matières pour Professeur
   useEffect(() => {
