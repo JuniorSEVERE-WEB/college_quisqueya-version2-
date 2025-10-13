@@ -189,18 +189,22 @@ useEffect(() => {
           "password2",
           "first_name",
           "last_name",
+          "phone",          // ✅ ajouté
+          "sexe",           // ✅ ajouté
           "year_left",
           "promo_name",
           "years_interval",
         ].forEach((k) => {
           if (form.get(k)) fd.append(k, form.get(k));
         });
+
         if (form.get("proof_document"))
           fd.append("proof_document", form.get("proof_document"));
 
         await API.post("alumni/register/", fd, {
           headers: { "Content-Type": "multipart/form-data" },
         });
+
         setMsg("Demande envoyée. En attente de validation de l’administration.");
       }
     } catch (e2) {
@@ -515,6 +519,23 @@ useEffect(() => {
                     accept="application/pdf"
                   />
                 </label>
+                {/* Champs téléphone et sexe obligatoires */}
+              <input
+                className="form-input"
+                name="phone"
+                placeholder="Téléphone"
+                required
+                autoComplete="off"
+              />
+
+              <label>Sexe</label>
+              <select className="form-select" name="sexe" required defaultValue="">
+                <option value="" disabled>
+                  — Sélectionner votre sexe —
+                </option>
+                <option value="homme">Homme</option>
+                <option value="femme">Femme</option>
+              </select>
               </>
             )}
 
