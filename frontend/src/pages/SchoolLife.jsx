@@ -22,11 +22,11 @@ export function SchoolLife() {
     }
 
     // ✅ Autoriser admin, abonné, étudiant, professeur
-    if (["admin", "abonne", "student", "prof"].includes(role)) {
+    if (["admin", "abonne", "student", "professor"].includes(role)) {
       setAuthorized(true);
     } else {
       setError(
-        "Votre inscription est en cours de validation. Si vous n’êtes pas étudiant ou professeur, abonnez-vous pour accéder aux informations du site."
+        "Votre compte est en cours de validation. Si vous n’êtes pas étudiant ou professeur, abonnez-vous pour accéder à la vie scolaire."
       );
     }
   }, [role]);

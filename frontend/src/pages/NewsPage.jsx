@@ -26,7 +26,7 @@ export default function NewsPage() {
     }
 
     // ✅ Autoriser admin, abonné, étudiant, professeur
-    if (["admin", "abonne", "student", "prof"].includes(role)) {
+    if (["admin", "abonne", "student", "professor"].includes(role)) {
       setAuthorized(true);
     } else {
       setError(

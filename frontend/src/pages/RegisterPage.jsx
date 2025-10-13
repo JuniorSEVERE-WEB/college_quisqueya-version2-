@@ -258,7 +258,7 @@ useEffect(() => {
           l’administration avant activation.
         </p>
         <p className="info-advice">
-          👉 Si vous ne faites pas partie du collège, inscrivez-vous comme
+          Si vous ne faites pas partie du collège, inscrivez-vous comme
           <strong> Abonné(e)</strong>.
         </p>
         <button
