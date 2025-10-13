@@ -145,3 +145,160 @@ button:hover {
   from { opacity: 0; transform: translateY(-10px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* ===================== */
+/*  Bandeau d'information */
+/* ===================== */
+/* ===================== */
+/*  Bandeau d'information stylé */
+/* ===================== */
+.register-info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background: #f0f5ff;
+  border-left: 5px solid #1e1eb0;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-bottom: 28px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  animation: fadeInUp 0.6s ease-in-out;
+}
+
+.info-icon-svg {
+  animation: pulseBlue 2s infinite;
+  flex-shrink: 0;
+}
+
+.info-text {
+  font-size: 0.95rem;
+  color: #1a1a1a;
+  line-height: 1.55;
+}
+
+.info-text strong {
+  color: #1e1eb0;
+}
+
+.info-advice {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #0b5394;
+  background: rgba(30, 30, 176, 0.05);
+  padding: 8px 10px;
+  border-radius: 6px;
+  display: inline-block;
+}
+
+/* Animation subtile d'apparition */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effet de pulsation bleue sur l’icône */
+@keyframes pulseBlue {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Adaptation mobile */
+@media (max-width: 768px) {
+  .register-info-box {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .info-icon-svg svg {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* ===================== */
+/*  Bouton et modale info */
+/* ===================== */
+.learn-more-btn {
+  background: transparent;
+  border: 1.5px solid #1e1eb0;
+  color: #1e1eb0;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.learn-more-btn:hover {
+  background: #1e1eb0;
+  color: white;
+}
+
+/* Overlay sombre */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Contenu de la modale */
+.modal-content {
+  background: white;
+  padding: 24px;
+  max-width: 500px;
+  width: 90%;
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  text-align: left;
+  animation: scaleIn 0.3s ease-in-out;
+}
+
+.modal-content h3 {
+  color: #1e1eb0;
+  margin-bottom: 12px;
+}
+
+.modal-content p {
+  font-size: 0.95rem;
+  margin-bottom: 12px;
+  color: #333;
+  line-height: 1.5;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+

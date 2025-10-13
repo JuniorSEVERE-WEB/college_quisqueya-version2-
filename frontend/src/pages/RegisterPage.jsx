@@ -25,6 +25,8 @@ export default function RegisterPage() {
   const [err, setErr] = useState("");
   const formRef = useRef(null);
   const [formKey, setFormKey] = useState(0); // force remount pour reset total
+  const [showInfoModal, setShowInfoModal] = useState(false);
+
 
   useEffect(() => {
     setMsg("");
@@ -34,7 +36,7 @@ export default function RegisterPage() {
   // ⏱️ Efface automatiquement le message de succès après 5 secondes
   useEffect(() => {
     if (msg) {
-      const timer = setTimeout(() => setMsg(""), 5000);
+      const timer = setTimeout(() => setMsg(""), 15000);
       return () => clearTimeout(timer);
     }
   }, [msg]);
@@ -42,7 +44,7 @@ export default function RegisterPage() {
   // ⏱️ Efface automatiquement le message d’erreur après 5 secondes
   useEffect(() => {
     if (err) {
-      const timer = setTimeout(() => setErr(""), 5000);
+      const timer = setTimeout(() => setErr(""), 15000);
       return () => clearTimeout(timer);
     }
   }, [err]);
@@ -221,26 +223,121 @@ useEffect(() => {
       <div style={{ maxWidth: 900, margin: "24px auto", padding: "0 16px" }}>
         <h2 style={{ textAlign: "center", marginBottom: 16 }}>S'inscrire comme :</h2>
 
-        {!role && (
-          <div className="role-selection">
-            <div className="role-card" onClick={() => setRole("abonne")}>
-              <div className="icon">🌐</div>
-              Abonné(e)
-            </div>
-            <div className="role-card" onClick={() => setRole("student")}>
-              <div className="icon">🎓</div>
-              Étudiant(e)
-            </div>
-            <div className="role-card" onClick={() => setRole("professor")}>
-              <div className="icon">📘</div>
-              Professeur(e)
-            </div>
-            <div className="role-card" onClick={() => setRole("alumni")}>
-              <div className="icon">🏅</div>
-              Ancien/Ancienne
-            </div>
-          </div>
-        )}
+       {!role && (
+  <>
+    {/* 🟦 Bandeau d'information avec bouton */}
+    <div className="register-info-box">
+      <div className="info-icon-svg">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="42"
+          height="42"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#1e1eb0"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="feather feather-info"
+        >
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12" y2="8"></line>
+        </svg>
+      </div>
+
+      <div className="info-text">
+        <p>
+          <strong>Note importante :</strong><br />
+          Si vous vous inscrivez comme <strong>abonné(e)</strong>, vous aurez accès
+          à certaines informations du collège automatiquement.
+        </p>
+        <p>
+          Si vous êtes <strong>étudiant(e)</strong>, <strong>professeur(e)</strong> ou
+          <strong> ancien(ne)</strong> de l’école, votre compte devra être validé par
+          l’administration avant activation.
+        </p>
+        <p className="info-advice">
+          👉 Si vous ne faites pas partie du collège, inscrivez-vous comme
+          <strong> Abonné(e)</strong>.
+        </p>
+        <button
+          type="button"
+          className="learn-more-btn"
+          onClick={() => setShowInfoModal(true)}
+        >
+          En savoir plus
+        </button>
+      </div>
+    </div>
+
+    {/* 🎯 Sélection des rôles */}
+    <div className="role-selection">
+      <div className="role-card" onClick={() => setRole("abonne")}>
+        <div className="icon">🌐</div>
+        Abonné(e)
+      </div>
+      <div className="role-card" onClick={() => setRole("student")}>
+        <div className="icon">🎓</div>
+        Étudiant(e)
+      </div>
+      <div className="role-card" onClick={() => setRole("professor")}>
+        <div className="icon">📘</div>
+        Professeur(e)
+      </div>
+      <div className="role-card" onClick={() => setRole("alumni")}>
+        <div className="icon">🏅</div>
+        Ancien/Ancienne
+      </div>
+    </div>
+
+    {/* 🪟 Modale d'information */}
+    {showInfoModal && (
+      <div className="modal-overlay" onClick={() => setShowInfoModal(false)}>
+        <div
+          className="modal-content"
+          onClick={(e) => e.stopPropagation()} // empêche la fermeture au clic intérieur
+        >
+          <h3>À propos des rôles</h3>
+          <p>
+            <strong>🟢 Abonné(e)</strong><br />
+            Vous accédez immédiatement à certaines sections publiques : actualités,
+            événements, photos, valeurs du collège, etc.
+          </p>
+
+          <p>
+            <strong>🟡 Étudiant(e)</strong><br />
+            Votre demande est vérifiée par l’administration. Une fois validée,
+            vous pourrez consulter vos notes, documents, messages et emploi du temps.
+          </p>
+
+          <p>
+            <strong>🔵 Professeur(e)</strong><br />
+            Après validation, vous pourrez gérer vos matières, vos élèves,
+            vos notes et vos documents pédagogiques.
+          </p>
+
+          <p>
+            <strong>🟣 Ancien(ne)</strong><br />
+            Une fois approuvé, vous ferez partie du réseau des anciens élèves du
+            collège, avec accès à des informations exclusives et aux événements
+            dédiés aux alumni.
+          </p>
+
+          <button
+            className="form-button"
+            onClick={() => setShowInfoModal(false)}
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
+    )}
+  </>
+)}
+
+
+
 
         {role && (
           <form
