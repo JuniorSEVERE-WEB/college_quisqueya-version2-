@@ -1,24 +1,19 @@
-from rest_framework.permissions import BasePermission
+# backend/core/permissions.py
+from rest_framework import permissions
 
 
-class IsAbonneOrStudentOrProf(BasePermission):
+class IsAbonneOrStudentOrProf(permissions.BasePermission):
     """
-    Autorise les utilisateurs avec les rôles 'abonne', 'student', 'prof'
-    ✅ mais aussi les administrateurs (is_staff ou is_superuser)
+    Autorise l'accès aux utilisateurs ayant un rôle :
+    - abonne
+    - student
+    - professor
+    - admin
     """
-
-    message = (
-        "⛔ Accès restreint : seuls les abonnés, étudiants, professeurs ou administrateurs peuvent consulter ces données."
-    )
 
     def has_permission(self, request, view):
-        user = request.user
-        if not user.is_authenticated:
-            return False
-
-        # ✅ Les administrateurs peuvent tout voir
-        if user.is_staff or user.is_superuser:
-            return True
-
-        allowed_roles = {"abonne", "student", "prof"}
-        return user.role in allowed_roles
+        return bool(
+            request.user
+            and request.user.is_authenticated
+            and request.user.role in ["abonne", "student", "professor", "admin"]
+        )
