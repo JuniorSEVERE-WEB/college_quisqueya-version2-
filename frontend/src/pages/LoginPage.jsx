@@ -25,6 +25,7 @@ export default function LoginPage({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
+
     try {
       const response = await loginRequest(username, password);
       localStorage.setItem("access_token", response.data.access);
@@ -38,6 +39,10 @@ export default function LoginPage({ onLogin }) {
         }
       } catch (_) {}
 
+      // ✅ Vide les champs une fois connecté
+      setUsername("");
+      setPassword("");
+
       if (onLogin) onLogin();
       window.dispatchEvent(new Event("authChanged"));
       navigate("/");
@@ -45,6 +50,10 @@ export default function LoginPage({ onLogin }) {
       const detail =
         err?.response?.data?.detail || "Identifiants invalides";
       setError(detail);
+
+      // ✅ Vide aussi les champs si erreur
+      setUsername("");
+      setPassword("");
     }
   };
 
@@ -63,6 +72,7 @@ export default function LoginPage({ onLogin }) {
         <form
           onSubmit={handleSubmit}
           style={{ display: "grid", gap: 12 }}
+          autoComplete="off" // 👈 désactive l’autocomplétion du navigateur
         >
           <input
             type="text"
@@ -70,7 +80,7 @@ export default function LoginPage({ onLogin }) {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            autoComplete="username"
+            autoComplete="off" // 👈 empêche la mémorisation
           />
           <input
             type="password"
@@ -78,7 +88,7 @@ export default function LoginPage({ onLogin }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            autoComplete="current-password"
+            autoComplete="new-password" // 👈 empêche Chrome/Firefox d'enregistrer
           />
           <button
             type="submit"

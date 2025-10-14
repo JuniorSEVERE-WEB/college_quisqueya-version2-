@@ -1,6 +1,8 @@
 // ✅ frontend/src/App.jsx
 import "./App.css";
+import { useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
+import API from "./api";
 
 // 🌐 Pages principales
 import NewsPage from "./pages/NewsPage";
@@ -20,11 +22,36 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { StudentsManager } from "./pages/StudentsManager";
 import { ProfessorsManager } from "./pages/ProfessorsManager";
 
-// 💌 Mot de passe oublié
+// 💌 Mot de passe oublié / réinitialisation
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 
+
+// 🔁 Hook : rafraîchit automatiquement le token toutes les 10 min
+function useAutoRefreshToken() {
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const refresh = localStorage.getItem("refresh_token");
+      if (refresh) {
+        try {
+          const { data } = await API.post("auth/token/refresh/", { refresh });
+          localStorage.setItem("access_token", data.access);
+          window.dispatchEvent(new Event("authChanged"));
+          console.log("✅ Access token refreshed automatically");
+        } catch (err) {
+          console.warn("⚠️ Token refresh failed:", err);
+        }
+      }
+    }, 1000 * 60 * 10); // ⏱️ toutes les 10 minutes
+
+    return () => clearInterval(interval);
+  }, []);
+}
+
+
 function App() {
+  useAutoRefreshToken();
+
   return (
     <Routes>
       {/* 🌐 Pages publiques */}
