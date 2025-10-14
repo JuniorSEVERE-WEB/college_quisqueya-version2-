@@ -1,4 +1,4 @@
-// frontend/src/components/HeaderPage.jsx
+// frontend/src/components/HeaderPage.jsx 
 import "./headerpage.css";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
@@ -10,7 +10,19 @@ export function HeaderPage() {
   );
   const [role, setRole] = useState(localStorage.getItem("role") || "");
 
-  const handleMenuClick = () => setIsMenuOpen(!isMenuOpen);
+  const handleMenuClick = () => {
+    const menu = document.querySelector(".middle-section");
+    if (isMenuOpen && menu) {
+      menu.classList.add("closing");
+      setTimeout(() => {
+        menu.classList.remove("closing");
+        setIsMenuOpen(false);
+      }, 300);
+    } else {
+      setIsMenuOpen(true);
+    }
+  };
+
   const handleLinkClick = () => setIsMenuOpen(false);
 
   useEffect(() => {
@@ -46,7 +58,7 @@ export function HeaderPage() {
         <div className="menu-overlay" onClick={handleMenuClick}></div>
       )}
       <div className="header">
-        {/* Section gauche : logo */}
+        {/* --- SECTION GAUCHE --- */}
         <div className="left-section">
           <Link to="/" onClick={handleLinkClick}>
             <ul>
@@ -60,7 +72,7 @@ export function HeaderPage() {
           </Link>
         </div>
 
-        {/* Section menu principale (mobile) */}
+        {/* --- MENU CENTRAL (LIENS PRINCIPAUX) --- */}
         <div className={`middle-section${isMenuOpen ? " show-menu" : ""}`}>
           <div className="menu-header-row">
             <button
@@ -83,7 +95,7 @@ export function HeaderPage() {
             </li>
             <li>
               <Link to="/about" onClick={handleLinkClick}>
-                A propos
+                À propos
               </Link>
             </li>
             <li>
@@ -97,15 +109,7 @@ export function HeaderPage() {
               </Link>
             </li>
 
-            {/* ✅ Dashboard visible uniquement pour l’admin connecté */}
-            {isLoggedIn && role === "admin" && (
-              <li>
-                <Link to="/dashboard" onClick={handleLinkClick}>
-                  🏫 Dashboard
-                </Link>
-              </li>
-            )}
-
+            {/* 🔹 Connexion / Déconnexion */}
             {!isLoggedIn && (
               <li>
                 <Link to="/login" onClick={handleLinkClick}>
@@ -120,18 +124,36 @@ export function HeaderPage() {
                 </a>
               </li>
             )}
-            <li>
-              <Link to="/contact" onClick={handleLinkClick}>
-                Contact
+
+            {/* ✅ --- BOUTONS MOBILE (Contact + Dashboard) --- */}
+            <div className="mobile-menu-buttons">
+              {/* Dashboard admin uniquement */}
+              {isLoggedIn && role === "admin" && (
+                <Link
+                  to="/dashboard"
+                  className="mobile-btn mobile-dashboard"
+                  onClick={handleLinkClick}
+                >
+                  🏫 Dashboard
+                </Link>
+              )}
+
+              {/* Bouton Contact toujours visible sur mobile */}
+              <Link
+                to="/contact"
+                className="mobile-btn mobile-contact"
+                onClick={handleLinkClick}
+              >
+                ✉️ Contact
               </Link>
-            </li>
+            </div>
           </ul>
         </div>
 
-        {/* Section droite (desktop) */}
+        {/* --- SECTION DROITE (DESKTOP) --- */}
         <div className="right-section">
           <ul>
-            {/* ✅ Dashboard visible sur desktop aussi */}
+            {/* ✅ Dashboard visible sur desktop uniquement pour l’admin */}
             {isLoggedIn && role === "admin" && (
               <li>
                 <Link to="/dashboard" className="contact-btn">
@@ -139,11 +161,15 @@ export function HeaderPage() {
                 </Link>
               </li>
             )}
+
+            {/* ✅ Contact visible sur desktop */}
             <li>
               <Link to="/contact" className="contact-btn">
-                Contact
+                ✉️ Contact
               </Link>
             </li>
+
+            {/* Bouton menu mobile */}
             <li className="menu-icon" onClick={handleMenuClick}>
               {isMenuOpen ? "✕" : "☰"}
             </li>

@@ -229,3 +229,109 @@
   }
 }
 
+/* --- Boutons dans le menu mobile --- */
+.mobile-menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 25px;
+  padding: 10px;
+}
+
+.mobile-btn {
+  display: block;
+  text-align: center;
+  padding: 10px 16px;
+  border-radius: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.mobile-dashboard {
+  background-color: rgb(1, 1, 32);
+  color: white;
+  border: 1px solid rgb(1, 1, 32);
+}
+.mobile-dashboard:hover {
+  background: white;
+  color: rgb(1, 1, 32);
+}
+
+.mobile-contact {
+  background-color: white;
+  color: rgb(1, 1, 32);
+  border: 1px solid rgb(1, 1, 32);
+}
+.mobile-contact:hover {
+  background-color: rgb(1, 1, 32);
+  color: white;
+}
+
+/* --- Animation moderne du menu mobile --- */
+
+/* Animation d’apparition du menu */
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animation de disparition du menu */
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Appliquer l’animation au menu mobile */
+.middle-section.show-menu {
+  animation: slideInRight 0.3s ease forwards;
+}
+
+/* Optionnel : animation inverse à la fermeture */
+.middle-section.closing {
+  animation: slideOutRight 0.3s ease forwards;
+}
+
+/* Transition douce pour le contenu interne */
+.middle-section ul {
+  opacity: 0;
+  animation: fadeInContent 0.4s ease forwards 0.15s;
+}
+
+@keyframes fadeInContent {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* --- Cacher les boutons du menu mobile sur desktop --- */
+.mobile-menu-buttons {
+  display: none; /* Caché sur desktop */
+}
+
+/* --- Afficher uniquement sur mobile --- */
+@media (max-width: 1124px) {
+  .mobile-menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 25px;
+    padding: 10px;
+  }
+}
