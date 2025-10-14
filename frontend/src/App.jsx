@@ -1,7 +1,6 @@
-// ✅ src/App.jsx
+// ✅ frontend/src/App.jsx
 import "./App.css";
-
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 // 🌐 Pages principales
 import NewsPage from "./pages/NewsPage";
@@ -21,32 +20,38 @@ import { DashboardPage } from "./pages/DashboardPage";
 import { StudentsManager } from "./pages/StudentsManager";
 import { ProfessorsManager } from "./pages/ProfessorsManager";
 
+// 💌 Mot de passe oublié
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
+
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* 🌐 Pages publiques */}
-        <Route path="/" element={<HomePage />} />
-        <Route path="/about" element={<AboutPage />} />
-        <Route path="/schoollife" element={<SchoolLife />} />
-        <Route path="/contact" element={<ContactPage />} />
-        <Route path="/donation" element={<DonationPage />} />
-        <Route path="/news" element={<NewsPage />} />
-        <Route path="/news/:id" element={<ArticleDetailPage />} />
+    <Routes>
+      {/* 🌐 Pages publiques */}
+      <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/schoollife" element={<SchoolLife />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/donation" element={<DonationPage />} />
+      <Route path="/news" element={<NewsPage />} />
+      <Route path="/news/:id" element={<ArticleDetailPage />} />
 
-        {/* 🔐 Authentification */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
+      {/* 🔐 Authentification */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/profile" element={<ProfilePage />} />
 
-        {/* 🧭 Tableau de bord (avec Layout commun) */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<DashboardPage />} /> {/* /dashboard */}
-          <Route path="students" element={<StudentsManager />} /> {/* /dashboard/students */}
-          <Route path="professors" element={<ProfessorsManager />} /> {/* /dashboard/professors */}
-        </Route>
-      </Routes>
-    </Router>
+      {/* 🧭 Tableau de bord */}
+      <Route path="/dashboard" element={<DashboardLayout />}>
+        <Route index element={<DashboardPage />} />
+        <Route path="students" element={<StudentsManager />} />
+        <Route path="professors" element={<ProfessorsManager />} />
+      </Route>
+
+      {/* 💌 Mot de passe oublié / reset */}
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset/:uidb64/:token/" element={<ResetPassword />} />
+    </Routes>
   );
 }
 

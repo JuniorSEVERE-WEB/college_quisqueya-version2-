@@ -90,6 +90,12 @@ export default function LoginPage({ onLogin }) {
         {error && (
           <div style={{ color: "red", marginTop: 10 }}>{error}</div>
         )}
+        <div style={{ marginTop: 8, textAlign: "center" }}>
+          <Link to="/forgot-password" style={{ color: "#2563eb" }}>
+            Tu as oublié ton mot de passe ?
+          </Link>
+        </div>
+
         <div style={{ marginTop: 16, textAlign: "center" }}>
           Pas de compte ? <Link to="/register">Créer un compte</Link>
         </div>
