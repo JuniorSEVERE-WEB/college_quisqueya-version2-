@@ -5,6 +5,7 @@ from .api_views import (
     AbonneRegisterView,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
+from . import api_views_password_reset
 
 urlpatterns = [
     # Auth JWT
@@ -16,4 +17,5 @@ urlpatterns = [
 
     # Inscription abonné(e)
     path("register/abonne/", AbonneRegisterView.as_view(), name="register_abonne"),
+     path("password-reset/", api_views_password_reset.PasswordResetAPIView.as_view(), name="password_reset"),
 ]

@@ -7,9 +7,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
     TokenVerifyView,
 )
+from django.contrib.auth import views as auth_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf import settings
 from django.conf.urls.static import static
+
 
 urlpatterns = [
     # ---- Admin ----
@@ -19,7 +21,7 @@ urlpatterns = [
     path("api/schoollife/", include("schoollife.api_urls")),   # ✅ Vie scolaire
     path("api/homepage/", include("homepage.api_urls")),
     path("api/programs/", include("programs.api_urls")),       # Programmes publics
-    path("api/academics/", include("academics.api_urls")),     # ✅ AJOUTÉ ICI (pour active classrooms)
+    path("api/academics/", include("academics.api_urls")),     # ✅ Année académique et classes actives
     path("api/classrooms/", include("programs.api_urls")),     # Classes publiques
     path("api/subjects/", include("programs.api_urls")),       # Matières publiques
     path("api/", include("programs.api_urls")),
@@ -68,7 +70,48 @@ urlpatterns = [
     # ---- Documentation API ----
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
+
+
+    # ===============================
+    # 🔐 MOT DE PASSE OUBLIÉ (EMAIL)
+    # ===============================
+    path(
+        "password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="registration/password_reset_form.html",
+            email_template_name="registration/password_reset_email.html",
+            subject_template_name="registration/password_reset_subject.txt",
+            success_url="/password-reset/done/",
+        ),
+        name="password_reset",
+    ),
+
+    path(
+        "password-reset/done/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="registration/password_reset_done.html"
+        ),
+        name="password_reset_done",
+    ),
+
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="registration/password_reset_confirm.html",
+            success_url="/reset/done/",
+        ),
+        name="password_reset_confirm",
+    ),
+
+    path(
+        "reset/done/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="registration/password_reset_complete.html"
+        ),
+        name="password_reset_complete",
+    ),
 ]
+
 
 # ---- Fichiers médias en mode DEBUG ----
 if settings.DEBUG:
