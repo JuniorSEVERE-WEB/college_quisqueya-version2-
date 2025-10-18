@@ -3,14 +3,19 @@ services:
     name: college-quisqueya-backend
     env: python
     plan: free
+
     buildCommand: |
+      cd backend
       pip install -r requirements.txt
       python manage.py collectstatic --noinput
-    startCommand: gunicorn backend.backend.wsgi:application
+
+    startCommand: |
+      cd backend
+      gunicorn backend.wsgi:application
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: backend.deployment_settings
+        value: backend.backend.deployment_settings
       - key: PYTHON_VERSION
         value: 3.13.4
       - key: SECRET_KEY
