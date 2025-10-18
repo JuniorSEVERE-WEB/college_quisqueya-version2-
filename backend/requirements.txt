@@ -19,15 +19,19 @@ Pillow>=10.0.0
 
 # --- Database (PostgreSQL ready for production) ---
 psycopg2-binary>=2.9.9
+dj-database-url>=2.1
 
 # --- PDF and Reports ---
 reportlab>=4.2.0
 
-# --- Miscellaneous Tools (optional but useful) ---
-django-extensions>=3.2.3
-whitenoise>=6.6.0    # for serving static files in production
-gunicorn>=21.2.0     # for production WSGI server (if you deploy on Render/Railway)
-
-# --- Optional: for async or notifications (future use) ---
+# --- WebSockets & Real-time (optional) ---
 channels>=4.0.0
+channels-redis>=4.1.0
 redis>=5.0.0
+
+# --- Developer Tools ---
+django-extensions>=3.2.3
+
+# --- Production (Render/Railway/Heroku) ---
+whitenoise>=6.6.0
+gunicorn>=21.2.0
