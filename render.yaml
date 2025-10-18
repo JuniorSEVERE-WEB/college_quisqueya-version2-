@@ -2,18 +2,21 @@ services:
   - type: web
     name: college-quisqueya-backend
     env: python
-    buildCommand: "./build.sh"
-    startCommand: "gunicorn backend.wsgi:application"
     plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
+    startCommand: gunicorn backend.backend.wsgi:application
+
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: backend.settings
+        value: backend.deployment_settings
       - key: PYTHON_VERSION
         value: 3.13.4
-      - key: DATABASE_URL
-        sync: false
       - key: SECRET_KEY
         generateValue: true
+      - key: DATABASE_URL
+        sync: false
       - key: RENDER_EXTERNAL_HOSTNAME
         fromService:
           type: web
