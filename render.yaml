@@ -4,19 +4,25 @@ services:
     env: python
     plan: free
 
-    # Commande exécutée lors du build Render
+    # ============================================
+    # 🔧 Étape de build
+    # ============================================
     buildCommand: |
       ./build.sh
 
-    # Commande exécutée pour lancer le serveur
+    # ============================================
+    # 🚀 Commande de démarrage
+    # ============================================
     startCommand: |
       cd backend
       gunicorn backend.wsgi:application
 
-    # Variables d’environnement nécessaires au fonctionnement de Django
+    # ============================================
+    # 🌍 Variables d’environnement Render
+    # ============================================
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: backend.backend.deployment_settings
+        value: backend.deployment_settings
 
       - key: PYTHON_VERSION
         value: 3.13.4
@@ -24,11 +30,11 @@ services:
       - key: SECRET_KEY
         generateValue: true
 
-      # Base de données Render (sera automatiquement liée)
+      # Base de données Render
       - key: DATABASE_URL
         sync: false
 
-      # Hôte public (utilisé par Django pour ALLOWED_HOSTS)
+      # Hôte public (Render)
       - key: RENDER_EXTERNAL_HOSTNAME
         fromService:
           type: web
