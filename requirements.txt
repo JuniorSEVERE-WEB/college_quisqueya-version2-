@@ -41,5 +41,7 @@ gunicorn>=21.2.0
 
 drf-spectacular>=0.27.2
 django-smart-selects>=1.6.0
+weasyprint>=61.2
+
 
 
