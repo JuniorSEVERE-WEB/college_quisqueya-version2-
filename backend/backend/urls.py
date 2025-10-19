@@ -1,4 +1,5 @@
-# backend/urls.py
+# backend/backend/urls.py
+
 from django.contrib import admin
 from django.urls import path, include
 from django.views.i18n import set_language
@@ -11,27 +12,49 @@ from django.contrib.auth import views as auth_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.shortcuts import redirect, HttpResponse
+
+
+# ================================
+# 👇 PAGE D’ACCUEIL DU BACKEND
+# ================================
+def home(request):
+    """Page d’accueil simple pour Render ou tests backend"""
+    html = """
+    <html>
+        <head><title>Collège Quisqueya - Backend</title></head>
+        <body style="font-family:Arial; text-align:center; padding-top:50px;">
+            <h1>Bienvenue sur le backend Collège Quisqueya 🎓</h1>
+            <p>API opérationnelle avec Django REST Framework.</p>
+            <p><a href="/admin/">👉 Accéder à l’administration</a></p>
+            <p><a href="/api/docs/">📘 Documentation API (Swagger)</a></p>
+        </body>
+    </html>
+    """
+    return HttpResponse(html)
 
 
 urlpatterns = [
+    # ---- Page d’accueil ----
+    path("", home, name="home"),  # ✅ Corrige le 404 sur Render
+
     # ---- Admin ----
     path("admin/", admin.site.urls),
 
-    # ---- API publiques (inscriptions + endpoints ouverts) ----
-    path("api/schoollife/", include("schoollife.api_urls")),   # ✅ Vie scolaire
+    # ---- API publiques ----
+    path("api/schoollife/", include("schoollife.api_urls")),   # Vie scolaire
     path("api/homepage/", include("homepage.api_urls")),
     path("api/programs/", include("programs.api_urls")),       # Programmes publics
-    path("api/academics/", include("academics.api_urls")),     # ✅ Année académique et classes actives
-    path("api/classrooms/", include("programs.api_urls")),     # Classes publiques
-    path("api/subjects/", include("programs.api_urls")),       # Matières publiques
+    path("api/academics/", include("academics.api_urls")),     # Année académique et classes actives
+    path("api/classrooms/", include("programs.api_urls")),
+    path("api/subjects/", include("programs.api_urls")),
     path("api/", include("programs.api_urls")),
     path("api/", include("communication.api_urls")),
-    path("api/professors/", include("professors.api_urls")),   # Inscription publique professeurs
+    path("api/professors/", include("professors.api_urls")),
     path("api/employees/", include("employees.api_urls")),
     path("api/students/", include("students.api_urls")),
     path("api/", include("blog.api_urls")),
-
-    path("api/students/", include("students.urls")),           # Inscription publique étudiants
+    path("api/students/", include("students.urls")),
 
     # ---- API privées (auth requise) ----
     path("api/", include("students.urls")),
@@ -47,18 +70,15 @@ urlpatterns = [
     path("api/communication/", include("communication.api_urls")),
 
     # ---- Auth & comptes ----
-    path("api/auth/", include("accounts.api_urls")),  # Register abonné(e), token, me...
+    path("api/auth/", include("accounts.api_urls")),
 
-    # ---- Apps non-API (templates Django classiques) ----
+    # ---- Apps non-API ----
     path("blog/", include("blog.urls")),
     path("payments/", include(("payments.urls", "payments"), namespace="payments")),
     path("messages/", include(("communication.urls", "communication"), namespace="communication")),
     path("i18n/set-language/", set_language, name="set_language"),
-
     path("reports/", include("reports.urls")),
     path("chaining/", include("smart_selects.urls")),
-
-    # ---- Nouvelle app About ----
     path("api/", include("about.urls")),
     path("api/core/", include("core.urls")),
 
@@ -71,10 +91,7 @@ urlpatterns = [
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
 
-
-    # ===============================
-    # 🔐 MOT DE PASSE OUBLIÉ (EMAIL)
-    # ===============================
+    # ---- Mot de passe oublié ----
     path(
         "password-reset/",
         auth_views.PasswordResetView.as_view(
@@ -85,7 +102,6 @@ urlpatterns = [
         ),
         name="password_reset",
     ),
-
     path(
         "password-reset/done/",
         auth_views.PasswordResetDoneView.as_view(
@@ -93,7 +109,6 @@ urlpatterns = [
         ),
         name="password_reset_done",
     ),
-
     path(
         "reset/<uidb64>/<token>/",
         auth_views.PasswordResetConfirmView.as_view(
@@ -102,7 +117,6 @@ urlpatterns = [
         ),
         name="password_reset_confirm",
     ),
-
     path(
         "reset/done/",
         auth_views.PasswordResetCompleteView.as_view(
