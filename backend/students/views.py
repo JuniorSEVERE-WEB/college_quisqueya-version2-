@@ -8,9 +8,9 @@ from .models import Student
 from .serializers import StudentSerializer
 
 
-# ---------------------------
-# ViewSet privé (protégé JWT)
-# ---------------------------
+# ===============================
+# 🔒 ViewSet privé (protégé JWT)
+# ===============================
 class StudentViewSet(viewsets.ModelViewSet):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
@@ -31,7 +31,9 @@ class StudentViewSet(viewsets.ModelViewSet):
         return Student.objects.none()
 
 
-# ---------------------------
+# ===============================
+# 🧩 Sérialiseur d'inscription publique
+# ===============================
 class StudentRegisterSerializer(serializers.Serializer):
     # Champs User
     username = serializers.CharField()
@@ -67,7 +69,7 @@ class StudentRegisterSerializer(serializers.Serializer):
         return data
 
     def create(self, validated_data):
-        # 1. Créer le User
+        # 1️⃣ Créer le User
         user = User.objects.create_user(
             username=validated_data["username"],
             email=validated_data["email"],
@@ -77,15 +79,15 @@ class StudentRegisterSerializer(serializers.Serializer):
             role="student",
         )
 
-        # 2. Associer à l’année académique active
+        # 2️⃣ Récupérer l’année académique active
         academic_year = AcademicYear.objects.filter(is_active=True).first()
         if not academic_year:
             raise serializers.ValidationError("Aucune année académique active trouvée.")
 
-        # 3. Générer un matricule unique
+        # 3️⃣ Générer un matricule unique
         matricule = f"{academic_year.name}-{uuid.uuid4().hex[:6].upper()}"
 
-        # 4. Créer le Student
+        # 4️⃣ Créer l’objet Student
         student = Student.objects.create(
             user=user,
             academic_year=academic_year,
@@ -100,9 +102,10 @@ class StudentRegisterSerializer(serializers.Serializer):
         )
         return student
 
-# ---------------------------
-# Vue publique inscription
-# ---------------------------
+
+# ===============================
+# 🌐 Vue publique inscription
+# ===============================
 class StudentRegisterView(generics.CreateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentRegisterSerializer
@@ -114,13 +117,6 @@ class StudentRegisterView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         student = serializer.save()
 
-        # Réponse avec StudentSerializer pour inclure infos liées
+        # Réponse détaillée (avec relations)
         output_serializer = StudentSerializer(student)
         return Response(output_serializer.data, status=status.HTTP_201_CREATED)
-    
-        
-    def validate_email(self, value):
-        if User.objects.filter(email=value).exists():
-            raise serializers.ValidationError("Cet email est déjà utilisé.")
-        return value
-
