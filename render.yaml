@@ -4,37 +4,24 @@ services:
     env: python
     plan: free
 
-    # ============================================
-    # 🔧 Étape de build
-    # ============================================
     buildCommand: |
-      ./build.sh
+      cd backend
+      pip install -r requirements.txt
+      python manage.py collectstatic --noinput
 
-    # ============================================
-    # 🚀 Commande de démarrage
-    # ============================================
     startCommand: |
       cd backend
       gunicorn backend.wsgi:application
 
-    # ============================================
-    # 🌍 Variables d’environnement Render
-    # ============================================
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: backend.deployment_settings
-
+        value: backend.backend.deployment_settings
       - key: PYTHON_VERSION
         value: 3.13.4
-
       - key: SECRET_KEY
         generateValue: true
-
-      # Base de données Render
       - key: DATABASE_URL
         sync: false
-
-      # Hôte public (Render)
       - key: RENDER_EXTERNAL_HOSTNAME
         fromService:
           type: web
