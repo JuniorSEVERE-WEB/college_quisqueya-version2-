@@ -1,7 +1,7 @@
 import axios from "axios";
 
-// 👉 constante qu'on peut réutiliser dans les composants (pour afficher les images)
-const BASE_URL = "http://127.0.0.1:8000";
+// ✅ Base URL dynamique (locale ou Render)
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
 
 const API = axios.create({
   baseURL: `${BASE_URL}/api/`,
@@ -40,8 +40,6 @@ API.interceptors.response.use(
   async (error) => {
     const original = error.config || {};
     const status = error.response?.status;
-
-    // évite boucle infinie et double essai
     const isRefreshCall = /(auth\/)?token\/refresh\/$/.test(original.url || "");
 
     if (status === 401 && !original._retry && !isRefreshCall) {
@@ -49,16 +47,13 @@ API.interceptors.response.use(
       try {
         const newAccess = await refreshAccessToken();
         localStorage.setItem("access_token", newAccess);
-
         original.headers = {
           ...(original.headers || {}),
           Authorization: `Bearer ${newAccess}`,
         };
-
         window.dispatchEvent(new Event("authChanged"));
         return API(original);
       } catch (e) {
-        // échec du refresh: nettoyage et propagation
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("user");
@@ -72,4 +67,4 @@ API.interceptors.response.use(
 );
 
 export default API;
-export { BASE_URL }; // 👉 on exporte aussi BASE_URL pour les images
+export { BASE_URL };
