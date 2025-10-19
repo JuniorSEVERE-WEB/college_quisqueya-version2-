@@ -11,17 +11,19 @@ services:
 
     startCommand: |
       cd backend
-      gunicorn backend.wsgi:application
+      gunicorn backend.wsgi:application --log-file -
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: backend.backend.deployment_settings
+        value: backend.backend.settings   # ✅ utiliser ton settings.py principal
       - key: PYTHON_VERSION
         value: 3.13.4
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
         sync: false
+      - key: DEBUG
+        value: false
       - key: RENDER_EXTERNAL_HOSTNAME
         fromService:
           type: web

@@ -21,7 +21,7 @@ env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
-DEBUG = env.bool("DEBUG", default=False)  # ⚠️ False pour Render
+DEBUG = env.bool("DEBUG", default=True)
 
 # ============================================================
 # 🌍 Hôtes autorisés
@@ -82,7 +82,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ obligatoire Render
+    "whitenoise.middleware.WhiteNoiseMiddleware",  
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -157,7 +157,10 @@ AUTH_PASSWORD_VALIDATORS = [
 # 🌐 Internationalisation
 # ============================================================
 LANGUAGE_CODE = "fr"
-LANGUAGES = [("fr", "Français"), ("en", "English")]
+LANGUAGES = [
+    ("fr", "Français"),
+    ("en", "English"),
+]
 TIME_ZONE = "America/Port-au-Prince"
 USE_I18N = True
 USE_TZ = True
@@ -168,7 +171,8 @@ LOCALE_PATHS = [BASE_DIR / "locale"]
 # 📦 Fichiers statiques et médias
 # ============================================================
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"  # ✅ pour Render
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 MEDIA_URL = "/media/"
@@ -176,4 +180,68 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ==============================
+# ============================================================
+# 🌍 CORS (React/Vite frontend)
+# ============================================================
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+
+# ============================================================
+# ✉️ Email
+# ============================================================
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="severejunior2017@gmail.com")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="dxku jdwv nxht vomq")
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# ============================================================
+# 💳 Stripe
+# ============================================================
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="ta_cle_secrete")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="ta_cle_publishable")
+
+# ============================================================
+# 🧾 REST Framework
+# ============================================================
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.AllowAny"
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ],
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+    "PAGE_SIZE": 6,
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.OrderingFilter",
+        "rest_framework.filters.SearchFilter",
+    ],
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# ============================================================
+# 🔐 JWT
+# ============================================================
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=3),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+}
+
+# ============================================================
+# 🧩 Divers
+# ============================================================
+CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
+SMART_SELECTS_JQUERY = True
+
