@@ -12,40 +12,17 @@ from django.contrib.auth import views as auth_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf import settings
 from django.conf.urls.static import static
-from django.shortcuts import redirect, HttpResponse
-
-
-# ================================
-# 👇 PAGE D’ACCUEIL DU BACKEND
-# ================================
-def home(request):
-    """Page d’accueil simple pour Render ou tests backend"""
-    html = """
-    <html>
-        <head><title>Collège Quisqueya - Backend</title></head>
-        <body style="font-family:Arial; text-align:center; padding-top:50px;">
-            <h1>Bienvenue sur le backend Collège Quisqueya 🎓</h1>
-            <p>API opérationnelle avec Django REST Framework.</p>
-            <p><a href="/admin/">👉 Accéder à l’administration</a></p>
-            <p><a href="/api/docs/">📘 Documentation API (Swagger)</a></p>
-        </body>
-    </html>
-    """
-    return HttpResponse(html)
 
 
 urlpatterns = [
-    # ---- Page d’accueil ----
-    path("", home, name="home"),  # ✅ Corrige le 404 sur Render
-
     # ---- Admin ----
     path("admin/", admin.site.urls),
 
     # ---- API publiques ----
-    path("api/schoollife/", include("schoollife.api_urls")),   # Vie scolaire
+    path("api/schoollife/", include("schoollife.api_urls")),
     path("api/homepage/", include("homepage.api_urls")),
-    path("api/programs/", include("programs.api_urls")),       # Programmes publics
-    path("api/academics/", include("academics.api_urls")),     # Année académique et classes actives
+    path("api/programs/", include("programs.api_urls")),
+    path("api/academics/", include("academics.api_urls")),
     path("api/classrooms/", include("programs.api_urls")),
     path("api/subjects/", include("programs.api_urls")),
     path("api/", include("programs.api_urls")),
@@ -125,7 +102,6 @@ urlpatterns = [
         name="password_reset_complete",
     ),
 ]
-
 
 # ---- Fichiers médias en mode DEBUG ----
 if settings.DEBUG:
