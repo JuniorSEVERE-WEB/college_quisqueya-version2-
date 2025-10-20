@@ -1,3 +1,4 @@
+# render.yaml
 services:
   - type: web
     name: college-quisqueya-backend
@@ -11,19 +12,17 @@ services:
 
     startCommand: |
       cd backend
-      gunicorn backend.wsgi:application --log-file -
+      gunicorn backend.wsgi:application
 
     envVars:
       - key: DJANGO_SETTINGS_MODULE
-        value: backend.backend.settings   # ✅ utiliser ton settings.py principal
+        value: backend.backend.deployment_settings
       - key: PYTHON_VERSION
         value: 3.13.4
       - key: SECRET_KEY
         generateValue: true
       - key: DATABASE_URL
         sync: false
-      - key: DEBUG
-        value: false
       - key: RENDER_EXTERNAL_HOSTNAME
         fromService:
           type: web
