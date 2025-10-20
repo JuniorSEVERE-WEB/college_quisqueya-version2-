@@ -1,7 +1,6 @@
 """
 Django settings for backend project.
-
-Clean, optimized, and ready for both local development and Render deployment.
+Optimized for both local development and Render deployment.
 """
 
 import os
@@ -26,7 +25,11 @@ DEBUG = env.bool("DEBUG", default=True)
 # ============================================================
 # 🌍 Hôtes autorisés
 # ============================================================
-ALLOWED_HOSTS = ["127.0.0.1", "localhost", "college-quisqueya-version2-16.onrender.com"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "college-quisqueya-version2-16.onrender.com",  # ✅ backend Render
+]
 
 hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if hostname:
@@ -77,7 +80,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ indispensable sur Render
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -156,7 +159,6 @@ LANGUAGES = [("fr", "Français"), ("en", "English")]
 TIME_ZONE = "America/Port-au-Prince"
 USE_I18N = True
 USE_TZ = True
-
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # ============================================================
@@ -171,8 +173,6 @@ MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
 
 # ============================================================
 # ✉️ Email
@@ -229,28 +229,20 @@ SIMPLE_JWT = {
 CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
 SMART_SELECTS_JQUERY = True
 
-
 # ============================================================
-# 🌍 CORS & CSRF (React/Vite frontend)
+# 🌍 CORS & CSRF (Render + Local)
 # ============================================================
-# ============================================================
-# 🌍 CORS (Render + Local + Sécurité)
-# ============================================================
-# ============================================================
-# 🌍 CORS & CSRF pour Render et développement local
-# ============================================================
-
 CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
-    "https://college-quisqueya-version2-17.onrender.com",  # Frontend Render
+    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://college-quisqueya-version2-16.onrender.com",  # Backend Render
-    "https://college-quisqueya-version2-17.onrender.com",  # Frontend Render
+    "https://college-quisqueya-version2-16.onrender.com",  # ✅ Backend Render
+    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
