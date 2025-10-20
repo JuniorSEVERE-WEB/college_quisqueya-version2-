@@ -27,15 +27,9 @@ DEBUG = env.bool("DEBUG", default=True)
 # 🌍 Hôtes autorisés
 # ============================================================
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
-if hostname := os.environ.get("RENDER_EXTERNAL_HOSTNAME"):
-    ALLOWED_HOSTS.append(hostname)
-
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if hostname:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{hostname}")
+    ALLOWED_HOSTS.append(hostname)
 
 # ============================================================
 # 🧩 Applications
@@ -67,7 +61,7 @@ INSTALLED_APPS = [
     "about",
     "homepage",
 
-    # Libs
+    # Librairies externes
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
@@ -82,7 +76,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -157,10 +151,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # 🌐 Internationalisation
 # ============================================================
 LANGUAGE_CODE = "fr"
-LANGUAGES = [
-    ("fr", "Français"),
-    ("en", "English"),
-]
+LANGUAGES = [("fr", "Français"), ("en", "English")]
 TIME_ZONE = "America/Port-au-Prince"
 USE_I18N = True
 USE_TZ = True
@@ -180,15 +171,7 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# ============================================================
-# 🌍 CORS (React/Vite frontend)
-# ============================================================
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-]
+
 
 # ============================================================
 # ✉️ Email
@@ -212,7 +195,7 @@ STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="ta_cle_publishab
 # ============================================================
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny"
+        "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
@@ -245,3 +228,25 @@ SIMPLE_JWT = {
 CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
 SMART_SELECTS_JQUERY = True
 
+
+# ============================================================
+# 🌍 CORS & CSRF (React/Vite frontend)
+# ============================================================
+# ============================================================
+# 🌍 CORS (Render + Local + Sécurité)
+# ============================================================
+CORS_ALLOWED_ORIGINS = [
+    "https://college-quisqueya-version2-17.onrender.com",  # ✅ ton frontend Render
+    "http://localhost:5173",  # ✅ local dev
+    "http://127.0.0.1:5173",  # ✅ local dev
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://college-quisqueya-version2-17.onrender.com",  # ✅ pour formulaires / admin
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+
+if hostname:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{hostname}")
