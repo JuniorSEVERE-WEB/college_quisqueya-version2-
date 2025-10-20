@@ -26,7 +26,8 @@ DEBUG = env.bool("DEBUG", default=True)
 # ============================================================
 # 🌍 Hôtes autorisés
 # ============================================================
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = ["127.0.0.1", "localhost", "college-quisqueya-version2-16.onrender.com"]
+
 hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if hostname:
     ALLOWED_HOSTS.append(hostname)
@@ -235,18 +236,21 @@ SMART_SELECTS_JQUERY = True
 # ============================================================
 # 🌍 CORS (Render + Local + Sécurité)
 # ============================================================
-CORS_ALLOWED_ORIGINS = [
-    "https://college-quisqueya-version2-17.onrender.com",  # ✅ ton frontend Render
-    "http://localhost:5173",  # ✅ local dev
-    "http://127.0.0.1:5173",  # ✅ local dev
-]
+# ============================================================
+# 🌍 CORS & CSRF pour Render et développement local
+# ============================================================
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://college-quisqueya-version2-17.onrender.com",  # ✅ pour formulaires / admin
+CORS_ALLOW_ALL_ORIGINS = False
+
+CORS_ALLOWED_ORIGINS = [
+    "https://college-quisqueya-version2-17.onrender.com",  # Frontend Render
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
-
-if hostname:
-    CSRF_TRUSTED_ORIGINS.append(f"https://{hostname}")
+CSRF_TRUSTED_ORIGINS = [
+    "https://college-quisqueya-version2-16.onrender.com",  # Backend Render
+    "https://college-quisqueya-version2-17.onrender.com",  # Frontend Render
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
