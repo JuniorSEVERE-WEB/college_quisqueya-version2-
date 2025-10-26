@@ -12,9 +12,23 @@ from django.contrib.auth import views as auth_views
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.generic import TemplateView
+from django.http import JsonResponse
 
+# Vue pour la racine qui redirige vers le frontend
+def home(request):
+    return JsonResponse({
+        "message": "Backend College Quisqueya API",
+        "status": "running",
+        "frontend_url": "http://localhost:5173",
+        "admin_url": "/admin/",
+        "api_docs": "/api/docs/"
+    })
 
 urlpatterns = [
+    # ---- Racine ----
+    path("", home, name="home"),
+    
     # ---- Admin ----
     path("admin/", admin.site.urls),
 

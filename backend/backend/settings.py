@@ -78,9 +78,9 @@ INSTALLED_APPS = [
 # ⚙️ Middlewares
 # ============================================================
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",  # Doit être en premier
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",  # ✅ indispensable sur Render
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -230,19 +230,30 @@ CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
 SMART_SELECTS_JQUERY = True
 
 # ============================================================
-# 🌍 CORS & CSRF (Render + Local)
+# 🌍 CORS & CSRF (Render + Local) - CORRECTIONS IMPORTANTES
 # ============================================================
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True  # ✅ Pour le développement local
 
 CORS_ALLOWED_ORIGINS = [
-    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = [
-    "https://college-quisqueya-version2-16.onrender.com",  # ✅ Backend Render
-    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://college-quisqueya-version2-16.onrender.com",  # ✅ Backend Render
+    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
 ]
+
+# ============================================================
+# 🔧 Configuration développement
+# ============================================================
+if DEBUG:
+    # En développement, autoriser toutes les origines
+    CORS_ALLOW_ALL_ORIGINS = True
+    # Ajouter les hôtes de développement
+    ALLOWED_HOSTS.extend(['localhost', '127.0.0.1', '0.0.0.0'])
