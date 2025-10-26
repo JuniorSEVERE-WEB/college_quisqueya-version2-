@@ -12,21 +12,35 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
 
     // 📦 Base URL pour le déploiement sur Render
-    // Si ton site est hébergé à la racine, garde "/"
     base: "/",
 
-    // ⚙️ Configuration du serveur local (dev)
+    // ⚙️ Configuration du serveur local (dev) - CORRIGÉ
     server: {
       port: 5173,
-      open: true,
+      host: true, // ✅ Permet l'accès depuis l'extérieur
+      open: true, // ✅ Ouvre le navigateur automatiquement
+      cors: true, // ✅ Active CORS pour le développement
       proxy: {
-        // ✅ Proxy pour appeler ton backend local Django sans erreur CORS
-        "/api": {
-          target: "http://127.0.0.1:8000",
+        // ✅ Proxy pour toutes les routes API vers Django
+        '/api': {
+          target: 'http://127.0.0.1:8000',
+          changeOrigin: true,
+          secure: false,
+          rewrite: (path) => path,
+        },
+        // ✅ Proxy pour les médias
+        '/media': {
+          target: 'http://127.0.0.1:8000',
           changeOrigin: true,
           secure: false,
         },
-      },
+        // ✅ Proxy pour l'admin Django si nécessaire
+        '/admin': {
+          target: 'http://127.0.0.1:8000',
+          changeOrigin: true,
+          secure: false,
+        }
+      }
     },
 
     // 📁 Options de build pour Render
@@ -34,9 +48,16 @@ export default defineConfig(({ mode }) => {
       outDir: "dist",
       assetsDir: "assets",
       sourcemap: !isProduction,
+      minify: isProduction ? 'terser' : false,
     },
 
-    // ✅ Variables d’environnement
+    // ✅ Prévisualisation pour la production
+    preview: {
+      port: 5173,
+      host: true,
+    },
+
+    // ✅ Variables d'environnement
     define: {
       __APP_ENV__: JSON.stringify(mode),
     },

@@ -1,68 +1,84 @@
 import axios from "axios";
 
-// ✅ Base URL dynamique (locale ou Render)
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000";
+// ✅ Base URL dynamique (locale avec proxy ou production)
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
+
+console.log("API Base URL:", BASE_URL);
 
 const API = axios.create({
-  baseURL: `${BASE_URL}/api/`,
+  baseURL: BASE_URL ? `${BASE_URL}/api/` : "/api/", // ✅ Utilise le proxy en local
+  timeout: 10000,
   withCredentials: false,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // ---- Ajoute le token à chaque requête si présent ----
-API.interceptors.request.use((config) => {
-  const token = localStorage.getItem("access_token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-// ---- Helper: rafraîchit le token ----
-async function refreshAccessToken() {
-  const refresh = localStorage.getItem("refresh_token");
-  if (!refresh) throw new Error("No refresh token");
-
-  try {
-    const { data } = await API.post("auth/token/refresh/", { refresh });
-    return data.access;
-  } catch (e) {
-    if (e.response?.status === 404) {
-      const { data } = await API.post("token/refresh/", { refresh });
-      return data.access;
+API.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("access_token");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
-    throw e;
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-}
+);
 
-// ---- Rafraîchissement auto du token sur 401 ----
+// ---- Gestion des réponses et rafraîchissement du token ----
 API.interceptors.response.use(
-  (res) => res,
+  (response) => response,
   async (error) => {
-    const original = error.config || {};
-    const status = error.response?.status;
-    const isRefreshCall = /(auth\/)?token\/refresh\/$/.test(original.url || "");
+    const originalRequest = error.config;
 
-    if (status === 401 && !original._retry && !isRefreshCall) {
-      original._retry = true;
+    // Si erreur 401 et pas déjà en train de rafraîchir
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+
       try {
-        const newAccess = await refreshAccessToken();
-        localStorage.setItem("access_token", newAccess);
-        original.headers = {
-          ...(original.headers || {}),
-          Authorization: `Bearer ${newAccess}`,
-        };
-        window.dispatchEvent(new Event("authChanged"));
-        return API(original);
-      } catch (e) {
+        const refreshToken = localStorage.getItem("refresh_token");
+        if (!refreshToken) {
+          throw new Error("No refresh token");
+        }
+
+        // Essaye de rafraîchir le token
+        const response = await axios.post(
+          `${BASE_URL || ""}/api/auth/token/refresh/`,
+          { refresh: refreshToken }
+        );
+
+        const newAccessToken = response.data.access;
+        localStorage.setItem("access_token", newAccessToken);
+
+        // Retente la requête originale avec le nouveau token
+        originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+        return API(originalRequest);
+
+      } catch (refreshError) {
+        // Si le rafraîchissement échoue, déconnecter l'utilisateur
         localStorage.removeItem("access_token");
         localStorage.removeItem("refresh_token");
         localStorage.removeItem("user");
         window.dispatchEvent(new Event("authChanged"));
-        throw e;
+        
+        // Rediriger vers la page de login
+        if (window.location.pathname !== "/login") {
+          window.location.href = "/login";
+        }
+        
+        return Promise.reject(refreshError);
       }
     }
 
-    throw error;
+    // Gestion d'autres erreurs
+    if (error.response?.status >= 500) {
+      console.error("Server error:", error.response);
+    }
+
+    return Promise.reject(error);
   }
 );
 
