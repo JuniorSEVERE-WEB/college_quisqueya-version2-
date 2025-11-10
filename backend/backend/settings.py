@@ -1,7 +1,4 @@
-"""
-Django settings for backend project.
-Optimized for both local development and Render deployment.
-"""
+# Full settings.py for College Quisqueya (development-friendly)
 
 import os
 from datetime import timedelta
@@ -14,7 +11,7 @@ import environ
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ============================================================
-# 🔑 Clés et configuration de base
+# 🔑 Environnement
 # ============================================================
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
@@ -28,9 +25,10 @@ DEBUG = env.bool("DEBUG", default=True)
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "college-quisqueya-version2-16.onrender.com",  # ✅ backend Render
+    "college-quisqueya-version2-16.onrender.com",
 ]
 
+# add Render host if present
 hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if hostname:
     ALLOWED_HOSTS.append(hostname)
@@ -47,7 +45,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
-    # Apps locales
+    # Local apps
     "accounts",
     "academics",
     "core",
@@ -65,7 +63,7 @@ INSTALLED_APPS = [
     "about",
     "homepage",
 
-    # Librairies externes
+    # Third party
     "rest_framework",
     "corsheaders",
     "drf_spectacular",
@@ -75,10 +73,10 @@ INSTALLED_APPS = [
 ]
 
 # ============================================================
-# ⚙️ Middlewares
+# ⚙️ Middleware
 # ============================================================
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware",  # Doit être en premier
+    "corsheaders.middleware.CorsMiddleware",  # must be first for CORS
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -93,7 +91,7 @@ MIDDLEWARE = [
 ]
 
 # ============================================================
-# 📡 URL et Templates
+# 📡 URL / Templates
 # ============================================================
 ROOT_URLCONF = "backend.urls"
 
@@ -118,19 +116,17 @@ WSGI_APPLICATION = "backend.wsgi.application"
 ASGI_APPLICATION = "backend.asgi.application"
 
 # ============================================================
-# 🧠 Channels (WebSocket + Redis)
+# 🧠 Channels
 # ============================================================
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
+        "CONFIG": {"hosts": [("127.0.0.1", 6379)]},
+    }
 }
 
 # ============================================================
-# 🗃️ Base de données
+# 🗃️ Database (dev: sqlite)
 # ============================================================
 DATABASES = {
     "default": {
@@ -140,7 +136,7 @@ DATABASES = {
 }
 
 # ============================================================
-# 🔐 Authentification
+# 🔐 Authentication
 # ============================================================
 AUTH_USER_MODEL = "accounts.User"
 
@@ -162,7 +158,7 @@ USE_TZ = True
 LOCALE_PATHS = [BASE_DIR / "locale"]
 
 # ============================================================
-# 📦 Fichiers statiques et médias
+# 📦 Static & Media
 # ============================================================
 STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -175,29 +171,32 @@ MEDIA_ROOT = BASE_DIR / "media"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # ============================================================
-# ✉️ Email
+# ✉️ Email (dev safe)
 # ============================================================
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="severejunior2017@gmail.com")
-EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="dxku jdwv nxht vomq")
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+if DEBUG:
+    # Print emails to console in development to avoid SMTP errors
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default="no-reply@college-quisqueya.local")
+else:
+    EMAIL_BACKEND = env("EMAIL_BACKEND", default="django.core.mail.backends.smtp.EmailBackend")
+    EMAIL_HOST = env("EMAIL_HOST", default="smtp.gmail.com")
+    EMAIL_PORT = env.int("EMAIL_PORT", default=587)
+    EMAIL_USE_TLS = env.bool("EMAIL_USE_TLS", default=True)
+    EMAIL_HOST_USER = env("EMAIL_HOST_USER", default="")
+    EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
+    DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
 
 # ============================================================
-# 💳 Stripe
+# 💳 Stripe keys (optional)
 # ============================================================
-STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="ta_cle_secrete")
-STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="ta_cle_publishable")
+STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
+STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="")
 
 # ============================================================
-# 🧾 REST Framework
+# 🧾 DRF
 # ============================================================
 REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
+    "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.SessionAuthentication",
         "rest_framework_simplejwt.authentication.JWTAuthentication",
@@ -224,36 +223,60 @@ SIMPLE_JWT = {
 }
 
 # ============================================================
-# 🧩 Divers
+# 🧩 Misc
 # ============================================================
 CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
 SMART_SELECTS_JQUERY = True
 
 # ============================================================
-# 🌍 CORS & CSRF (Render + Local) - CORRECTIONS IMPORTANTES
+# 🌍 CORS & CSRF configuration (dev-first)
 # ============================================================
-CORS_ALLOW_ALL_ORIGINS = True  # ✅ Pour le développement local
-
+# Allowed origins for frontend (used when CORS_ALLOW_ALL_ORIGINS is False)
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
+    "https://college-quisqueya-version2-17.onrender.com",
 ]
 
 CORS_ALLOW_CREDENTIALS = True
 
+# CSRF trusted origins (include ports and schemes)
 CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://college-quisqueya-version2-16.onrender.com",  # ✅ Backend Render
-    "https://college-quisqueya-version2-17.onrender.com",  # ✅ Frontend Render
+    "https://college-quisqueya-version2-16.onrender.com",
+    "https://college-quisqueya-version2-17.onrender.com",
 ]
 
-# ============================================================
-# 🔧 Configuration développement
-# ============================================================
+# Dev cookie/CSRF settings (unsafe for production)
+CSRF_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = "Lax"
+
+# Toggle behavior based on DEBUG
 if DEBUG:
-    # En développement, autoriser toutes les origines
+    # simpler local dev: allow all origins
     CORS_ALLOW_ALL_ORIGINS = True
-    # Ajouter les hôtes de développement
-    ALLOWED_HOSTS.extend(['localhost', '127.0.0.1', '0.0.0.0'])
+    ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
+else:
+    CORS_ALLOW_ALL_ORIGINS = False
+    # In production, ensure CSRF_COOKIE_SECURE = True and SESSION_COOKIE_SECURE = True
+
+# ============================================================
+# 🧾 Logging minimal (console)
+# ============================================================
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {"console": {"class": "logging.StreamHandler"}},
+    "root": {"handlers": ["console"], "level": "INFO"},
+}
+
+# End of settings.py
+# Make sure to:
+# - install requirements: pip install -r requirements.txt
+# - create a .env with SECRET_KEY and other production vars
+# - restart the dev server after changes
