@@ -16,6 +16,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
+DATABASES = {
+    'default': env.db('DATABASE_URL', default='postgres://user:password@localhost:5432/dbname')
+}
+
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
 DEBUG = env.bool("DEBUG", default=True)
 
@@ -25,7 +29,8 @@ DEBUG = env.bool("DEBUG", default=True)
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "college-quisqueya-version2-16.onrender.com",
+    "juniorsevere.dev",           # Ton domaine
+    ".railway.app",               # Autorise tous les sous-domaines Railway
 ]
 
 # add Render host if present
@@ -126,15 +131,18 @@ CHANNEL_LAYERS = {
 }
 
 # ============================================================
-# 🗃️ Database (dev: sqlite)
+# 🗃️ Database (dev: postgresql)
 # ============================================================
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'college_db',
+        'USER': 'severe',
+        'PASSWORD': 'ton_mot_pass_ici',  # Remplace par le mot de passe que tu as créé
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
-
 # ============================================================
 # 🔐 Authentication
 # ============================================================
