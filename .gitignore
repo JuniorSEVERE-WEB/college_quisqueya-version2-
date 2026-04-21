@@ -1,0 +1,11 @@
+venv/
+*.pyc
+__pycache__/
+db.sqlite3
+.env
+data_dump.json
+build.sh
+render.yaml
+backend/venv/
+backend/**/__pycache__/
+
