@@ -6,7 +6,7 @@ from reports.models import Grade, SubjectCoefficient
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image
 from reportlab.lib import colors
-from weasyprint import HTML, CSS
+#from weasyprint import HTML, CSS
 from django.template.loader import render_to_string
 from django.utils import timezone
 
