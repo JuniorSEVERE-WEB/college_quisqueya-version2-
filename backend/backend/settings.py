@@ -40,6 +40,9 @@ ALLOWED_HOSTS = [
     ".railway.app",               # Autorise tous les sous-domaines Railway
     "collegequisqueya-version2-production.up.railway.app",  # Domaine de production spécifique
 ]
+CSRF_TRUSTED_ORIGINS = [
+    'https://collegequisqueya-version2-production.up.railway.app',
+]
 
 # add Render host if present
 hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
