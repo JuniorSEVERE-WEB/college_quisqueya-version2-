@@ -22,7 +22,6 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # ============================================================
 DATABASES = {
     'default': dj_database_url.config(
-        default="postgresql://postgres:mmgNEQeqdRLdwhLulkXWLtsceMjYJwKh@shinkansen.proxy.rlwy.net:57101/railway",
         conn_max_age=600,
         ssl_require=True
     )
@@ -39,6 +38,7 @@ ALLOWED_HOSTS = [
     "localhost",
     "juniorsevere.dev",           # Ton domaine
     ".railway.app",               # Autorise tous les sous-domaines Railway
+    "collegequisqueya-version2-production.up.railway.app",  # Domaine de production spécifique
 ]
 
 # add Render host if present
