@@ -1,5 +1,6 @@
 # Full settings.py for College Quisqueya (development-friendly)
 
+import dj_database_url
 import os
 from datetime import timedelta
 from pathlib import Path
@@ -16,8 +17,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 
+# ============================================================
+# 🗃️ Database (Railway compliant)
+# ============================================================
 DATABASES = {
-    'default': env.db('DATABASE_URL', default='postgres://user:password@localhost:5432/dbname')
+    'default': dj_database_url.config(
+        default="postgresql://postgres:mmgNEQeqdRLdwhLulkXWLtsceMjYJwKh@shinkansen.proxy.rlwy.net:57101/railway",
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
@@ -133,16 +141,7 @@ CHANNEL_LAYERS = {
 # ============================================================
 # 🗃️ Database (dev: postgresql)
 # ============================================================
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'college_db',
-        'USER': 'severe',
-        'PASSWORD': 'ton_mot_pass_ici',  # Remplace par le mot de passe que tu as créé
-        'HOST': 'localhost',
-        'PORT': '5432',
-    }
-}
+
 # ============================================================
 # 🔐 Authentication
 # ============================================================
