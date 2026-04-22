@@ -1,0 +1,5 @@
+[phases.setup]
+nixPkgs = ["python312", "glib", "pango", "harfbuzz", "fontconfig", "libunwind", "gobject-introspection"]
+
+[variables]
+PYTHONPATH = "backend"
