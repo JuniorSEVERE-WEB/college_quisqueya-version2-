@@ -28,7 +28,7 @@ DATABASES = {
 }
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
-DEBUG = env.bool("DEBUG", default=True)
+DEBUG = env.bool("DEBUG", default=False)
 
 # ============================================================
 # 🌍 Hôtes autorisés
