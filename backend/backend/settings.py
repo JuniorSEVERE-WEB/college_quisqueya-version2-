@@ -40,9 +40,6 @@ ALLOWED_HOSTS = [
     ".railway.app",               # Autorise tous les sous-domaines Railway
     "collegequisqueya-version2-production.up.railway.app",  # Domaine de production spécifique
 ]
-CSRF_TRUSTED_ORIGINS = [
-    'https://collegequisqueya-version2-production.up.railway.app',
-]
 
 # add Render host if present
 hostname = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
@@ -256,9 +253,11 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://college-quisqueya-version2-16.onrender.com",
-    "https://college-quisqueya-version2-17.onrender.com",
+    "https://collegequisqueya-version2-production.up.railway.app",  # Ton URL Railway actuelle
 ]
+
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Dev cookie/CSRF settings (unsafe for production)
 CSRF_COOKIE_SECURE = False
