@@ -273,7 +273,11 @@ if DEBUG:
     ALLOWED_HOSTS.extend(["localhost", "127.0.0.1", "0.0.0.0"])
 else:
     CORS_ALLOW_ALL_ORIGINS = False
-    # In production, ensure CSRF_COOKIE_SECURE = True and SESSION_COOKIE_SECURE = True
+    # --- AJOUTE CES LIGNES CI-DESSOUS ---
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # ============================================================
 # 🧾 Logging minimal (console)
