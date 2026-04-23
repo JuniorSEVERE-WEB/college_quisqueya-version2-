@@ -40,9 +40,11 @@ DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "juniorsevere.dev",           # Ton domaine
-    ".railway.app",               # Autorise tous les sous-domaines Railway
-    "collegequisqueya-version2-production.up.railway.app",  # Domaine de production spécifique
+    "juniorsevere.dev",
+    ".juniorsevere.dev",
+    "collegequisqueyadeleogane.juniorsevere.dev",
+    ".railway.app",
+    "collegequisqueya-version2-production.up.railway.app",
 ]
 
 # add Render host if present
@@ -257,7 +259,8 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:8000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://collegequisqueya-version2-production.up.railway.app",  # Ton URL Railway actuelle
+    "https://collegequisqueya-version2-production.up.railway.app",
+    "https://collegequisqueyadeleogane.juniorsevere.dev",
 ]
 
 
