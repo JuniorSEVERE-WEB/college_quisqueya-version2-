@@ -15,18 +15,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 🔑 Environnement
 # ============================================================
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+_env_file = os.path.join(BASE_DIR, ".env")
+if os.path.isfile(_env_file):
+    environ.Env.read_env(_env_file)
 
 # ============================================================
 # 🗃️ Database (Railway compliant)
 # ============================================================
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
-        conn_max_age=600,
-        ssl_require=True
+_db_config = dj_database_url.config(conn_max_age=600)
+if not _db_config:
+    from django.core.exceptions import ImproperlyConfigured
+    raise ImproperlyConfigured(
+        "DATABASE_URL environment variable is not set. "
+        "On Railway: link the Postgres service variable to this service."
     )
-}
+DATABASES = {'default': _db_config}
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
 DEBUG = env.bool("DEBUG", default=False)
