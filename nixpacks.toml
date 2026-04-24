@@ -3,3 +3,4 @@ nixPkgs = ["python312", "glib", "pango", "harfbuzz", "fontconfig", "libunwind", 
 
 [variables]
 PYTHONPATH = "backend"
+DISABLE_COLLECTSTATIC = "1"
