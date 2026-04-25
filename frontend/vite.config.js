@@ -48,7 +48,7 @@ export default defineConfig(({ mode }) => {
       outDir: "dist",
       assetsDir: "assets",
       sourcemap: !isProduction,
-      minify: isProduction ? 'terser' : false,
+      minify: isProduction ? 'esbuild' : false,
     },
 
     // ✅ Prévisualisation pour la production
