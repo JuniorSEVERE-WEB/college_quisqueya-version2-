@@ -33,6 +33,7 @@ DATABASES = {'default': _db_config}
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
 DEBUG = env.bool("DEBUG", default=False)
+FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")
 
 # ============================================================
 # 🌍 Hôtes autorisés
@@ -47,6 +48,7 @@ ALLOWED_HOSTS = [
     "collegequisqueya-version2-production.up.railway.app",
     '.up.railway.app',
     'api.collegequisqueya.juniorsevere.dev',
+    'api.collegequisqueyadeleogane.juniorsevere.dev',
 
 ]
 
@@ -273,6 +275,9 @@ CSRF_TRUSTED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://collegequisqueya-version2-production.up.railway.app",
     "https://collegequisqueyadeleogane.juniorsevere.dev",
+    "https://collegequisqueya.juniorsevere.dev",
+    "https://api.collegequisqueya.juniorsevere.dev",
+    "https://api.collegequisqueyadeleogane.juniorsevere.dev",
 ]
 
 
