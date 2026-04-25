@@ -45,6 +45,9 @@ ALLOWED_HOSTS = [
     "collegequisqueyadeleogane.juniorsevere.dev",
     ".railway.app",
     "collegequisqueya-version2-production.up.railway.app",
+    '.up.railway.app',
+    'api.collegequisqueya.juniorsevere.dev',
+
 ]
 
 # add Render host if present
@@ -250,6 +253,10 @@ CORS_ALLOWED_ORIGINS = [
     "http://127.0.0.1:5173",
     "https://college-quisqueya-version2-17.onrender.com",
     "https://collegequisqueyadeleogane.juniorsevere.dev",
+    #frontend
+    "https://collegequisqueya.juniorsevere.dev", # Ton nouveau domaine frontend
+    "http://localhost:3000", # Pour tes tests locaux
+    "http://127.0.0.1:3000",
 ]
 
 CORS_ALLOWED_ORIGIN_REGEXES = [
