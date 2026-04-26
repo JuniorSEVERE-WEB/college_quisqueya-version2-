@@ -126,15 +126,24 @@ useEffect(() => {
     setErr("");
     const form = new FormData(e.currentTarget);
 
+    // Validation côté client : vérifier que les mots de passe correspondent
+    const pw1 = form.get("password1");
+    const pw2 = form.get("password2");
+    if (pw1 !== pw2) {
+      setErr("Les mots de passe ne correspondent pas. Veuillez les vérifier.");
+      return;
+    }
+
     try {
       if (role === "abonne") {
         await API.post("auth/register/abonne/", {
           username: form.get("username"),
           email: form.get("email"),
-          password1: form.get("password1"),
-          password2: form.get("password2"),
+          password1: pw1,
+          password2: pw2,
         });
         setMsg("Compte créé. Vous pouvez vous connecter.");
+        hardResetForm();
       } else if (role === "student") {
         const fd = new FormData();
         [
@@ -161,6 +170,7 @@ useEffect(() => {
           headers: { "Content-Type": "multipart/form-data" },
         });
         setMsg("Demande envoyée. En attente de validation de l’administration.");
+        hardResetForm();
       } else if (role === "professor") {
         const fd = new FormData();
         [
@@ -182,6 +192,7 @@ useEffect(() => {
 
         await API.post("professors/register/", fd);
         setMsg("Demande envoyée. En attente de validation de l’administration.");
+        hardResetForm();
       } else if (role === "alumni") {
         const fd = new FormData();
         [
@@ -208,12 +219,11 @@ useEffect(() => {
         });
 
         setMsg("Demande envoyée. En attente de validation de l’administration.");
+        hardResetForm();
       }
     } catch (e2) {
       const detail = e2?.response?.data || e2?.message || "Erreur d’inscription.";
       setErr(typeof detail === "string" ? detail : JSON.stringify(detail));
-    } finally {
-      hardResetForm();
     }
   };
 
