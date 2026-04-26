@@ -117,6 +117,6 @@ urlpatterns = [
     ),
 ]
 
-# ---- Fichiers médias en mode DEBUG ----
-if settings.DEBUG:
+# ---- Fichiers médias ----
+if settings.SERVE_MEDIA_FILES:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
