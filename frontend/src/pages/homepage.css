@@ -2,6 +2,14 @@ html, body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    overflow-x: clip;
+}
+
+.bienvenue-section,
+.valeurs-section,
+.articles-home,
+.more-articles {
+  overflow-x: clip;
 }
 
 /* === Carrousel === */
@@ -212,7 +220,7 @@ html, body {
 .valeurs-grid {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
 }
 .valeur-card {
   background: #ffffff;
@@ -289,7 +297,7 @@ html, body {
 .articles-grid {
   display: grid;
   gap: 20px;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
 }
 
 /* Carte article */
