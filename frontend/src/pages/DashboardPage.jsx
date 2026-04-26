@@ -127,7 +127,7 @@ export function DashboardPage() {
 
       <div className="admin-access">
         <a
-          href="http://localhost:8000/admin/"
+          href="https://api.collegequisqueyadeleogane.juniorsevere.dev/admin/"
           target="_blank"
           rel="noopener noreferrer"
           className="admin-btn"
