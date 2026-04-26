@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import API from "../api";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { getMediaUrl } from "../utils/media";
 import "./articledetail.css";
 
 export default function ArticleDetailPage() {
@@ -18,14 +19,6 @@ export default function ArticleDetailPage() {
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState("");
-
-  const getImageUrl = (img) => {
-    if (!img) return "";
-    if (/^https?:\/\//i.test(img)) return img;
-    const base = API?.defaults?.baseURL || "";
-    const root = base.replace(/\/api\/?.*$/, "");
-    return `${root}${img.startsWith("/") ? "" : "/"}${img}`;
-  };
 
   // --- Charger l’article ---
   useEffect(() => {
@@ -185,7 +178,7 @@ export default function ArticleDetailPage() {
               {article.author?.username || "Admin"}
             </div>
             <img
-              src={getImageUrl(article.image)}
+              src={getMediaUrl(article.image)}
               alt={article.title}
               className="article-image"
             />

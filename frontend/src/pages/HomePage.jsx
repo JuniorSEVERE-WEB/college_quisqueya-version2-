@@ -4,6 +4,7 @@ import { FooterPage } from "../components/FooterPage";
 import "./homepage.css";
 import API from "../api";
 import { motion } from "framer-motion"; // 🔹 Import Framer Motion
+import { getMediaUrl } from "../utils/media";
 
 export function HomePage() {
   const [slides, setSlides] = useState([]);
@@ -82,15 +83,6 @@ export function HomePage() {
     return () => clearTimeout(timeout);
   }, [charIndex, isDeleting, titleIndex, slides, current]);
 
-  // Construire URL images
-  const getImageUrl = (img) => {
-    if (!img) return "";
-    if (/^https?:\/\//i.test(img)) return img;
-    const base = API?.defaults?.baseURL || "";
-    const root = base.replace(/\/api\/?.*$/, "");
-    return `${root}${img.startsWith("/") ? "" : "/"}${img}`;
-  };
-
   const slideInSection = {
     hidden: { opacity: 0, x: -90 },
     visible: {
@@ -140,7 +132,7 @@ export function HomePage() {
               <div
                 className="carroussel-img"
                 style={{
-                  backgroundImage: `url(${getImageUrl(slides[current].image)})`,
+                  backgroundImage: `url(${getMediaUrl(slides[current].image)})`,
                 }}
               >
                 <div className="carroussel-overlay">
@@ -260,7 +252,7 @@ export function HomePage() {
                     >
                       <div
                         className="article-card-img"
-                        style={{ backgroundImage: `url(${getImageUrl(a.image)})` }}
+                        style={{ backgroundImage: `url(${getMediaUrl(a.image)})` }}
                       />
                       <div className="article-card-body">
                         <div className="article-meta">
@@ -296,7 +288,7 @@ export function HomePage() {
                     >
                       <div
                         className="article-card-img"
-                        style={{ backgroundImage: `url(${getImageUrl(a.image)})` }}
+                        style={{ backgroundImage: `url(${getMediaUrl(a.image)})` }}
                       />
                       <div className="article-card-body">
                         <div className="article-meta">

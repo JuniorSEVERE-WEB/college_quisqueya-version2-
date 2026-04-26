@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
-import API, { BASE_URL } from "../api";
+import API from "../api";
+import { getMediaUrl } from "../utils/media";
 import "./aboutpage.css";
 import { motion } from "framer-motion"; // ✅ Framer Motion
 
@@ -61,7 +62,7 @@ export function AboutPage() {
           >
             {aboutInfo.main_image && (
               <img
-                src={`${BASE_URL}${aboutInfo.main_image}`}
+                src={getMediaUrl(aboutInfo.main_image)}
                 alt="Collège Quisqueya"
               />
             )}
@@ -114,7 +115,7 @@ export function AboutPage() {
                   <p>{event.description}</p>
                   {event.image && (
                     <img
-                      src={`${BASE_URL}${event.image}`}
+                      src={getMediaUrl(event.image)}
                       alt={event.title}
                     />
                   )}
@@ -156,7 +157,7 @@ export function AboutPage() {
                 >
                   {f.photo && (
                     <img
-                      src={`${BASE_URL}${f.photo}`}
+                      src={getMediaUrl(f.photo)}
                       alt={f.name}
                     />
                   )}
@@ -193,7 +194,7 @@ export function AboutPage() {
                 >
                   {s.photo && (
                     <img
-                      src={`${BASE_URL}${s.photo}`}
+                      src={getMediaUrl(s.photo)}
                       alt={s.name}
                     />
                   )}
@@ -268,7 +269,7 @@ export function AboutPage() {
               >
                 {v.image && (
                   <img
-                    src={`${BASE_URL}${v.image}`}
+                    src={getMediaUrl(v.image)}
                     alt={v.title}
                   />
                 )}

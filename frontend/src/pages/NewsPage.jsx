@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import API from "../api";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { getMediaUrl } from "../utils/media";
 import "./newspage.css";
 
 export default function NewsPage() {
@@ -78,14 +79,6 @@ export default function NewsPage() {
     setPage(nextPage);
   };
 
-  const getImageUrl = (img) => {
-    if (!img) return "";
-    if (/^https?:\/\//i.test(img)) return img;
-    const base = API?.defaults?.baseURL || "";
-    const root = base.replace(/\/api\/?.*$/, "");
-    return `${root}${img.startsWith("/") ? "" : "/"}${img}`;
-  };
-
   return (
     <>
       <HeaderPage />
@@ -137,7 +130,7 @@ export default function NewsPage() {
                       <div
                         className="news-card-img"
                         style={{
-                          backgroundImage: `url(${getImageUrl(a.image)})`,
+                          backgroundImage: `url(${getMediaUrl(a.image)})`,
                         }}
                         aria-label={a.title}
                       />

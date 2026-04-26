@@ -14,6 +14,7 @@ from django.conf import settings
 from django.views.static import serve
 from django.views.generic import TemplateView
 from django.http import JsonResponse
+from pathlib import Path
 
 # Vue pour la racine qui redirige vers le frontend
 def home(request):
@@ -24,6 +25,15 @@ def home(request):
         "admin_url": "/admin/",
         "api_docs": "/api/docs/"
     })
+
+
+def serve_media_with_fallback(request, path):
+    media_path = Path(settings.MEDIA_ROOT) / path
+    if media_path.exists():
+        return serve(request, path, document_root=settings.MEDIA_ROOT)
+
+    fallback_root = settings.BASE_DIR / "media_fallback"
+    return serve(request, path, document_root=fallback_root)
 
 urlpatterns = [
     # ---- Racine ----
@@ -120,5 +130,5 @@ urlpatterns = [
 # ---- Fichiers médias ----
 if settings.SERVE_MEDIA_FILES:
     urlpatterns += [
-        re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
+        re_path(r"^media/(?P<path>.*)$", serve_media_with_fallback),
     ]

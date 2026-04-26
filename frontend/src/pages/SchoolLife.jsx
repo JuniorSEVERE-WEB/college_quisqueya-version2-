@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
 import API from "../api";
+import { getMediaUrl } from "../utils/media";
 import "./schoollife.css";
 
 export function SchoolLife() {
@@ -89,7 +90,7 @@ export function SchoolLife() {
                 {clubs.map((club) => (
                   <div key={club.id} className="card">
                     {club.photo && (
-                      <img src={club.photo} alt={club.name} className="club-photo" />
+                      <img src={getMediaUrl(club.photo)} alt={club.name} className="club-photo" />
                     )}
                     <h3>{club.name}</h3>
                     <p>{club.description}</p>
@@ -105,7 +106,7 @@ export function SchoolLife() {
                 {events.map((event) => (
                   <div key={event.id} className="card">
                     {event.logo && (
-                      <img src={event.logo} alt={event.title} className="event-logo" />
+                      <img src={getMediaUrl(event.logo)} alt={event.title} className="event-logo" />
                     )}
                     <h3>{event.title}</h3>
                     <p>{event.description}</p>
@@ -122,7 +123,7 @@ export function SchoolLife() {
                 {testimonials.map((t) => (
                   <div key={t.id} className="card">
                     {t.photo && (
-                      <img src={t.photo} alt={t.name} className="testimonial-photo" />
+                      <img src={getMediaUrl(t.photo)} alt={t.name} className="testimonial-photo" />
                     )}
                     <blockquote>{t.message}</blockquote>
                     <p className="author">
@@ -139,7 +140,7 @@ export function SchoolLife() {
               <div className="grid gallery">
                 {gallery.map((g) => (
                   <div key={g.id} className="gallery-item">
-                    <img src={g.image} alt={g.title} />
+                    <img src={getMediaUrl(g.image)} alt={g.title} />
                     <p>{g.title}</p>
                   </div>
                 ))}
