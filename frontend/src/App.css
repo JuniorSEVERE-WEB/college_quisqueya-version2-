@@ -1,14 +1,21 @@
-/* ✅ Fixe le layout global sur toute la hauteur */
-html, body, #root {
-  height: 100%;
+/* Layout global: garde le footer colle au bas de la page */
+html,
+body {
+  min-height: 100%;
   margin: 0;
   padding: 0;
 }
 
 body {
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+#root {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  background: #f8f9fa;
 }
 
 /* Chaque page principale prend toute la hauteur restante */
@@ -21,6 +28,7 @@ body {
 /* S'assure que le footer reste toujours en bas */
 footer.footer {
   margin-top: auto;
+  flex-shrink: 0;
 }
 .error, .loading {
   min-height: 60vh;
