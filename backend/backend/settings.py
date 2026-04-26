@@ -19,21 +19,36 @@ _env_file = os.path.join(BASE_DIR, ".env")
 if os.path.isfile(_env_file):
     environ.Env.read_env(_env_file)
 
-# ============================================================
-# 🗃️ Database (Railway compliant)
-# ============================================================
-_db_config = dj_database_url.config(conn_max_age=600)
-if not _db_config:
-    from django.core.exceptions import ImproperlyConfigured
-    raise ImproperlyConfigured(
-        "DATABASE_URL environment variable is not set. "
-        "On Railway: link the Postgres service variable to this service."
-    )
-DATABASES = {'default': _db_config}
-
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-fallback-key")
 DEBUG = env.bool("DEBUG", default=False)
 FRONTEND_URL = env("FRONTEND_URL", default="http://localhost:5173")
+
+# ============================================================
+# 🗃️ Database (PostgreSQL by default, SQLite only if explicitly requested)
+# ============================================================
+DATABASE_URL = os.environ.get("DATABASE_URL")
+if env.bool("USE_DATABASE_PUBLIC_URL", default=False) or "DATABASE_PUBLIC_URL" in os.environ:
+    DATABASE_URL = os.environ.get("DATABASE_PUBLIC_URL") or DATABASE_URL
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600),
+    }
+elif env.bool("USE_SQLITE", default=False):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+else:
+    from django.core.exceptions import ImproperlyConfigured
+    raise ImproperlyConfigured(
+        "DATABASE_URL environment variable is not set. "
+        "Use `railway run --service Postgres python manage.py runserver` locally, "
+        "or set DATABASE_URL in .env. Set USE_SQLITE=True only if you intentionally "
+        "want local SQLite."
+    )
 
 # ============================================================
 # 🌍 Hôtes autorisés
