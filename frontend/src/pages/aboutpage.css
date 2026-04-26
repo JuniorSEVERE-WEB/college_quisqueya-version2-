@@ -3,11 +3,22 @@
   padding: 20px;
   max-width: 1200px;
   margin: auto;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.about-container *,
+.about-container *::before,
+.about-container *::after {
+  box-sizing: border-box;
 }
 
 .section {
   margin: 50px 0;
   border: 1.5px dotted rgb(1, 1, 32);
+  width: 100%;
+  overflow-x: clip;
 }
 
 .section h2 {
@@ -18,8 +29,9 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr));
   gap: 20px;
+  width: 100%;
 }
 
 .card {
@@ -80,6 +92,7 @@
 .timeline-grid {
   display: grid;
   gap: 40px;
+  width: 100%;
 }
 
 .timeline-item {
@@ -141,8 +154,34 @@
 
 /* Mobile = simple liste */
 @media (max-width: 767px) {
+  .about-container {
+    padding: 14px;
+  }
+
+  .section {
+    margin: 32px 0;
+  }
+
   .timeline-item {
     width: 100%;
+    max-width: 100%;
+    padding: 16px;
+  }
+
+  .vision-card {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 16px;
+  }
+
+  .vision-card img {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .hero-text h1 {
+    font-size: 2rem;
+    overflow-wrap: anywhere;
   }
 }
 
@@ -170,6 +209,7 @@
   background: #f0f9ff;
   border-radius: 12px;
   padding: 20px;
+  width: 100%;
 }
 
 .vision-card img {
