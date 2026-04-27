@@ -21,7 +21,7 @@ def home(request):
     return JsonResponse({
         "message": "Backend College Quisqueya API",
         "status": "running",
-        "frontend_url": "http://localhost:5173",
+        "frontend_url": "https://collegequisqueyadeleogane.juniorsevere.dev",
         "admin_url": "/admin/",
         "api_docs": "/api/docs/"
     })

@@ -13,12 +13,21 @@ SECRET_KEY = os.environ.get("SECRET_KEY", "fallback-secret-key")
 # ============================================================
 RENDER_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 
+ALLOWED_HOSTS = [
+    "api.collegequisqueyadeleogane.juniorsevere.dev",
+    "collegequisqueyadeleogane.juniorsevere.dev",
+    "localhost",
+    "127.0.0.1",
+]
 if RENDER_HOSTNAME:
-    ALLOWED_HOSTS = [RENDER_HOSTNAME, "localhost", "127.0.0.1"]
-    CSRF_TRUSTED_ORIGINS = [f"https://{RENDER_HOSTNAME}"]
-else:
-    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
-    CSRF_TRUSTED_ORIGINS = ["http://localhost", "http://127.0.0.1"]
+    ALLOWED_HOSTS.append(RENDER_HOSTNAME)
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://api.collegequisqueyadeleogane.juniorsevere.dev",
+    "https://collegequisqueyadeleogane.juniorsevere.dev",
+]
+if RENDER_HOSTNAME:
+    CSRF_TRUSTED_ORIGINS.append(f"https://{RENDER_HOSTNAME}")
 
 # ============================================================
 # 🧱 Middleware (avec Whitenoise pour les fichiers statiques)
@@ -77,13 +86,14 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 # 🌐 CORS et CSRF (frontend autorisé)
 # ============================================================
 CORS_ALLOWED_ORIGINS = [
-    "https://college-quisqueya-frontend.onrender.com",
+    "https://collegequisqueyadeleogane.juniorsevere.dev",
+    "https://api.collegequisqueyadeleogane.juniorsevere.dev",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
 ]
 
 CSRF_TRUSTED_ORIGINS += [
-    "https://college-quisqueya-frontend.onrender.com",
+    "https://collegequisqueyadeleogane.juniorsevere.dev",
 ]
 
 # ============================================================
