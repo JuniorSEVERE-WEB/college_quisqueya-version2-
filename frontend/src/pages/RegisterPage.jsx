@@ -2,7 +2,9 @@
 import { useEffect, useRef, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { GoogleLogin } from "@react-oauth/google";
 import API from "../api";
+import { useNavigate } from "react-router-dom";
 import "./registerpage.css"; // 👈 style des inputs + boutons + cartes
 
 // Titres lisibles par rôle
@@ -14,6 +16,7 @@ const ROLE_TITLES = {
 };
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
   const [role, setRole] = useState("");
   const [classes, setClasses] = useState([]);
   const [programs, setPrograms] = useState([]);
@@ -108,6 +111,28 @@ useEffect(() => {
       formRef.current?.reset();
     } catch {}
     setFormKey((k) => k + 1); // remonte le form pour reset defaultValue/select/file inputs
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setErr("");
+    try {
+      const response = await API.post("auth/google/", {
+        credential: credentialResponse.credential,
+      });
+      localStorage.setItem("access_token", response.data.access);
+      localStorage.setItem("refresh_token", response.data.refresh);
+
+      try {
+        const me = await API.get("auth/me/");
+        localStorage.setItem("user", JSON.stringify(me.data));
+        if (me.data?.role) localStorage.setItem("role", me.data.role);
+      } catch (_) {}
+
+      window.dispatchEvent(new Event("authChanged"));
+      navigate("/");
+    } catch (e) {
+      setErr(e?.response?.data?.detail || "Connexion Google échouée.");
+    }
   };
 
   const handleChangeRole = () => {
@@ -349,7 +374,43 @@ useEffect(() => {
 
 
 
-        {role && (
+        {role === "abonne" && (
+          <div className="form-section">
+            <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 24 }}>
+              <h3 style={{ margin: 0 }}>{ROLE_TITLES["abonne"]}</h3>
+              <button
+                type="button"
+                onClick={handleChangeRole}
+                className="form-button"
+                style={{ marginLeft: "auto" }}
+              >
+                Changer
+              </button>
+            </div>
+
+            <p style={{ textAlign: "center", color: "#555", marginBottom: 20 }}>
+              Connectez-vous avec votre compte Google pour créer votre compte abonné(e).
+            </p>
+
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <GoogleLogin
+                onSuccess={handleGoogleSuccess}
+                onError={() => setErr("Connexion Google échouée.")}
+                locale="fr"
+                text="continue_with"
+                shape="rectangular"
+              />
+            </div>
+
+            {err && (
+              <div className="alert-message alert-error">
+                ⚠️ {err}
+              </div>
+            )}
+          </div>
+        )}
+
+        {role && role !== "abonne" && (
           <form
             key={formKey}
             ref={formRef}
