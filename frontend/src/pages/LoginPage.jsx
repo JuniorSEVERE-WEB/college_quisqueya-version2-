@@ -3,6 +3,7 @@ import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
 import API from "../api";
 import { useNavigate, Link } from "react-router-dom";
+import { GoogleLogin } from "@react-oauth/google";
 import "./loginpage.css";
 
 export default function LoginPage({ onLogin }) {
@@ -10,6 +11,31 @@ export default function LoginPage({ onLogin }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setError("");
+    try {
+      const response = await API.post("auth/google/", {
+        credential: credentialResponse.credential,
+      });
+      localStorage.setItem("access_token", response.data.access);
+      localStorage.setItem("refresh_token", response.data.refresh);
+
+      try {
+        const me = await API.get("auth/me/");
+        localStorage.setItem("user", JSON.stringify(me.data));
+        if (me.data?.role) {
+          localStorage.setItem("role", me.data.role);
+        }
+      } catch (_) {}
+
+      if (onLogin) onLogin();
+      window.dispatchEvent(new Event("authChanged"));
+      navigate("/");
+    } catch (err) {
+      setError(err?.response?.data?.detail || "Connexion Google échouée.");
+    }
+  };
 
   const loginRequest = async (username, password) => {
     try {
@@ -100,7 +126,21 @@ export default function LoginPage({ onLogin }) {
         {error && (
           <div style={{ color: "red", marginTop: 10 }}>{error}</div>
         )}
-        <div style={{ marginTop: 8, textAlign: "center" }}>
+
+        <div style={{ marginTop: 20, textAlign: "center", color: "#888", fontSize: 13 }}>
+          — ou —
+        </div>
+        <div style={{ marginTop: 12, display: "flex", justifyContent: "center" }}>
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError("Connexion Google échouée.")}
+            locale="fr"
+            text="signin_with"
+            shape="rectangular"
+          />
+        </div>
+
+        <div style={{ marginTop: 16, textAlign: "center" }}>
           <Link to="/forgot-password" style={{ color: "#2563eb" }}>
             Tu as oublié ton mot de passe ?
           </Link>

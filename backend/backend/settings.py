@@ -227,6 +227,11 @@ STRIPE_SECRET_KEY = env("STRIPE_SECRET_KEY", default="")
 STRIPE_PUBLISHABLE_KEY = env("STRIPE_PUBLISHABLE_KEY", default="")
 
 # ============================================================
+# 🔑 Google OAuth
+# ============================================================
+GOOGLE_CLIENT_ID = env("GOOGLE_CLIENT_ID", default="")
+
+# ============================================================
 # 🧾 DRF
 # ============================================================
 REST_FRAMEWORK = {

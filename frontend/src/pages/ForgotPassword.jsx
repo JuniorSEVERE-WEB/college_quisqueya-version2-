@@ -1,6 +1,6 @@
 // frontend/src/pages/ForgotPassword.jsx
 import { useState } from "react";
-import axios from "axios";
+import API from "../api";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
 import "./forgotpassword.css";  // 👈 import du style
@@ -16,7 +16,7 @@ export default function ForgotPassword() {
     setError("");
 
     try {
-      await axios.post("http://127.0.0.1:8000/api/auth/password-reset/", { email });
+      await API.post("auth/password-reset/", { email });
       setMessage("📬 Un lien de réinitialisation vous a été envoyé par email.");
       setEmail("");
     } catch (err) {

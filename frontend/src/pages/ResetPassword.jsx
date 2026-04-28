@@ -1,7 +1,7 @@
 // frontend/src/pages/ResetPassword.jsx
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import API from "../api";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
 
@@ -24,16 +24,12 @@ export default function ResetPassword() {
     }
 
     try {
-      await axios.post(
-        `http://127.0.0.1:8000/reset/${uidb64}/${token}/`,
-        {
-          new_password1: password1,
-          new_password2: password2,
-        },
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      await API.post("auth/password-reset-confirm/", {
+        uid: uidb64,
+        token,
+        new_password1: password1,
+        new_password2: password2,
+      });
       setMessage("✅ Mot de passe réinitialisé avec succès !");
       setTimeout(() => navigate("/login"), 2000);
     } catch (err) {

@@ -3,6 +3,7 @@ from .api_views import (
     EmailOrUsernameTokenObtainPairView,
     MeView,
     AbonneRegisterView,
+    GoogleAuthView,
 )
 from rest_framework_simplejwt.views import TokenRefreshView
 from . import api_views_password_reset
@@ -17,5 +18,11 @@ urlpatterns = [
 
     # Inscription abonné(e)
     path("register/abonne/", AbonneRegisterView.as_view(), name="register_abonne"),
-     path("password-reset/", api_views_password_reset.PasswordResetAPIView.as_view(), name="password_reset"),
+
+    # OAuth Google
+    path("google/", GoogleAuthView.as_view(), name="google_auth"),
+
+    # Réinitialisation de mot de passe
+    path("password-reset/", api_views_password_reset.PasswordResetAPIView.as_view(), name="api_password_reset"),
+    path("password-reset-confirm/", api_views_password_reset.PasswordResetConfirmAPIView.as_view(), name="api_password_reset_confirm"),
 ]

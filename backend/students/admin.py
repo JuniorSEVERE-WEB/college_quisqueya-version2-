@@ -5,7 +5,7 @@ from django import forms
 from django.urls import reverse
 from django.utils.html import format_html
 from django.core.mail import EmailMessage
-from reports.views import student_report_pdf
+#from reports.views import student_report_pdf
 
 
 class StudentForm(forms.ModelForm):

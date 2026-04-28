@@ -46,7 +46,7 @@ export function DashboardLayout() {
           </NavLink>
 
           <a
-            href="http://localhost:8000/admin/"
+            href={`${import.meta.env.VITE_API_BASE_URL || "http://localhost:8000"}/admin/`}
             target="_blank"
             rel="noopener noreferrer"
           >
