@@ -9,6 +9,7 @@ django-environ>=0.11
 djangorestframework-simplejwt>=5.3
 google-auth>=2.29.0
 django-smart-selects>=1.6.0
+stripe>=9.0.0
 
 # --- Admin & UI Enhancements ---
 django-jazzmin>=3.0.0
