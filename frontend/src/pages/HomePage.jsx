@@ -5,6 +5,7 @@ import "./homepage.css";
 import API from "../api";
 import { motion } from "framer-motion"; // 🔹 Import Framer Motion
 import { getMediaUrl } from "../utils/media";
+import { ValeurIcone } from "../components/ValeurIcone";
 
 export function HomePage() {
   const [slides, setSlides] = useState([]);
@@ -208,13 +209,13 @@ export function HomePage() {
                   variants={staggerGroup}
                   viewport={{ once: false, amount: 0.2 }}
                 >
-                  {values.map((v) => (
+                  {values.map((v, index) => (
                     <motion.div
                       key={v.id}
                       className="valeur-card"
                       variants={slideInCard}
                     >
-                      <div className="valeur-icon">{v.icon}</div>
+                      <ValeurIcone icon={v.icon} index={index} />
                       <h3>{v.title}</h3>
                       <p>{v.description}</p>
                     </motion.div>

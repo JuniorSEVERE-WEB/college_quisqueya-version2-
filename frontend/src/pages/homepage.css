@@ -232,11 +232,7 @@ html, body {
 .valeur-card:hover {
   transform: translateY(-5px);
 }
-.valeur-icon {
-  font-size: 2.5rem;
-  color: #daa520;
-  margin-bottom: 15px;
-}
+/* .valeur-icon supprimé — remplacé par le composant ValeurIcone */
 .valeur-card h3 {
   color: #001f3f;
   margin-bottom: 15px;
