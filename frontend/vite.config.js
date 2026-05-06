@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 // =============================================================
 // ⚙️ Configuration Vite pour développement & production (Render)
@@ -9,7 +10,7 @@ export default defineConfig(({ mode }) => {
   const isProduction = mode === "production";
 
   return {
-    plugins: [react()],
+    plugins: [react(), tailwindcss()],
 
     // 📦 Base URL pour le déploiement sur Render
     base: "/",

@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs ls *)",
+      "Bash(python manage.py test accounts.tests --verbosity=2)",
+      "Bash(python3 manage.py test accounts.tests --verbosity=2)",
+      "Read(//home/sever/**)",
+      "Bash(npm install *)",
+      "Bash(xargs cat *)",
+      "Bash(railway --version)",
+      "Bash(railway status *)",
+      "Bash(railway login *)",
+      "Bash(python backend/manage.py shell -c \"from homepage.models import Value; [print\\(repr\\(v.icon\\), v.title\\) for v in Value.objects.all\\(\\)]\")",
+      "Bash(python3 backend/manage.py shell -c \"from homepage.models import Value; [print\\(repr\\(v.icon\\), v.title\\) for v in Value.objects.all\\(\\)]\")",
+      "Bash(python -c \"import ast; ast.parse\\(open\\('reports/views.py'\\).read\\(\\)\\)\")",
+      "Bash(python -c \"import django; import os; os.environ.setdefault\\('DJANGO_SETTINGS_MODULE', 'config.settings'\\); django.setup\\(\\); from reports.views import student_report_pdf, dashboard_pdf_view; print\\('OK: views imported successfully'\\)\")",
+      "Bash(python3 -c ' *)",
+      "Bash(.venv/bin/python -c ' *)",
+      "Bash(.venv/bin/pip show *)",
+      "Bash(.venv/bin/pip list *)",
+      "Bash(venv/bin/python -c ' *)",
+      "Bash(grep -r \"rgba\\\\|rgb\\\\|#[0-9a-f]\\\\{3,6\\\\}\" /home/sever/projects/college_quisqueya-version2-/frontend/src --include=\"*.css\")",
+      "Bash(node -e \"const p = require\\('./node_modules/@tailwindcss/vite/package.json'\\); console.log\\(p.version\\)\")"
+    ]
+  }
+}
