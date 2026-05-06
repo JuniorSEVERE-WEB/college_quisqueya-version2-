@@ -39,10 +39,6 @@ export default function LoginPage({ onLogin }) {
         }
       } catch (_) {}
 
-      // ✅ Vide les champs une fois connecté
-      setUsername("");
-      setPassword("");
-
       if (onLogin) onLogin();
       window.dispatchEvent(new Event("authChanged"));
       navigate("/");
@@ -50,10 +46,6 @@ export default function LoginPage({ onLogin }) {
       const detail =
         err?.response?.data?.detail || "Identifiants invalides";
       setError(detail);
-
-      // ✅ Vide aussi les champs si erreur
-      setUsername("");
-      setPassword("");
     }
   };
 
@@ -72,15 +64,14 @@ export default function LoginPage({ onLogin }) {
         <form
           onSubmit={handleSubmit}
           style={{ display: "grid", gap: 12 }}
-          autoComplete="off" // 👈 désactive l’autocomplétion du navigateur
         >
           <input
             type="text"
-            placeholder="Nom d'utilisateur ou email"
+            placeholder="Nom d’utilisateur ou email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             required
-            autoComplete="off" // 👈 empêche la mémorisation
+            autoComplete="username"
           />
           <input
             type="password"
@@ -88,7 +79,7 @@ export default function LoginPage({ onLogin }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            autoComplete="new-password" // 👈 empêche Chrome/Firefox d'enregistrer
+            autoComplete="current-password"
           />
           <button
             type="submit"

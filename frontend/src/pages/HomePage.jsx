@@ -164,7 +164,7 @@ export function HomePage() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.9 }}
-                  className="absolute inset-0 bg-cover bg-center"
+                  className="absolute inset-0 bg-cover bg-top"
                   style={{ backgroundImage: `url(${getMediaUrl(slides[current].image)})` }}
                 />
               </AnimatePresence>

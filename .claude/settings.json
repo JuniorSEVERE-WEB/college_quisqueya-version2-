@@ -20,7 +20,8 @@
       "Bash(.venv/bin/pip list *)",
       "Bash(venv/bin/python -c ' *)",
       "Bash(grep -r \"rgba\\\\|rgb\\\\|#[0-9a-f]\\\\{3,6\\\\}\" /home/sever/projects/college_quisqueya-version2-/frontend/src --include=\"*.css\")",
-      "Bash(node -e \"const p = require\\('./node_modules/@tailwindcss/vite/package.json'\\); console.log\\(p.version\\)\")"
+      "Bash(node -e \"const p = require\\('./node_modules/@tailwindcss/vite/package.json'\\); console.log\\(p.version\\)\")",
+      "Bash(npm run *)"
     ]
   }
 }
