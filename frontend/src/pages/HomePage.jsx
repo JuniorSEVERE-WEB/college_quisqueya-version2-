@@ -191,7 +191,7 @@ export function HomePage() {
               <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/45 to-black/80 z-10" />
 
               {/* Content */}
-              <div className="relative z-20 flex flex-col items-center justify-center h-full text-white text-center px-4">
+              <div className="relative z-20 flex flex-col items-center justify-end sm:justify-center h-full text-white text-center px-4 pb-16 sm:pb-0">
                 <motion.div
                   key={`content-${current}`}
                   initial={{ opacity: 0, y: 32 }}
