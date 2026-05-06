@@ -220,6 +220,9 @@ else:
     EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD", default="")
     DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=EMAIL_HOST_USER)
 
+# Email de l'administrateur qui reçoit les messages de contact
+CONTACT_RECIPIENT_EMAIL = env("CONTACT_RECIPIENT_EMAIL", default="severejunior2017@gmail.com")
+
 # ============================================================
 # 💳 Stripe keys (optional)
 # ============================================================

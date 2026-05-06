@@ -1,6 +1,8 @@
 from rest_framework import viewsets, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.core.mail import send_mail
+from django.conf import settings
 from .models import Message, ContactMessage
 from .serializers import MessageSerializer, ContactMessageSerializer
 
@@ -43,7 +45,25 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         if self.action in ["list", "retrieve", "update", "partial_update", "destroy"]:
-            # Restreindre la consultation des messages de contact aux admins
             return [permissions.IsAdminUser()]
-        # Toute personne peut créer un message de contact (POST)
         return [permissions.AllowAny()]
+
+    def perform_create(self, serializer):
+        contact = serializer.save()
+        recipient = getattr(settings, "CONTACT_RECIPIENT_EMAIL", "")
+        if recipient:
+            try:
+                send_mail(
+                    subject=f"[Contact] {contact.subject}",
+                    message=(
+                        f"Nom : {contact.name}\n"
+                        f"Email : {contact.email}\n"
+                        f"Sujet : {contact.subject}\n\n"
+                        f"{contact.message}"
+                    ),
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[recipient],
+                    fail_silently=True,
+                )
+            except Exception:
+                pass
