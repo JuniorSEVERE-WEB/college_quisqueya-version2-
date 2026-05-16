@@ -50,20 +50,35 @@ class ContactMessageViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         contact = serializer.save()
+        from_email = settings.DEFAULT_FROM_EMAIL
+
         recipient = getattr(settings, "CONTACT_RECIPIENT_EMAIL", "")
         if recipient:
-            try:
-                send_mail(
-                    subject=f"[Contact] {contact.subject}",
-                    message=(
-                        f"Nom : {contact.name}\n"
-                        f"Email : {contact.email}\n"
-                        f"Sujet : {contact.subject}\n\n"
-                        f"{contact.message}"
-                    ),
-                    from_email=settings.DEFAULT_FROM_EMAIL,
-                    recipient_list=[recipient],
-                    fail_silently=True,
-                )
-            except Exception:
-                pass
+            send_mail(
+                subject=f"[Contact] {contact.subject}",
+                message=(
+                    f"Nom : {contact.name}\n"
+                    f"Email : {contact.email}\n"
+                    f"Sujet : {contact.subject}\n\n"
+                    f"{contact.message}"
+                ),
+                from_email=from_email,
+                recipient_list=[recipient],
+                fail_silently=True,
+            )
+
+        if contact.email:
+            send_mail(
+                subject="Merci de nous avoir contactés - Collège Quisqueya",
+                message=(
+                    f"Bonjour {contact.name},\n\n"
+                    f"Nous avons bien reçu votre message concernant : \"{contact.subject}\".\n"
+                    f"Notre équipe vous répondra dans les plus brefs délais.\n\n"
+                    f"Copie de votre message :\n{contact.message}\n\n"
+                    f"Merci de votre confiance,\n"
+                    f"L'équipe du Collège Quisqueya"
+                ),
+                from_email=from_email,
+                recipient_list=[contact.email],
+                fail_silently=True,
+            )
