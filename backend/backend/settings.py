@@ -212,6 +212,13 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
+# Permet à WhiteNoise de servir les fichiers depuis STATICFILES_DIRS et les
+# packages installés (Unfold, admin, etc.) même si collectstatic n'a pas tourné.
+# Utile sur Railway où la phase build n'a pas accès à la base et où le volume
+# persistant masque les fichiers ramassés.
+WHITENOISE_USE_FINDERS = True
+WHITENOISE_AUTOREFRESH = True
+
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(env("MEDIA_ROOT", default=str(BASE_DIR / "media")))
 SERVE_MEDIA_FILES = env.bool("SERVE_MEDIA_FILES", default=DEBUG)
