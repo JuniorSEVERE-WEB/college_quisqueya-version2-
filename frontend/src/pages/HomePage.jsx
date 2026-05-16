@@ -406,75 +406,47 @@ export function HomePage() {
                   <div className="w-16 h-1 bg-gradient-to-r from-navy to-gold mx-auto mt-4 rounded-full" />
                 </motion.div>
 
-                {/* Desktop grid — 2 col sur tablette, 4 col sur large */}
-                <div className="hidden md:grid grid-cols-2 lg:grid-cols-4 gap-5">
-                  {articles.slice(0, 4).map((a) => (
-                    <motion.article
-                      key={a.id}
-                      variants={fadeUp}
-                      className="group flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm border border-navy/5 hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
-                    >
-                      {/* Image */}
-                      <div className="aspect-video overflow-hidden">
-                        <div
-                          className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
-                          style={{ backgroundImage: `url(${getMediaUrl(a.image)})` }}
-                        />
-                      </div>
-
-                      {/* Body */}
-                      <div className="flex flex-col flex-1 p-5 gap-2.5">
-                        <div className="flex items-center gap-1.5 text-[11px] text-[#556] font-medium">
-                          <FaCalendarAlt size={9} className="text-gold" />
-                          {new Date(a.date_published).toLocaleDateString("fr-FR")}
+                {/* Marquee carousel — défilement horizontal infini et lent.
+                    Survol = pause. Le track contient deux copies de la liste
+                    pour permettre une boucle sans coupure visible. */}
+                <div className="articles-marquee-viewport -mx-4 px-0">
+                  <div className="articles-marquee-track py-2">
+                    {[...articles, ...articles].map((a, i) => (
+                      <article
+                        key={`${a.id}-${i}`}
+                        aria-hidden={i >= articles.length ? "true" : undefined}
+                        className="group flex-none w-[78vw] sm:w-[320px] md:w-[300px] lg:w-[280px] flex flex-col bg-white rounded-2xl overflow-hidden shadow-sm border border-navy/5 hover:shadow-xl transition-shadow duration-300"
+                      >
+                        <div className="aspect-video overflow-hidden">
+                          <div
+                            className="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-500"
+                            style={{ backgroundImage: `url(${getMediaUrl(a.image)})` }}
+                          />
                         </div>
-                        <h3 className="text-sm font-bold text-navy leading-snug line-clamp-2">
-                          {a.title}
-                        </h3>
-                        <p className="text-xs text-[#555] leading-relaxed flex-1 line-clamp-3">
-                          {a.description}
-                        </p>
-                        <Link
-                          to={`/news/${a.id}`}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy hover:text-gold transition-colors duration-200 group/lnk mt-1"
-                        >
-                          Lire plus
-                          <FaArrowRight size={9} className="group-hover/lnk:translate-x-1 transition-transform" />
-                        </Link>
-                      </div>
-                    </motion.article>
-                  ))}
-                </div>
 
-                {/* Mobile horizontal carousel */}
-                <div className="md:hidden flex overflow-x-auto gap-4 pb-3 snap-x snap-mandatory scroll-smooth -mx-4 px-4">
-                  {articles.slice(0, 4).map((a) => (
-                    <article
-                      key={a.id}
-                      className="flex-none w-[78vw] max-w-[300px] snap-center flex flex-col bg-white rounded-2xl overflow-hidden shadow-md border border-navy/5"
-                    >
-                      <div
-                        className="aspect-video bg-cover bg-center"
-                        style={{ backgroundImage: `url(${getMediaUrl(a.image)})` }}
-                      />
-                      <div className="flex flex-col flex-1 p-4 gap-2">
-                        <div className="flex items-center gap-1.5 text-[11px] text-[#556]">
-                          <FaCalendarAlt size={9} className="text-gold" />
-                          {new Date(a.date_published).toLocaleDateString("fr-FR")}
+                        <div className="flex flex-col flex-1 p-5 gap-2.5">
+                          <div className="flex items-center gap-1.5 text-[11px] text-[#556] font-medium">
+                            <FaCalendarAlt size={9} className="text-gold" />
+                            {new Date(a.date_published).toLocaleDateString("fr-FR")}
+                          </div>
+                          <h3 className="text-sm font-bold text-navy leading-snug line-clamp-2">
+                            {a.title}
+                          </h3>
+                          <p className="text-xs text-[#555] leading-relaxed flex-1 line-clamp-3">
+                            {a.description}
+                          </p>
+                          <Link
+                            to={`/news/${a.id}`}
+                            tabIndex={i >= articles.length ? -1 : 0}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-navy hover:text-gold transition-colors duration-200 group/lnk mt-1"
+                          >
+                            Lire plus
+                            <FaArrowRight size={9} className="group-hover/lnk:translate-x-1 transition-transform" />
+                          </Link>
                         </div>
-                        <h3 className="text-sm font-bold text-navy leading-snug line-clamp-2">
-                          {a.title}
-                        </h3>
-                        <p className="text-xs text-[#555] line-clamp-3">{a.description}</p>
-                        <Link
-                          to={`/news/${a.id}`}
-                          className="inline-flex items-center gap-1 text-xs font-semibold text-navy hover:text-gold transition-colors mt-1"
-                        >
-                          Lire plus <FaArrowRight size={9} />
-                        </Link>
-                      </div>
-                    </article>
-                  ))}
+                      </article>
+                    ))}
+                  </div>
                 </div>
 
                 {/* CTA voir tout */}
