@@ -2,10 +2,15 @@
 
 import dj_database_url
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 import environ
 from django.templatetags.static import static
+
+# True when running `manage.py collectstatic` — used to relax the DB check
+# (collectstatic doesn't need a real database, only static file settings).
+_IS_COLLECTSTATIC = "collectstatic" in sys.argv
 
 # ============================================================
 # 📁 Base Directory
@@ -35,7 +40,7 @@ if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(DATABASE_URL, conn_max_age=600),
     }
-elif env.bool("USE_SQLITE", default=False):
+elif env.bool("USE_SQLITE", default=False) or _IS_COLLECTSTATIC:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
