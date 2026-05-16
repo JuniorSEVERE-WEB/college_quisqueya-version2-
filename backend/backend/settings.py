@@ -5,6 +5,7 @@ import os
 from datetime import timedelta
 from pathlib import Path
 import environ
+from django.templatetags.static import static
 
 # ============================================================
 # 📁 Base Directory
@@ -76,6 +77,14 @@ if hostname:
 # 🧩 Applications
 # ============================================================
 INSTALLED_APPS = [
+    # Admin theme (must come BEFORE django.contrib.admin)
+    "unfold",
+    "unfold.contrib.filters",
+    "unfold.contrib.forms",
+    "unfold.contrib.inlines",
+    "unfold.contrib.import_export",
+    "unfold.contrib.simple_history",
+
     # Django core
     "django.contrib.admin",
     "django.contrib.auth",
@@ -269,6 +278,113 @@ SIMPLE_JWT = {
 # ============================================================
 CORE_ACADEMIC_YEAR_MODEL = "students.AcademicYear"
 SMART_SELECTS_JQUERY = True
+
+# ============================================================
+# 🎨 Unfold admin theme (dark, branded Collège Quisqueya)
+# ============================================================
+UNFOLD = {
+    "SITE_TITLE": "Collège Quisqueya — Admin",
+    "SITE_HEADER": "Collège Quisqueya",
+    "SITE_SUBHEADER": "Espace d'administration",
+    "SITE_URL": "/",
+    "SITE_SYMBOL": "school",  # Material symbol icon name
+    "SITE_LOGO": {
+        "light": lambda request: static("admin/img/college_quisqueya_logo.png"),
+        "dark":  lambda request: static("admin/img/college_quisqueya_logo.png"),
+    },
+    "SITE_ICON": {
+        "light": lambda request: static("admin/img/college_quisqueya_logo.png"),
+        "dark":  lambda request: static("admin/img/college_quisqueya_logo.png"),
+    },
+    "SHOW_HISTORY": True,
+    "SHOW_VIEW_ON_SITE": True,
+
+    # Dark theme forced
+    "THEME": "dark",
+
+    # Brand colors — gold accent on dark background
+    "COLORS": {
+        "font": {
+            "subtle-light": "107 114 128",
+            "subtle-dark":  "156 163 175",
+            "default-light": "75 85 99",
+            "default-dark":  "229 231 235",
+            "important-light": "17 24 39",
+            "important-dark":  "243 244 246",
+        },
+        "primary": {
+            "50":  "253 246 220",
+            "100": "250 234 178",
+            "200": "246 217 130",
+            "300": "240 195 86",
+            "400": "228 175 56",
+            "500": "212 160 23",   # base gold (#d4a017)
+            "600": "183 134 14",
+            "700": "148 105 14",
+            "800": "120 84 18",
+            "900": "100 69 22",
+            "950": "57 38 10",
+        },
+    },
+
+    # Top bar quick actions
+    "SIDEBAR": {
+        "show_search": True,
+        "show_all_applications": True,
+        "navigation": [
+            {
+                "title": "Tableau de bord",
+                "separator": False,
+                "items": [
+                    {
+                        "title": "Accueil",
+                        "icon": "dashboard",
+                        "link": "/admin/",
+                    },
+                    {
+                        "title": "Documentation API",
+                        "icon": "code",
+                        "link": "/api/docs/",
+                    },
+                ],
+            },
+            {
+                "title": "Pédagogie",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": "Élèves",     "icon": "groups",       "link": "/admin/students/"},
+                    {"title": "Professeurs","icon": "school",       "link": "/admin/professors/"},
+                    {"title": "Classes",    "icon": "meeting_room", "link": "/admin/academics/"},
+                    {"title": "Programmes", "icon": "menu_book",    "link": "/admin/programs/"},
+                    {"title": "Notes",      "icon": "grading",      "link": "/admin/grades/"},
+                ],
+            },
+            {
+                "title": "Vie scolaire",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": "Clubs & événements", "icon": "celebration", "link": "/admin/schoollife/"},
+                    {"title": "Blog",               "icon": "article",     "link": "/admin/blog/"},
+                    {"title": "Communications",    "icon": "forum",       "link": "/admin/communication/"},
+                ],
+            },
+            {
+                "title": "Administration",
+                "separator": True,
+                "collapsible": True,
+                "items": [
+                    {"title": "Utilisateurs", "icon": "person",       "link": "/admin/accounts/"},
+                    {"title": "Employés",     "icon": "badge",        "link": "/admin/employees/"},
+                    {"title": "Alumni",       "icon": "diversity_3",  "link": "/admin/alumni/"},
+                    {"title": "Paiements",    "icon": "payments",     "link": "/admin/payments/"},
+                    {"title": "Rapports",     "icon": "bar_chart",    "link": "/admin/reports/"},
+                ],
+            },
+        ],
+    },
+}
 
 # ============================================================
 # 🌍 CORS & CSRF configuration (dev-first)

@@ -12,7 +12,7 @@ django-smart-selects>=1.6.0
 stripe>=9.0.0
 
 # --- Admin & UI Enhancements ---
-django-jazzmin>=3.0.0
+django-unfold>=0.40.0
 
 # --- API Documentation (Swagger) ---
 drf-yasg>=1.21.8

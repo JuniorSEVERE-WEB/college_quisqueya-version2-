@@ -1,13 +1,45 @@
+# ─── Python / Django ─────────────────────────────
 venv/
 .venv/
 *.pyc
 __pycache__/
 db.sqlite3
-.env
 data_dump.json
-build.sh
-render.yaml
 backend/venv/
 backend/.venv/
 backend/**/__pycache__/
 
+# ─── Déploiement / build ─────────────────────────
+build.sh
+render.yaml
+
+# ─── Secrets & variables d'environnement ─────────
+# Ne JAMAIS commiter les .env (ils contiennent des secrets).
+# Les .env.example sont autorisés car ils ne contiennent que des placeholders.
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.env
+backend/.env
+backend/.env.*
+!backend/.env.example
+!backend/.env.*.example
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+!frontend/.env.*.example
+
+# ─── Clés et certificats ─────────────────────────
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+secrets/
+credentials/
+
+# ─── OS / IDE ────────────────────────────────────
+.DS_Store
+.idea/
+.vscode/
