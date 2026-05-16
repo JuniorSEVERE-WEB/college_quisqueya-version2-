@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Slide, SlideTitle, Welcome, Value
+from .models import Slide, SlideTitle, Welcome, Value, SiteSettings
 
 
 class SlideTitleSerializer(serializers.ModelSerializer):
@@ -26,3 +26,9 @@ class ValueSerializer(serializers.ModelSerializer):
     class Meta:
         model = Value
         fields = "__all__"
+
+
+class SiteSettingsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SiteSettings
+        fields = ["logo", "site_name"]

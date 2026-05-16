@@ -32,3 +32,24 @@ class Value(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class SiteSettings(models.Model):
+    logo = models.ImageField(upload_to="homepage/logo/", blank=True, null=True)
+    site_name = models.CharField(max_length=50, default="CQL")
+
+    class Meta:
+        verbose_name = "Paramètres du site"
+        verbose_name_plural = "Paramètres du site"
+
+    def __str__(self):
+        return "Paramètres du site"
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        obj, _ = cls.objects.get_or_create(pk=1)
+        return obj
