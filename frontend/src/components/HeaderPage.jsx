@@ -1,7 +1,10 @@
-// frontend/src/components/HeaderPage.jsx 
+// frontend/src/components/HeaderPage.jsx
 import "./headerpage.css";
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import API from "../api";
+
+const DEFAULT_LOGO = "/logo-19-aout.png";
 
 export function HeaderPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -9,6 +12,17 @@ export function HeaderPage() {
     !!localStorage.getItem("access_token")
   );
   const [role, setRole] = useState(localStorage.getItem("role") || "");
+  const [logoUrl, setLogoUrl] = useState(DEFAULT_LOGO);
+  const [siteName, setSiteName] = useState("CQL");
+
+  useEffect(() => {
+    API.get("homepage/settings/")
+      .then((res) => {
+        if (res.data?.logo) setLogoUrl(res.data.logo);
+        if (res.data?.site_name) setSiteName(res.data.site_name);
+      })
+      .catch(() => {});
+  }, []);
 
   const handleMenuClick = () => {
     const menu = document.querySelector(".middle-section");
@@ -63,10 +77,16 @@ export function HeaderPage() {
           <Link to="/" onClick={handleLinkClick}>
             <ul>
               <li>
-                <img src="/logo-19-aout.png" alt="Logo" />
+                <img
+                  src={logoUrl}
+                  alt="Logo"
+                  onError={(e) => {
+                    e.currentTarget.src = DEFAULT_LOGO;
+                  }}
+                />
               </li>
               <li>
-                <span>CQL</span>
+                <span>{siteName}</span>
               </li>
             </ul>
           </Link>
