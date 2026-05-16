@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { ConnectionError } from "../components/ConnectionError";
 import API from "../api";
 import { getMediaUrl } from "../utils/media";
 import "./schoollife.css";
@@ -94,7 +95,9 @@ export function SchoolLife() {
             </div>
           )}
 
-          {authorized && (
+          {error && authorized && <ConnectionError message={error} />}
+
+          {authorized && !error && (
             <>
               {/* Clubs */}
               <section className="sl-section reveal">

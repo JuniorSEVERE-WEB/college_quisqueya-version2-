@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { ConnectionError } from "../components/ConnectionError";
 import API from "../api";
 import { getMediaUrl } from "../utils/media";
 import "./aboutpage.css";
@@ -44,11 +45,20 @@ export function AboutPage() {
     visible: { opacity: 1, scale: 1 },
   };
 
+  if (error) {
+    return (
+      <>
+        <HeaderPage />
+        <ConnectionError />
+        <FooterPage />
+      </>
+    );
+  }
+
   return (
     <>
       <HeaderPage />
       <div className="about-container">
-        {error && <p className="error">{error}</p>}
 
         {/* Hero Section */}
         {aboutInfo ? (

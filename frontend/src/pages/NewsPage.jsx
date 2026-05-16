@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import API from "../api";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { ConnectionError } from "../components/ConnectionError";
 import { getMediaUrl } from "../utils/media";
 import "./newspage.css";
 
@@ -117,7 +118,7 @@ export default function NewsPage() {
             </div>
 
             {loading && <div>Chargement des actualités…</div>}
-            {!loading && error && <div>{error}</div>}
+            {!loading && error && <ConnectionError message={error} />}
             {!loading && !error && articles.length === 0 && (
               <div>Aucun article pour le moment.</div>
             )}

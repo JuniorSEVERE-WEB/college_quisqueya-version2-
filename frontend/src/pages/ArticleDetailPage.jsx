@@ -3,6 +3,7 @@ import { useParams, Link } from "react-router-dom";
 import API from "../api";
 import { HeaderPage } from "../components/HeaderPage";
 import { FooterPage } from "../components/FooterPage";
+import { ConnectionError } from "../components/ConnectionError";
 import { getMediaUrl } from "../utils/media";
 import "./articledetail.css";
 
@@ -167,7 +168,7 @@ export default function ArticleDetailPage() {
 
       <div className="article-detail">
         {loading && <div>Chargement…</div>}
-        {!loading && error && <div>{error}</div>}
+        {!loading && error && <ConnectionError message={error} />}
 
         {!loading && article && (
           <div className="article-container">
