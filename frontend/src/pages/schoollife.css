@@ -39,7 +39,7 @@
     radial-gradient(70% 80% at 100% 80%, rgba(179, 0, 0, 0.20), transparent 60%),
     linear-gradient(135deg, var(--sl-navy) 0%, var(--sl-navy-2) 100%);
   color: #fff;
-  padding: clamp(64px, 12vw, 140px) 24px clamp(80px, 14vw, 160px);
+  padding: clamp(56px, 10vw, 110px) 24px clamp(56px, 10vw, 110px);
   overflow: hidden;
   isolation: isolate;
 }
@@ -96,10 +96,9 @@
 /* ── Container ─────────────────────────────────────────── */
 .sl-container {
   max-width: 1200px;
-  margin: -60px auto 0;
-  padding: 0 24px 80px;
+  margin: 0 auto;
+  padding: clamp(48px, 6vw, 72px) 24px 80px;
   position: relative;
-  z-index: 2;
 }
 
 /* ── Notice (non-autorisé / erreur) ────────────────────── */
@@ -378,8 +377,8 @@
 
 /* ── Mobile ────────────────────────────────────────────── */
 @media (max-width: 640px) {
-  .sl-hero { padding: 80px 20px 100px; }
-  .sl-container { padding: 0 16px 60px; margin-top: -40px; }
+  .sl-hero { padding: 60px 20px; }
+  .sl-container { padding: 40px 16px 60px; }
   .sl-section-header { padding-left: 14px; }
   .sl-testimonial { padding: 24px; }
   .sl-quote-mark { font-size: 3rem; }
