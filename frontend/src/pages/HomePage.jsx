@@ -62,16 +62,22 @@ export function HomePage() {
           API.get("homepage/values/"),
           API.get("blog/articles/?is_published=true"),
         ]);
-        setSlides(slidesRes.data.results   || slidesRes.data   || []);
+        const asArray = (res) => {
+          const d = res?.data;
+          if (Array.isArray(d?.results)) return d.results;
+          if (Array.isArray(d)) return d;
+          return [];
+        };
+        setSlides(asArray(slidesRes));
         setWelcome(
-          welcomeRes.data.results
+          welcomeRes?.data?.results
             ? welcomeRes.data.results[0]
-            : Array.isArray(welcomeRes.data)
+            : Array.isArray(welcomeRes?.data)
             ? welcomeRes.data[0]
-            : welcomeRes.data
+            : welcomeRes?.data
         );
-        setValues(valuesRes.data.results     || valuesRes.data     || []);
-        setArticles(articlesRes.data.results || articlesRes.data   || []);
+        setValues(asArray(valuesRes));
+        setArticles(asArray(articlesRes));
       } catch (err) {
         console.error("Erreur chargement homepage:", err);
         setError("Impossible de charger la page d'accueil.");

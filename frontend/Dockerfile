@@ -8,6 +8,12 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+# URL publique du backend Django. Vite substitue import.meta.env.VITE_*
+# au build, donc cette valeur doit être présente AVANT `npm run build`.
+# Peut être surchargée via --build-arg si on déploie sur un autre domaine.
+ARG VITE_API_BASE_URL=https://api.collegequisqueyadeleogane.juniorsevere.dev
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+
 # Installer les dépendances en premier (meilleur cache Docker)
 COPY package.json package-lock.json ./
 RUN npm ci
