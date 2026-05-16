@@ -1,6 +1,8 @@
 [phases.setup]
 nixPkgs = ["python312", "glib", "pango", "harfbuzz", "fontconfig", "libunwind", "gobject-introspection"]
 
+[phases.build]
+cmds = ["python backend/manage.py collectstatic --noinput"]
+
 [variables]
 PYTHONPATH = "backend"
-DISABLE_COLLECTSTATIC = "1"
