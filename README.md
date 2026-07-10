@@ -72,40 +72,21 @@ The technical challenges included coordinating Django's ORM for complex multi-ta
 
 ### Backend Django Application Structure
 
-**`school/models.py`** - Core database models representing the complete school ecosystem:
-- `CustomUser` model extending Django's AbstractUser with role-specific fields and academic affiliations
-- `Program`, `Subject`, `Classroom` models defining the academic structural hierarchy
-- `Trimester`, `Step`, `Grade` models for temporal academic tracking and evaluation
-- `ReportCard` model for comprehensive academic summaries with calculated averages
-- `Donation`, `Slide`, `Message`, `Contact` models for institutional communication and fundraising
-- Complex many-to-many relationships with custom through tables for academic associations
+The backend is organized as a modular Django project with dedicated apps for each major domain of the school system:
 
-**`school/serializers.py`** - Django REST Framework serializers for comprehensive API data transformation:
-- Nested serializers for complex relational data including grades with student and subject details
-- Custom validation logic ensuring academic integrity constraints and grade range validation
-- Optimized read-only and write-only field configurations for security and performance
-- Specialized serializers for report card generation with calculated field aggregation
+backend/
+├── accounts/      # CustomUser model, authentication, roles and JWT-based auth
+├── academics/     # Programs, classrooms, subjects, steps and trimester hierarchy
+├── grades/        # Grade and evaluation models with business logic for weighted averages
+├── reports/       # Report card generation and academic summary data
+├── communication/ # Internal messaging, contact forms and communication features
+├── payments/      # Donation management and payment-related workflows
+├── blog/          # Content/blog features and related pages
+├── profiles/      # User profile management and related data
+├── core/          # Shared middleware, permissions and common utilities
+├── students/, employees/, professors/, alumni/ # Role-specific business logic and data models
 
-**`school/views.py`** - API endpoints implementing sophisticated business logic:
-- ModelViewSets providing full CRUD operations for all major educational entities
-- Custom endpoints for advanced operations like bulk grade entry and report card generation
-- Authentication and permission enforcement with role-based access control
-- Optimized database queries using select_related and prefetch_related for performance
-- Custom filtering and search capabilities for large datasets
-
-**`school/urls.py`** - Comprehensive API routing with nested resources and custom endpoints for educational workflows
-
-**`school/admin.py`** - Extensively customized Django admin interface using Jazzmin theming:
-- Enhanced admin classes with advanced filtering, search, and bulk operation capabilities
-- Inline editing interfaces for related models like grades and subject assignments
-- Custom admin actions for academic operations like transcript generation and grade import
-- Role-appropriate admin access with customized interfaces for different user types
-
-**`config/settings.py`** - Django configuration optimized for educational institutions:
-- Environment-based configuration supporting development and production deployments
-- JWT authentication configuration with appropriate token lifetimes for academic use
-- CORS setup enabling seamless frontend-backend integration
-- Media and static file handling for academic documents and institutional branding
+This structure reflects the real application layout used in the repository and is better aligned with the modular architecture of the project.
 
 ### Frontend React Application Architecture
 
@@ -170,7 +151,7 @@ Main Application Interface: http://localhost:5173/
 API Documentation & Testing: http://localhost:8000/api/
 Administrative Dashboard: http://localhost:8000/admin/
 Sample Login Credentials (After Loading Fixtures)
-Admin: severejunior2017@gmail.com / django2017@
+Admin: admin@example.com / password123
 
 
 Python Environment Configuration:
