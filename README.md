@@ -151,8 +151,18 @@ Main Application Interface: http://localhost:5173/
 API Documentation & Testing: http://localhost:8000/api/
 Administrative Dashboard: http://localhost:8000/admin/
 Sample Login Credentials (After Loading Fixtures)
-Admin: admin@example.com / password123
 
+### 🔑 Demo Access
+
+To test the application locally, load the fixtures and create your own superuser account:
+
+\`\`\`bash
+python manage.py createsuperuser
+\`\`\`
+
+Then log in with the credentials you just created at http://localhost:8000/admin/
+
+ docs: remove hardcoded demo credentials, fix fixture reference
 
 Python Environment Configuration:
 # Create isolated Python environment

@@ -10,9 +10,14 @@
 
 html {
   background-color: #010120;
+  /* Empêche tout scroll latéral parasite (marquee, blobs absolus, etc.) */
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   background-color: #f8f9fa;
+  /* Idem côté body au cas où */
+  overflow-x: hidden;
+  width: 100%;
 }

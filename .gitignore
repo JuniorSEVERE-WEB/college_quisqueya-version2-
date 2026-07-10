@@ -11,7 +11,7 @@ backend/**/__pycache__/
 
 # ─── Déploiement / build ─────────────────────────
 build.sh
-render.yaml
+
 
 # ─── Secrets & variables d'environnement ─────────
 # Ne JAMAIS commiter les .env (ils contiennent des secrets).
