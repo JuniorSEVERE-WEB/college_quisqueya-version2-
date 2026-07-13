@@ -43,3 +43,8 @@ credentials/
 .DS_Store
 .idea/
 .vscode/
+
+#AI Tools
+.claude/
+.codex/
+Bash tool output*
